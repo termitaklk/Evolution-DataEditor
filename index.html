@@ -1,0 +1,3742 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador de Scripts Premium - Reporte Detallado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --glass-bg: rgba(22, 27, 34, 0.8);
+            --accent-primary: #8b5cf6;
+            --accent-secondary: #06b6d4;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --card-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-card.stat-no-script {
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .stat-card h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 0.8rem 1.5rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .search-container {
+            margin-bottom: 2rem;
+        }
+
+        #searchInput {
+            width: 100%;
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            color: white;
+            outline: none;
+        }
+
+        .lang-switcher {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .lang-btn.active {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        /* Progreso de Descarga */
+        .download-progress-container {
+            width: 80%;
+            max-width: 500px;
+            margin-top: 2rem;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            transition: width 0.3s ease;
+        }
+
+        .progress-info {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .download-log {
+            width: 100%;
+            height: 120px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 0.8rem;
+            font-family: 'Consolas', monospace;
+            font-size: 0.75rem;
+            overflow-y: auto;
+            color: #10b981;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .log-entry {
+            margin-bottom: 0.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .config-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1rem;
+        }
+
+        .config-tab {
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .config-tab.active {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent-primary);
+            border-color: rgba(139, 92, 246, 0.2);
+        }
+
+        .config-tab:hover:not(.active) {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .github-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            padding: 0.8rem;
+            border-radius: 0.7rem;
+            font-size: 0.8rem;
+            color: white;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .github-input:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .config-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 1000;
+            display: none;
+            /* Oculto por defecto para evitar parpadeo */
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .config-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            padding: 3rem;
+            border-radius: 2rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .config-row {
+            margin-bottom: 1.5rem;
+        }
+
+        .config-row label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .config-input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .config-path {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            padding: 0.8rem;
+            border-radius: 0.7rem;
+            font-size: 0.8rem;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .browse-btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.7rem;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .browse-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .run-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.4s ease;
+        }
+
+        .run-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        .loading-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.8);
+            border-radius: 2rem;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(139, 92, 246, 0.1);
+            border-left-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .table-wrapper {
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            display: none;
+        }
+
+        .table-wrapper.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.05);
+            text-align: left;
+            padding: 1.2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        td {
+            padding: 1.2rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .id-cell {
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: var(--accent-secondary);
+            font-weight: 600;
+        }
+
+        .badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .badge-ok {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .badge-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .detail-row {
+            background: rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .detail-content {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .detail-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .detail-box h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            color: var(--accent-primary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.4rem;
+        }
+
+        .text-item {
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
+            line-height: 1.4;
+            padding-left: 0.5rem;
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .expand-btn {
+            cursor: pointer;
+            color: var(--accent-secondary);
+            text-decoration: underline;
+            font-size: 0.8rem;
+        }
+
+        /* Etiquetas unificadas en azul */
+        .sys-badge,
+        .cdb-badge,
+        .prev-badge {
+            font-size: 0.7rem;
+            background: #3b82f6;
+            color: white;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .page-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin: 0 1rem;
+        }
+
+        .page-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .page-btn.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Estilos para tabla de códigos */
+        .inner-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .inner-table th {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent-primary);
+            padding: 0.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .inner-table td {
+            padding: 0.6rem;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            vertical-align: top;
+        }
+
+        .code-column {
+            font-family: 'Courier New', monospace;
+            color: var(--accent-secondary);
+            font-size: 0.8rem !important;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .text-column {
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+
+        /* --- ESTILOS MENÚ PRINCIPAL --- */
+        #main-menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            gap: 3rem;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .menu-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            padding: 3rem 2rem;
+            border-radius: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .menu-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .menu-card * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--accent-primary);
+            transition: all 0.4s ease;
+        }
+
+        .menu-card:hover .menu-icon {
+            background: var(--accent-primary);
+            color: white;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .menu-card h2 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .menu-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* --- ESTILOS MÓDULO EDITOR --- */
+        #module-editor {
+            max-width: 100%;
+            height: calc(100dvh - 4rem);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            overflow: hidden;
+        }
+
+        #module-editor > header {
+            margin-bottom: 0.35rem !important;
+        }
+
+        #module-editor > header h1 {
+            font-size: clamp(1.9rem, 2.6vw, 2.6rem);
+        }
+
+        #module-editor > header .subtitle {
+            font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+        }
+
+        #module-editor .back-to-menu {
+            margin-bottom: 0.25rem;
+            align-self: flex-start;
+            width: fit-content;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #module-editor .editor-footer {
+            margin-top: 0.5rem;
+            padding-bottom: 0.25rem;
+        }
+
+        .editor-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 2rem;
+            padding: 2rem;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 2rem;
+            color: var(--text-muted);
+        }
+
+        .back-to-menu {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-to-menu:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--text-muted);
+        }
+
+        /* --- ESTILOS COMPLEJOS DEL EDITOR --- */
+        .editor-grid {
+            display: grid;
+            grid-template-columns: clamp(280px, 22vw, 340px) minmax(560px, 1fr) clamp(320px, 28vw, 520px);
+            gap: 1.25rem;
+            flex: 1;
+            height: auto;
+            min-height: 0;
+        }
+
+        .editor-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .panel-header {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--card-border);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--accent-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Panel Izquierdo: Lista */
+        .card-list-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .card-item {
+            padding: 0.8rem;
+            border-radius: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            margin-bottom: 0.4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-item.active {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: var(--accent-primary);
+        }
+
+        .card-item .card-id,
+        .editor-card-item strong {
+            font-family: monospace;
+            color: var(--accent-secondary);
+            font-weight: 600;
+        }
+
+        .editor-card-item {
+            padding: 0.8rem;
+            border-radius: 0.8rem;
+            cursor: pointer !important;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            user-select: none;
+        }
+
+        .editor-card-item * {
+            pointer-events: none;
+        }
+
+        .editor-card-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .editor-card-item.active {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: var(--accent-primary);
+        }
+
+        .editor-filter-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+            gap: 0.45rem;
+            margin-top: 0.6rem;
+        }
+
+        .editor-filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 0.32rem 0.5rem;
+            border-radius: 0.7rem;
+            cursor: pointer;
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .editor-filter-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .editor-filter-btn.active {
+            background: rgba(139, 92, 246, 0.18);
+            border-color: var(--accent-primary);
+            color: var(--text-main);
+        }
+
+        /* Panel Central: Formulario */
+        .editor-main-content {
+            flex: 1;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: clamp(0.9rem, 1.2vw, 1.25rem);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 0;
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: rgba(139, 92, 246, 0.55) rgba(255, 255, 255, 0.03); /* Firefox */
+        }
+
+        /* Solo lectura: mantener estética al deshabilitar */
+        #module-editor .editor-main-content input:disabled,
+        #module-editor .editor-main-content select:disabled,
+        #module-editor .editor-main-content textarea:disabled {
+            opacity: 1;
+            cursor: not-allowed;
+            background: rgba(255, 255, 255, 0.055);
+            border-color: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        #module-editor .checkbox-panel input[type="checkbox"]:disabled {
+            cursor: not-allowed;
+            opacity: 0.95;
+        }
+
+        #module-editor #field-link-markers input[type="checkbox"]:disabled {
+            opacity: 0.95;
+            filter: brightness(1.25) contrast(1.05);
+        }
+
+        /* Resaltado de coincidencias de búsqueda */
+        #module-editor mark.editor-search-hit {
+            background: rgba(255, 230, 90, 0.35);
+            color: rgba(255, 255, 255, 0.98);
+            padding: 0.05em 0.15em;
+            border-radius: 0.25rem;
+            border: 1px solid rgba(255, 230, 90, 0.35);
+        }
+
+        #module-editor .editor-search-match {
+            box-shadow: 0 0 0 2px rgba(255, 230, 90, 0.22), 0 0 0 1px rgba(255, 230, 90, 0.28) inset;
+            border-color: rgba(255, 230, 90, 0.35) !important;
+        }
+
+        /* Scrollbar (Card Information) */
+        .editor-main-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .editor-main-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .editor-main-content::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.35);
+            border-radius: 999px;
+            border: 2px solid rgba(0, 0, 0, 0.25);
+        }
+
+        .editor-main-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.55);
+        }
+
+        .editor-form-details {
+            background: rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 1rem;
+            overflow: hidden;
+            /* Dentro de .editor-main-content (flex), evitar que el formulario se "encoga"
+               y recorte campos cuando el panel no tiene suficiente alto. El scroll debe
+               ocurrir en .editor-main-content, igual que en la lista de cartas. */
+            flex: 0 0 auto;
+            flex-shrink: 0;
+        }
+
+        .editor-form-details > summary {
+            list-style: none;
+            cursor: pointer;
+            user-select: none;
+            padding: 0.6rem 0.85rem;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .editor-form-details > summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .editor-form-details[open] > summary {
+            border-bottom-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .editor-form-details-content {
+            padding: 0.9rem;
+        }
+
+        /* Compact mode when height is tight */
+        #module-editor.editor-compact .editor-row {
+            grid-template-columns: minmax(140px, 160px) 1fr;
+        }
+
+        #module-editor.editor-compact .card-preview-box {
+            max-height: 210px;
+            margin-top: 0;
+        }
+
+        #module-editor.editor-compact .input-field input,
+        #module-editor.editor-compact .input-field select,
+        #module-editor.editor-compact .input-field textarea {
+            padding: 0.5rem 0.7rem;
+            font-size: 0.85rem;
+        }
+
+        #module-editor.editor-compact #editor-analysis-display {
+            font-size: 0.8rem !important;
+        }
+
+        .editor-row {
+            display: grid;
+            grid-template-columns: minmax(150px, 180px) 1fr;
+            gap: clamp(1.05rem, 1.8vw, 2rem);
+            margin-bottom: clamp(0.6rem, 1vw, 1rem);
+            align-items: start;
+        }
+
+        .card-preview-box {
+            width: clamp(150px, 12vw, 180px);
+            aspect-ratio: 180 / 260;
+            height: auto;
+            max-height: clamp(210px, 28vh, 260px);
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px dashed var(--card-border);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 0;
+            /* Centrar verticalmente entre el borde superior y la fila inferior (ID/ATK/etc.) */
+            align-self: center;
+        }
+
+        .card-preview-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(0.6rem, 1vw, 1rem);
+        }
+
+        /* Separar un poco la columna de campos del recuadro de imagen */
+        #editor-form-grid-top {
+            padding-left: 0.35rem;
+        }
+
+        /* Card Information: hacer campos más compactos por defecto */
+        #module-editor .editor-form-area .input-field {
+            gap: 0.3rem;
+        }
+
+        #module-editor .editor-form-area .input-field label {
+            font-size: 0.72rem;
+            letter-spacing: 0.06em;
+        }
+
+        #module-editor .editor-form-area .input-field input,
+        #module-editor .editor-form-area .input-field select,
+        #module-editor .editor-form-area .input-field textarea {
+            padding: 0.48rem 0.7rem;
+            font-size: 0.86rem;
+        }
+
+        /* Cuando es Link, reservar una columna a la derecha para Link Markers */
+        #module-editor.has-link-markers #editor-form-grid-top {
+            grid-template-columns: 1fr 1fr 150px;
+            column-gap: 0.75rem;
+        }
+
+        /* Columna derecha (Link): stack (Attribute + Link Markers). */
+        .link-side-stack {
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 0.7rem;
+            height: 100%;
+            width: 100%;
+        }
+
+        #module-editor.has-link-markers #link-side-stack {
+            display: flex;
+            grid-column: 3;
+            grid-row: 1 / span 4;
+            align-self: stretch;
+            justify-self: stretch;
+        }
+
+        #module-editor.has-link-markers #link-side-stack .input-field {
+            width: 100%;
+            max-width: 150px;
+            align-items: center;
+        }
+
+        #module-editor.has-link-markers #link-side-stack .input-field label {
+            text-align: center;
+            width: 100%;
+        }
+
+        .archetype-multi {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.4rem;
+        }
+
+        .link-marker-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 20px);
+            grid-template-rows: repeat(3, 20px);
+            gap: 0.25rem;
+            align-items: center;
+            justify-content: center;
+            padding: 0.2rem 0.1rem 0.1rem;
+        }
+
+        .link-marker-grid .lm-cell {
+            width: 20px;
+            height: 20px;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .link-marker-grid .lm-cell.center {
+            opacity: 0.25;
+        }
+
+        .link-marker-grid input[type="checkbox"] {
+            width: 12px;
+            height: 12px;
+            margin: 0;
+            accent-color: var(--accent-primary);
+            cursor: pointer;
+        }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .input-field label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .input-field input,
+        .input-field select,
+        .input-field textarea {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            padding: 0.6rem 0.8rem;
+            border-radius: 0.6rem;
+            color: white;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .input-field input:focus,
+        .input-field select:focus,
+        .input-field textarea:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .script-editor {
+            width: 100%;
+            height: 300px;
+            margin-top: 1rem;
+            font-family: 'Consolas', monospace;
+            resize: none;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--accent-primary);
+            color: #d1d5db;
+            padding: 1rem;
+            border-radius: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .strings-display-container {
+            width: 100%;
+            max-height: none;
+            overflow: visible;
+            margin-top: 0;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .editor-details {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            overflow: visible;
+        }
+
+        .editor-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .editor-tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 0.45rem 0.75rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        .editor-tab-btn.active {
+            background: rgba(139, 92, 246, 0.18);
+            border-color: var(--accent-primary);
+            color: var(--text-main);
+        }
+
+        .editor-tab-content {
+            flex: 0 0 auto;
+            overflow: visible;
+            padding-bottom: 0.25rem;
+            display: block;
+        }
+
+        .editor-tab-content::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        #editor-analysis-display {
+            overflow: visible;
+        }
+
+        /* El scroll se aplica al panel completo (Card Information) */
+
+        #editor-analysis-display::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        .string-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.8rem 1rem;
+            border-radius: 0.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            transition: all 0.2s;
+        }
+
+        .string-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--accent-secondary);
+        }
+
+        .string-label {
+            font-size: 0.65rem;
+            color: var(--accent-secondary);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .string-content {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        /* Panel Derecho: Checkboxes */
+        .checkbox-panel {
+            flex: 1;
+            overflow: hidden;
+            padding: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .checkbox-section {
+            margin-bottom: 0;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .checkbox-section h4 {
+            font-size: 0.75rem;
+            color: var(--text-main);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.6rem 0.85rem;
+            background: rgba(139, 92, 246, 0.14);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+            gap: 0.35rem 0.8rem;
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 0.7rem 0.85rem 0.85rem;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge legacy */
+        }
+
+        .checkbox-grid::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        /* Alturas por sección (estilo DataEditorX) */
+        #type-checkbox-grid {
+            max-height: clamp(170px, 22vh, 240px);
+        }
+
+        #category-checkbox-grid {
+            max-height: clamp(150px, 18vh, 200px);
+        }
+
+        #flags-checkbox-grid {
+            max-height: clamp(160px, 20vh, 220px);
+        }
+
+        /* "Ghost marks" para ver bits de la carta seleccionada sin afectar filtros */
+        .checkbox-item.card-on {
+            box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.45);
+            background: rgba(139, 92, 246, 0.06);
+            border-radius: 8px;
+            padding: 4px 6px;
+        }
+        .checkbox-item.card-on .checkbox-text {
+            color: rgba(229, 231, 235, 0.98);
+        }
+
+        /* Checks marcados (especialmente cuando están disabled) */
+        .checkbox-item.is-checked {
+            box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.65);
+            background: rgba(139, 92, 246, 0.12);
+            border-radius: 8px;
+            padding: 4px 6px;
+        }
+        .checkbox-item.is-checked .checkbox-text {
+            color: rgba(243, 244, 246, 0.98);
+            font-weight: 600;
+        }
+        .checkbox-item input[type="checkbox"]:disabled:checked {
+            accent-color: rgba(167, 139, 250, 0.95);
+        }
+
+        @media (max-width: 1400px) {
+            .editor-grid {
+                grid-template-columns: 320px minmax(640px, 1.25fr) minmax(360px, 0.85fr);
+            }
+            .checkbox-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .editor-grid {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            .checkbox-panel {
+                overflow-y: auto;
+            }
+            .checkbox-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            #module-editor .back-to-menu {
+                max-width: 100%;
+            }
+        }
+
+        /* Ajustes por altura (pantallas bajas): subir y compactar */
+        @media (max-height: 850px) {
+            #module-editor {
+                height: auto;
+                gap: 0.5rem;
+            }
+            #module-editor > header h1 {
+                font-size: 2.1rem;
+            }
+            #module-editor > header .subtitle {
+                font-size: 0.95rem;
+            }
+            #module-editor .back-to-menu {
+                margin-bottom: 0.25rem;
+            }
+            .editor-main-content {
+                padding: 1rem;
+            }
+            .editor-row {
+                grid-template-columns: 160px 1fr;
+                gap: 1rem;
+                margin-bottom: 0.75rem;
+            }
+            .card-preview-box {
+                width: 160px;
+                height: 230px;
+            }
+            .editor-footer {
+                margin-top: 0.5rem;
+                padding-bottom: 0.25rem;
+            }
+            .editor-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.45rem;
+            font-size: 0.78rem;
+            line-height: 1.15;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            min-width: 0;
+            white-space: normal;
+        }
+
+        .checkbox-item:hover {
+            color: var(--text-main);
+        }
+
+        .checkbox-item input {
+            accent-color: var(--accent-primary);
+            flex: 0 0 auto;
+        }
+
+        .checkbox-text {
+            min-width: 0;
+            overflow: visible;
+            text-overflow: unset;
+            display: block;
+        }
+
+        /* Footer de Botones */
+        .editor-footer {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            padding-bottom: 2rem;
+        }
+
+        .editor-btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.8rem;
+            border: 1px solid var(--card-border);
+            background: var(--glass-bg);
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .editor-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .editor-btn.primary {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .editor-btn.danger {
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        .editor-btn.danger:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- MENÚ PRINCIPAL -->
+    <div id="main-menu" class="container">
+        <header>
+            <h1 data-i18n="app_suite_title">Yu-Gi-Oh! Script Suite</h1>
+            <p class="subtitle" data-i18n="app_suite_subtitle">Selecciona una herramienta para comenzar</p>
+        </header>
+
+        <div class="menu-grid">
+            <div class="menu-card" onclick="switchView('module-analyzer')">
+                <div class="menu-icon">🔍</div>
+                <h2 data-i18n="menu_analyzer_title">Analizador</h2>
+                <p data-i18n="menu_analyzer_desc">Verifica la integridad estructural de tus scripts y detecta anomalías.
+                </p>
+            </div>
+            <div class="menu-card" onclick="switchView('module-editor')">
+                <div class="menu-icon">✍️</div>
+                <h2 data-i18n="menu_editor_title">Editor</h2>
+                <p data-i18n="menu_editor_desc">Crea o modifica scripts y configura parámetros de cartas.</p>
+            </div>
+            <div class="menu-card" onclick="switchView('config-view')">
+                <div class="menu-icon">⚙️</div>
+                <h2 data-i18n="menu_config_title">Configuración</h2>
+                <p data-i18n="menu_config_desc">Cambia las rutas base del CDB, Scripts e Imágenes.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- CONFIGURACIÓN GLOBAL -->
+    <div id="config-view" class="config-overlay" style="display: none;">
+        <div class="config-card" style="position: relative;">
+            <div class="lang-switcher" style="position: absolute; top: 1.5rem; right: 1.5rem; margin: 0;">
+                <button class="lang-btn" id="lang-es-cfg" onclick="setLang('es')">ES</button>
+                <button class="lang-btn" id="lang-en-cfg" onclick="setLang('en')">EN</button>
+            </div>
+            <header style="padding-top: 0; margin-bottom: 1.5rem;">
+                <h1 data-i18n="config_title">Parametrización Global</h1>
+                <p class="subtitle" data-i18n="config_subtitle">Configura las rutas base para la Suite</p>
+            </header>
+
+            <div class="config-tabs">
+                <div id="tab-local" class="config-tab active" onclick="setConfigMode('local')" data-i18n="tab_local">
+                    Local</div>
+                <div id="tab-github" class="config-tab" onclick="setConfigMode('github')" data-i18n="tab_github">GitHub
+                </div>
+            </div>
+
+            <!-- MODO LOCAL -->
+            <div id="mode-local">
+                <div class="config-row">
+                    <label data-i18n="label_cdb">Carpeta de Bases de Datos (.cdb)</label>
+                    <div class="config-input-group">
+                        <div id="path-cdb" class="config-path" data-placeholder="select_cdb">...</div>
+                        <button class="browse-btn" onclick="browse('cdb', true, 'title_cdb')"
+                            data-i18n="btn_select">Seleccionar</button>
+                    </div>
+                </div>
+
+                <div class="config-row">
+                    <label data-i18n="label_scripts">Carpeta de Scripts (c*.lua)</label>
+                    <div class="config-input-group">
+                        <div id="path-scripts" class="config-path" data-placeholder="select_scripts">...</div>
+                        <button class="browse-btn" onclick="browse('scripts', true, 'title_scripts')"
+                            data-i18n="btn_select">Seleccionar</button>
+                    </div>
+                </div>
+
+
+
+                <div class="config-row">
+                    <label data-i18n="label_strings">Archivo de Sistema (strings.conf)</label>
+                    <div class="config-input-group">
+                        <div id="path-strings" class="config-path" data-placeholder="select_strings">...</div>
+                        <button class="browse-btn" onclick="browse('strings', false, 'title_strings')"
+                            data-i18n="btn_select">Seleccionar</button>
+                    </div>
+                </div>
+
+                <div class="config-row">
+                    <label data-i18n="label_pics">Carpeta de Imágenes (pics)</label>
+                    <div class="config-input-group">
+                        <div id="path-pics" class="config-path" data-placeholder="select_pics">...</div>
+                        <button class="browse-btn" onclick="browse('pics', true, 'title_pics')"
+                            data-i18n="btn_select">Seleccionar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODO GITHUB -->
+            <div id="mode-github" style="display: none;">
+                <div class="config-row">
+                    <label data-i18n="label_cdb_gh">URL Carpeta CDBs (GitHub)</label>
+                    <input type="text" id="gh-cdb" class="github-input" placeholder="https://github.com/.../cdb"
+                        oninput="validatePaths()">
+                </div>
+                <div class="config-row">
+                    <label data-i18n="label_scripts_gh">URL Carpeta Scripts (GitHub)</label>
+                    <input type="text" id="gh-scripts" class="github-input" placeholder="https://github.com/.../script"
+                        oninput="validatePaths()">
+                </div>
+                <div class="config-row">
+                    <label data-i18n="label_strings_gh">URL Raw strings.conf (GitHub)</label>
+                    <input type="text" id="gh-strings" class="github-input"
+                        placeholder="https://raw.githubusercontent.com/.../strings.conf" oninput="validatePaths()">
+                </div>
+            </div>
+
+            <button id="saveConfigBtn" class="run-btn" onclick="saveGlobalConfig()" disabled
+                data-i18n="btn_save_config">Guardar y Continuar</button>
+            <button id="cancelConfigBtn" class="browse-btn" onclick="switchView('main-menu')"
+                style="width: 100%; margin-top: 0.5rem; background: transparent; border: 1px solid var(--card-border); display: none;"
+                data-i18n="btn_cancel">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- MÓDULO ANALIZADOR -->
+    <div id="module-analyzer" style="display: none;">
+
+        <div class="container" id="analyzer-main-view" style="display: none;">
+            <button class="back-to-menu" onclick="switchView('main-menu')">
+                <span>←</span> <span data-i18n="btn_back_menu">Volver al Menú</span>
+            </button>
+            <div style="display: flex; align-items: flex-start; margin-top: 1rem;">
+                <header style="flex: 1;">
+                    <h1 data-i18n="app_title">Reporte de Análisis Estructural</h1>
+                    <p class="subtitle" data-i18n="app_subtitle">Validación de Efectos: Previsión vs. Implementación LUA
+                    </p>
+                </header>
+                <div class="header-actions" style="display: flex; gap: 1rem; align-items: center;">
+                    <button id="startAnalysisBtn" class="run-btn" onclick="startAnalysis()"
+                        style="font-size: 0.8rem; padding: 0.6rem 1rem; width: auto; margin: 0;">
+                        <span data-i18n="btn_start">Iniciar Análisis</span>
+                    </button>
+                    <button class="browse-btn" onclick="showConfig()" data-i18n="btn_new_analysis"
+                        style="font-size: 0.8rem; padding: 0.6rem 1rem;">Nuevo Análisis</button>
+                    <div class="lang-switcher" style="margin: 0; position: static;">
+                        <button class="lang-btn" id="lang-es" onclick="setLang('es')">ES</button>
+                        <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="analyzer-welcome" class="stats-grid" style="display: block; text-align: center; padding: 3rem;">
+                <h2 data-i18n="analyzer_welcome_title">Analizador de Scripts</h2>
+                <p data-i18n="analyzer_welcome_desc" style="opacity: 0.7;">Presiona el botón superior para
+                    escanear la base de datos y scripts configurados.</p>
+            </div>
+
+            <div id="analysis-loading" class="loading-overlay"
+                style="display: none; position: static; margin: 2rem 0; border-radius: 1rem; background: var(--glass-bg); border: 1px solid var(--card-border);">
+                <div class="spinner"></div>
+                <h2 data-i18n="loading_text" style="background:none; -webkit-text-fill-color:white;">Analizando...</h2>
+                <div id="download-progress-box" class="download-progress-container">
+                    <div class="progress-bar-bg">
+                        <div id="progress-fill" class="progress-bar-fill"></div>
+                    </div>
+                    <div id="progress-text" class="progress-info">0 / 0 (0%)</div>
+                    <div id="download-log" class="download-log"></div>
+                </div>
+            </div>
+
+            <div id="analyzer-results" style="display: none;">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 data-i18n="stat_total">Total Analizado</h3>
+                        <div class="value" id="stat-total">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3 data-i18n="stat_ok">Coincidencias</h3>
+                        <div class="value" id="stat-ok" style="color: var(--success)">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3 data-i18n="stat_error">Anomalías</h3>
+                        <div class="value" id="stat-error" style="color: var(--error)">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3 data-i18n="stat_missing">Problemas Datos</h3>
+                        <div class="value" id="stat-missing" style="color: var(--warning)">0</div>
+                    </div>
+                    <div class="stat-card stat-no-script">
+                        <h3 data-i18n="stat_no_script">Scripts Faltantes</h3>
+                        <div class="value" id="stat-no-script" style="color: #a78bfa">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3 data-i18n="stat_excluded" style="color: var(--text-muted)">Cartas Excluidas</h3>
+                        <div class="value" id="stat-excluded" style="color: var(--text-muted)">0</div>
+                    </div>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" id="btn-tab-coincidencias"
+                        onclick="changeTab('tab-coincidencias', this)" data-i18n="tab_ok">Coincidencias</button>
+                    <button class="tab-btn" id="btn-tab-anomalias" onclick="changeTab('tab-anomalias', this)"
+                        data-i18n="tab_error">Anomalías</button>
+                    <button class="tab-btn" id="btn-tab-faltantes" onclick="changeTab('tab-faltantes', this)"
+                        data-i18n="tab_missing">Datos Faltantes</button>
+                    <button class="tab-btn" id="btn-tab-scripts-faltantes"
+                        onclick="changeTab('tab-scripts-faltantes', this)" data-i18n="tab_no_script">Scripts
+                        Faltantes</button>
+                    <button class="tab-btn" id="btn-tab-excluidas" onclick="changeTab('tab-excluidas', this)"
+                        data-i18n="tab_excluded">Cartas Excluidas</button>
+                </div>
+
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Filtrar por ID de carta..."
+                        onkeyup="handleSearch()">
+                </div>
+
+                <div id="tab-coincidencias" class="table-wrapper active">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-i18n="col_id">ID Carta</th>
+                                <th data-i18n="col_name">Nombre</th>
+                                <th data-i18n="col_pred">Previsto</th>
+                                <th data-i18n="col_script">Script</th>
+                                <th data-i18n="col_action">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="body-coincidencias"></tbody>
+                    </table>
+                </div>
+
+                <div id="tab-anomalias" class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-i18n="col_id">ID Carta</th>
+                                <th data-i18n="col_name">Nombre</th>
+                                <th data-i18n="col_pred">Previsto</th>
+                                <th data-i18n="col_script">Script</th>
+                                <th data-i18n="col_action">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="body-anomalias"></tbody>
+                    </table>
+                </div>
+
+                <div id="tab-faltantes" class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-i18n="col_id">ID Carta</th>
+                                <th data-i18n="col_name">Nombre</th>
+                                <th data-i18n="col_pred">Previsto</th>
+                                <th data-i18n="col_script">Script</th>
+                                <th data-i18n="col_action">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="body-faltantes"></tbody>
+                    </table>
+                </div>
+
+                <div id="tab-scripts-faltantes" class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-i18n="col_id">ID Carta</th>
+                                <th data-i18n="col_name">Nombre</th>
+                                <th data-i18n="col_pred">Previsto</th>
+                                <th data-i18n="col_script">Script</th>
+                                <th data-i18n="col_action">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="body-scripts-faltantes"></tbody>
+                    </table>
+                </div>
+
+                <div id="tab-excluidas" class="table-wrapper">
+                    <div id="excluidas-breakdown"
+                        style="padding: 1.5rem; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--card-border); display: flex; gap: 2rem; justify-content: center;">
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-i18n="col_id">ID Carta</th>
+                                <th data-i18n="col_name">Nombre</th>
+                                <th data-i18n="col_reason">Motivo Exclusión</th>
+                            </tr>
+                        </thead>
+                        <tbody id="body-excluidas"></tbody>
+                    </table>
+                </div>
+
+                <div class="pagination" id="paginationControls">
+                    <!-- Los controles se generan dinámicamente -->
+                </div>
+            </div> <!-- Fin analyzer-results -->
+        </div> <!-- Fin analyzer-main-view -->
+    </div> <!-- Fin module-analyzer -->
+
+    <!-- MÓDULO EDITOR (Diseño Visual) -->
+    <div id="module-editor" class="container" style="display: none; max-width: 100%;">
+        <button class="back-to-menu" onclick="switchView('main-menu')">
+            <span>←</span> <span data-i18n="btn_back_menu">Volver al Menú</span>
+        </button>
+
+        <header style="margin-bottom: 1.5rem;">
+            <h1 data-i18n="menu_editor_title">Editor de Scripts</h1>
+            <p class="subtitle" data-i18n="editor_subtitle">Herramientas de creación y edición</p>
+        </header>
+
+        <div class="editor-grid">
+            <!-- PANEL IZQUIERDO: LISTA -->
+            <div class="editor-panel">
+                <div class="panel-header">
+                    <span data-i18n="editor_tab_list">Card List</span>
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <span id="editor-card-count" style="font-size: 0.7rem; opacity: 0.6;">0 Cards</span>
+                        <button onclick="initEditor(true)" title="Sincronizar CDB"
+                            style="background: none; border: none; color: var(--accent-primary); cursor: pointer; font-size: 0.9rem; padding: 0; display: flex; align-items: center; transition: transform 0.3s ease;">
+                            🔄
+                        </button>
+                    </div>
+                </div>
+                <div style="padding: 0.8rem;">
+                    <input type="text" id="editor-search" class="github-input" placeholder="Search card..."
+                        oninput="searchEditor()" style="padding: 0.5rem; font-size: 0.8rem;">
+                    <div class="editor-filter-bar" role="group" aria-label="Card type filters">
+                        <button class="editor-filter-btn active" type="button" data-editor-type="all"
+                            onclick="toggleEditorTypeFilter('all')" data-i18n="editor_filter_all">All</button>
+                        <button class="editor-filter-btn" type="button" data-editor-type="monster"
+                            onclick="toggleEditorTypeFilter('monster')" data-i18n="editor_filter_monster">Monster</button>
+                        <button class="editor-filter-btn" type="button" data-editor-type="spell"
+                            onclick="toggleEditorTypeFilter('spell')" data-i18n="editor_filter_spell">Spell</button>
+                        <button class="editor-filter-btn" type="button" data-editor-type="trap"
+                            onclick="toggleEditorTypeFilter('trap')" data-i18n="editor_filter_trap">Trap</button>
+                        <button class="editor-filter-btn" type="button" data-editor-prefilter="1"
+                            onclick="toggleEditorPreFilter()" data-i18n="editor_filter_pre">Pre-Lanzadas</button>
+                    </div>
+                    <div class="editor-filter-bar" style="margin-top:0.45rem" role="group" aria-label="Advanced filters">
+                        <button class="editor-filter-btn" type="button" id="editor-btn-adv-filters"
+                            onclick="toggleEditorAdvancedFilters()" data-i18n="editor_filter_adv">Filtros</button>
+                        <button class="editor-filter-btn" type="button" id="editor-btn-clear-adv-filters"
+                            onclick="clearEditorAdvancedFilters()" data-i18n="editor_filter_clear">Limpiar</button>
+                    </div>
+                </div>
+                <div id="editor-card-list" class="card-list-container">
+                    <!-- Dinámico -->
+                </div>
+                <div class="panel-header" style="border-top: 1px solid var(--card-border); border-bottom: none;">
+                    <div style="display: flex; gap: 0.5rem; width: 100%; justify-content: center;">
+                        <button class="page-btn" onclick="prevEditorPage()"
+                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;">«</button>
+                        <span id="editor-page-info" style="font-size: 0.75rem; align-self: center;">1 / 1</span>
+                        <button class="page-btn" onclick="nextEditorPage()"
+                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;">»</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL CENTRAL: DETALLES -->
+            <div class="editor-panel">
+                <div class="panel-header">Card Information</div>
+                <div class="editor-main-content">
+                    <details id="editor-form-details" class="editor-form-details" open>
+                        <summary>Datos de carta</summary>
+                        <div class="editor-form-details-content">
+                            <div class="editor-form-area">
+                                <div class="editor-row">
+                                    <div class="card-preview-box">
+                                        <img id="editor-img-preview" src=""
+                                            style="width: 100%; height: 100%; object-fit: contain; display: block;">
+                                        <div id="editor-img-placeholder" style="text-align: center; opacity: 0.3;">
+                                            <div style="font-size: 2rem;">🎴</div>
+                                            <div style="font-size: 0.6rem; margin-top: 0.5rem;">NO IMAGE</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-grid" id="editor-form-grid-top">
+                                        <div class="input-field">
+                                            <label data-i18n="col_name">Name</label>
+                                            <input type="text" id="edit-name" placeholder="Card Name...">
+                                        </div>
+                                        <div class="input-field">
+                                            <label>Rule (Format)</label>
+                                            <select id="edit-rule">
+                                                <option value="0">Rule</option>
+                                            </select>
+                                        </div>
+                                        <div id="attribute-anchor" style="display:none"></div>
+                                        <div class="input-field" id="field-attribute">
+                                            <label>Attribute</label>
+                                            <select id="edit-attribute">
+                                                <option value="0">NONE</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-field">
+                                            <label>Level/Rank/Link</label>
+                                            <select id="edit-level">
+                                                <option value="0">0</option>
+                                            </select>
+                                        </div>
+                                        <div id="link-markers-anchor" style="display:none"></div>
+                                        <div class="input-field" id="field-link-markers" style="display:none">
+                                            <label data-i18n="editor_link_markers">Link Markers</label>
+                                            <div class="link-marker-grid" aria-label="Link Markers">
+                                                <div class="lm-cell"><input id="lm-tl" type="checkbox" value="0x40" title="↖"></div>
+                                                <div class="lm-cell"><input id="lm-t" type="checkbox" value="0x80" title="↑"></div>
+                                                <div class="lm-cell"><input id="lm-tr" type="checkbox" value="0x100" title="↗"></div>
+                                                <div class="lm-cell"><input id="lm-l" type="checkbox" value="0x8" title="←"></div>
+                                                <div class="lm-cell center"></div>
+                                                <div class="lm-cell"><input id="lm-r" type="checkbox" value="0x20" title="→"></div>
+                                                <div class="lm-cell"><input id="lm-bl" type="checkbox" value="0x1" title="↙"></div>
+                                                <div class="lm-cell"><input id="lm-b" type="checkbox" value="0x2" title="↓"></div>
+                                                <div class="lm-cell"><input id="lm-br" type="checkbox" value="0x4" title="↘"></div>
+                                            </div>
+                                        </div>
+                                        <div class="input-field">
+                                            <label>Race</label>
+                                            <select id="edit-race">
+                                                <option value="0">NONE</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-field" id="field-setcode1">
+                                            <label>Archetype (SetCode)</label>
+                                            <select id="edit-setcode1">
+                                                <option value="0">None / Custom</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-field" id="field-setcode2">
+                                            <label>Archetype 2</label>
+                                            <select id="edit-setcode2">
+                                                <option value="0">None / Custom</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-field" id="field-setcode3">
+                                            <label>Archetype 3</label>
+                                            <select id="edit-setcode3">
+                                                <option value="0">None / Custom</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-field" id="field-setcode4">
+                                            <label>Archetype 4</label>
+                                            <select id="edit-setcode4">
+                                                <option value="0">None / Custom</option>
+                                            </select>
+                                        </div>
+                                        <div id="passcode-anchor-top" style="display:none"></div>
+                                        <div id="link-side-stack" class="link-side-stack"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-grid">
+                                    <div class="input-field" id="field-passcode">
+                                        <label data-i18n="col_id">Passcode</label>
+                                        <input type="number" id="edit-passcode" placeholder="8 digits...">
+                                    </div>
+                                    <div id="passcode-anchor-bottom" style="display:none"></div>
+                                    <div class="input-field">
+                                        <label>Alias Card</label>
+                                        <input type="number" id="edit-alias" placeholder="0 if none">
+                                    </div>
+                                    <div class="input-field">
+                                        <label>ATK</label>
+                                        <input type="text" id="edit-atk" value="0">
+                                    </div>
+                                    <div class="input-field">
+                                        <label>DEF</label>
+                                        <input type="text" id="edit-def" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="editor-details">
+                        <div class="editor-tabs">
+                            <button class="editor-tab-btn active" type="button" data-tab="analysis">Análisis</button>
+                            <button class="editor-tab-btn" type="button" data-tab="strings">Strings</button>
+                        </div>
+
+                        <div id="editor-tab-analysis" class="editor-tab-content">
+                            <div id="editor-analysis-display"
+                                style="padding: 0.8rem; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--card-border); border-radius: 1rem; font-size: 0.85rem; color: var(--text-main); line-height: 1.45;">
+                                Esperando selección de carta...
+                            </div>
+                        </div>
+
+                        <div id="editor-tab-strings" class="editor-tab-content" style="display:none">
+                            <div id="editor-strings-display" class="strings-display-container">
+                                <div
+                                    style="color: var(--text-muted); font-style: italic; padding: 1rem; text-align: center;">
+                                    Selecciona una carta para ver sus strings...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL DERECHO: FLAGS -->
+            <div class="editor-panel">
+                <div class="panel-header">Types & Flags</div>
+                <div class="checkbox-panel">
+                    <div class="checkbox-section">
+                        <h4>Card Type & Monster Type</h4>
+                        <div class="checkbox-grid" id="type-checkbox-grid">
+                            <!-- Dinámico -->
+                        </div>
+                    </div>
+                    <div class="checkbox-section">
+                        <h4>Category / Genre</h4>
+                        <div class="checkbox-grid" id="category-checkbox-grid">
+                            <!-- Dinámico -->
+                        </div>
+                    </div>
+                    <div class="checkbox-section">
+                        <h4>Flags</h4>
+                        <div class="checkbox-grid" id="flags-checkbox-grid">
+                            <!-- Dinámico -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACCIONES INFERIORES -->
+        <div class="editor-footer">
+            <button class="editor-btn" type="button">🔍 Search</button>
+            <button class="editor-btn" type="button">🧹 Clear All</button>
+            <button class="editor-btn" type="button">🖼️ Load Image</button>
+            <button class="editor-btn" type="button">📂 Open LUA</button>
+            <div style="width: 2px; background: var(--card-border); height: 30px; margin: 0 0.5rem;"></div>
+            <button class="editor-btn primary" id="editor-btn-add" type="button">➕ Add Card</button>
+            <button class="editor-btn primary" id="editor-btn-modify" type="button" onclick="editorModifySelected()">📝 Modify</button>
+            <button class="editor-btn primary" id="editor-btn-save" type="button" disabled>💾 Save</button>
+            <button class="editor-btn danger" id="editor-btn-delete" type="button">🗑️ Delete</button>
+        </div>
+    </div>
+
+    <script>
+        let allData = { coincidencias: [], anomalias: [], faltantes: [], i18n: {} };
+        let currentTab = 'tab-coincidencias';
+        let currentPage = 1;
+        const pageSize = 50;
+        let filteredList = [];
+        let lang = localStorage.getItem('lang') || 'es';
+
+        const UI_STRINGS = {
+            'es': {
+                'app_title': 'Reporte de Análisis Estructural',
+                'app_subtitle': 'Validación de Efectos: Previsión vs. Implementación LUA',
+                'stat_total': 'Total Analizado',
+                'stat_ok': 'Coincidencias',
+                'stat_error': 'Anomalías',
+                'stat_missing': 'Problemas Datos',
+                'tab_ok': 'Coincidencias',
+                'tab_error': 'Anomalías',
+                'tab_missing': 'Datos Faltantes',
+                'search_placeholder': 'Filtrar por ID de carta...',
+                'col_id': 'ID Carta',
+                'col_name': 'Nombre',
+                'col_pred': 'Previsto',
+                'col_script': 'Script',
+                'col_action': 'Acción',
+                'btn_expand': 'Ver Detalle Textos',
+                'anomalies_title': '⚠️ Anomalías Técnicas Detectadas',
+                'anomalies_th_type': 'Tipo',
+                'anomalies_th_ref': 'Referencia',
+                'anomalies_th_code': 'Código LUA',
+                'anomalies_th_desc': 'Descripción',
+                'pred_title': 'Efectos Previstos (Descripción)',
+                'script_title': 'Efectos Hallados (LUA + CDB/SYS)',
+                'script_th_ref': 'Ref',
+                'script_th_code': 'Código LUA',
+                'script_th_text': 'Texto Extraído',
+                'pagination_first': '« Primera',
+                'pagination_last': 'Última »',
+                'pagination_prev': 'Anterior',
+                'pagination_next': 'Siguiente',
+                'effects_suffix': 'efectos',
+                // Nuevos strings
+                'config_title': 'Analizador Yu-Gi-Oh!',
+                'config_subtitle': 'Configura las rutas para iniciar el escaneo',
+                'label_cdb': 'Carpeta de Bases de Datos (.cdb)',
+                'label_scripts': 'Carpeta de Scripts (c*.lua)',
+                'label_strings': 'Archivo de Sistema (strings.conf)',
+                'label_vars': 'Carpeta de Variables (todos los .lua)',
+                'btn_select': 'Seleccionar',
+                'btn_start': 'Iniciar Análisis Estructural',
+                'loading_text': 'Procesando scripts y base de datos...',
+                'select_cdb': 'Carpeta de .cdb...',
+                'select_scripts': 'Carpeta de scripts...',
+                'select_strings': 'Archivo strings.conf...',
+                'select_vars': 'Carpeta con archivos .lua...',
+                'btn_new_analysis': 'Nuevo Análisis',
+                'btn_cancel': 'Cancelar',
+                'tab_local': 'Local',
+                'tab_github': 'GitHub',
+                'menu_config_title': 'Configuración Global',
+                'menu_config_desc': 'Cambia las rutas base para el CDB, Scripts e Imágenes.',
+                'tab_github': 'GitHub',
+                'label_cdb_gh': 'URL Carpeta CDBs (GitHub)',
+                'label_scripts_gh': 'URL Carpeta Scripts (GitHub)',
+                'label_strings_gh': 'URL Raw strings.conf (GitHub)',
+                'app_suite_title': 'Yu-Gi-Oh! Script Suite',
+                'app_suite_subtitle': 'Selecciona una herramienta para comenzar',
+                'menu_analyzer_title': 'Analizador',
+                'menu_analyzer_desc': 'Verifica la integridad estructural de tus scripts y detecta anomalías.',
+                'menu_editor_title': 'Editor',
+                'menu_editor_desc': 'Crea y modifica scripts LUA con herramientas avanzadas (Próximamente).',
+                'btn_back_menu': 'Volver al Menú',
+                'editor_subtitle': 'Herramientas de creación y edición',
+                'editor_coming_soon': 'Próximamente',
+                'editor_desc_placeholder': 'Estamos construyendo el mejor editor para tus scripts LUA.',
+                'label_pics': 'Carpeta de Imágenes (pics)',
+                'select_pics': 'Carpeta con id.jpg o id.png...',
+                'editor_tab_list': 'Lista de Cartas',
+                'editor_tab_info': 'Información de la Carta',
+                'editor_tab_flags': 'Tipos y Flags',
+                'editor_btn_search': 'Buscar',
+                'editor_btn_clear': 'Limpiar Todo',
+                'editor_btn_image': 'Cargar Imagen',
+                'editor_btn_open_lua': 'Abrir LUA',
+                'editor_btn_add': 'Añadir Carta',
+                'editor_btn_modify': 'Modificar',
+                'editor_btn_save': 'Guardar',
+                'editor_btn_delete': 'Eliminar',
+                'editor_filter_all': 'Todos',
+                'editor_filter_monster': 'Monstruo',
+                'editor_filter_spell': 'Mágica',
+                'editor_filter_trap': 'Trampa',
+                'editor_filter_pre': 'Pre-Lanzadas',
+                'editor_filter_adv': 'Filtros',
+                'editor_filter_clear': 'Limpiar',
+                'editor_link_markers': 'Link Markers',
+                'btn_save_config': 'Guardar y Continuar',
+                'analyzer_welcome_title': 'Analizador de Scripts',
+                'stat_no_script': 'Scripts Faltantes',
+                'tab_no_script': 'Scripts Faltantes',
+                'analyzer_welcome_desc': 'Presiona el botón para escanear la base de datos y scripts configurados.',
+                'stat_excluded': 'Cartas Excluidas',
+                'tab_excluded': 'Cartas Excluidas',
+                'col_reason': 'Motivo Exclusión',
+            },
+            'en': {
+                'app_title': 'Structural Analysis Report',
+                'app_subtitle': 'Effect Validation: Prediction vs. LUA Implementation',
+                'stat_total': 'Total Analyzed',
+                'stat_ok': 'Matches',
+                'stat_error': 'Anomalies',
+                'stat_missing': 'Data Issues',
+                'tab_ok': 'Matches',
+                'tab_error': 'Anomalies',
+                'tab_missing': 'Missing Data',
+                'search_placeholder': 'Filter by card ID...',
+                'col_id': 'Card ID',
+                'col_name': 'Name',
+                'col_pred': 'Predicted',
+                'col_script': 'Script',
+                'col_action': 'Action',
+                'btn_expand': 'View Text Details',
+                'anomalies_title': '⚠️ Technical Anomalies Detected',
+                'anomalies_th_type': 'Type',
+                'anomalies_th_ref': 'Reference',
+                'anomalies_th_code': 'LUA Code',
+                'anomalies_th_desc': 'Description',
+                'pred_title': 'Predicted Effects (Description)',
+                'script_title': 'Found Effects (LUA + CDB/SYS)',
+                'script_th_ref': 'Ref',
+                'script_th_code': 'LUA Code',
+                'script_th_text': 'Extracted Text',
+                'pagination_first': '« First',
+                'pagination_last': 'Last »',
+                'pagination_prev': 'Previous',
+                'pagination_next': 'Next',
+                'effects_suffix': 'effects',
+                // New strings
+                'config_title': 'Yu-Gi-Oh! Analyzer',
+                'config_subtitle': 'Configure paths to start scanning',
+                'label_cdb': 'Database Folder (.cdb)',
+                'label_scripts': 'Script Folder (c*.lua)',
+                'label_strings': 'System File (strings.conf)',
+                'label_vars': 'Variables Folder (all .lua files)',
+                'btn_select': 'Select',
+                'btn_start': 'Start Structural Analysis',
+                'loading_text': 'Processing scripts and database...',
+                'select_cdb': 'Folder with .cdb...',
+                'select_scripts': 'Script folder...',
+                'select_strings': 'strings.conf file...',
+                'select_vars': 'Folder with .lua files...',
+                'btn_new_analysis': 'New Analysis',
+                'btn_cancel': 'Cancel',
+                'tab_local': 'Local',
+                'tab_github': 'GitHub',
+                'label_cdb_gh': 'CDB Folder URL (GitHub)',
+                'label_scripts_gh': 'Scripts Folder URL (GitHub)',
+                'label_strings_gh': 'raw strings.conf URL (GitHub)',
+                'app_suite_title': 'Yu-Gi-Oh! Script Suite',
+                'app_suite_subtitle': 'Select a tool to begin',
+                'menu_analyzer_title': 'Analyzer',
+                'menu_analyzer_desc': 'Verify the structural integrity of your scripts and detect anomalies.',
+                'menu_editor_title': 'Editor',
+                'menu_editor_desc': 'Create and modify LUA scripts with advanced tools (Coming Soon).',
+                'btn_back_menu': 'Back to Menu',
+                'editor_subtitle': 'Creation and editing tools',
+                'editor_coming_soon': 'Coming Soon',
+                'editor_desc_placeholder': 'We are building the best editor for your LUA scripts.',
+                'label_pics': 'Pictures Folder (pics)',
+                'select_pics': 'Folder with id.jpg or id.png...',
+                'editor_tab_list': 'Card List',
+                'editor_tab_info': 'Card Information',
+                'editor_tab_flags': 'Types & Flags',
+                'editor_btn_search': 'Search',
+                'editor_btn_clear': 'Clear All',
+                'editor_btn_image': 'Load Image',
+                'editor_btn_open_lua': 'Open LUA',
+                'editor_btn_add': 'Add Card',
+                'editor_btn_modify': 'Modify',
+                'editor_btn_save': 'Save',
+                'editor_btn_delete': 'Delete',
+                'editor_filter_all': 'All',
+                'editor_filter_monster': 'Monster',
+                'editor_filter_spell': 'Spell',
+                'editor_filter_trap': 'Trap',
+                'editor_filter_pre': 'Pre-Released',
+                'editor_filter_adv': 'Filters',
+                'editor_filter_clear': 'Clear',
+                'editor_link_markers': 'Link Markers',
+                'btn_save_config': 'Save and Continue',
+                'analyzer_welcome_title': 'Script Analyzer',
+                'stat_no_script': 'Missing Scripts',
+                'tab_no_script': 'Missing Scripts',
+                'analyzer_welcome_desc': 'Press the button to scan the configured database and scripts.',
+                'stat_excluded': 'Excluded Cards',
+                'tab_excluded': 'Excluded Cards',
+                'col_reason': 'Exclusion Reason',
+            },
+        };
+
+        let paths = { cdb: '', scripts: '', strings: '', pics: '' };
+        let configMode = 'local'; // 'local' o 'github'
+
+        function setConfigMode(mode) {
+            configMode = mode;
+            document.getElementById('mode-local').style.display = mode === 'local' ? 'block' : 'none';
+            document.getElementById('mode-github').style.display = mode === 'github' ? 'block' : 'none';
+
+            document.getElementById('tab-local').classList.toggle('active', mode === 'local');
+            document.getElementById('tab-github').classList.toggle('active', mode === 'github');
+
+            validatePaths();
+        }
+
+        async function browse(key, isFolder, titleKey = '') {
+            const api = isFolder ? '/api/browse_folder' : '/api/browse_file';
+            try {
+                const resp = await fetch(`${api}?lang=${lang}&title_key=${titleKey}`);
+                const data = await resp.json();
+                if (data.path) {
+                    paths[key] = data.path;
+                    document.getElementById(`path-${key}`).innerText = data.path;
+                    validatePaths();
+                }
+            } catch (e) {
+                console.error("API Error:", e);
+            }
+        }
+
+        async function saveGlobalConfig() {
+            if (configMode === 'local') {
+                try {
+                    await fetch('/api/config', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            pics_dir: paths.pics,
+                            cdb_dir: paths.cdb,
+                            script_dir: paths.scripts,
+                            strings_conf: paths.strings
+                        })
+                    });
+                } catch (e) { console.error("Config Sync Error:", e); }
+            }
+            switchView('main-menu');
+        }
+
+        function validatePaths() {
+            let isReady = false;
+            if (configMode === 'local') {
+                isReady = paths.cdb && paths.scripts && paths.strings;
+            } else {
+                const ghCdb = document.getElementById('gh-cdb').value.trim();
+                const ghScripts = document.getElementById('gh-scripts').value.trim();
+                const ghStrings = document.getElementById('gh-strings').value.trim();
+                isReady = ghCdb && ghScripts && ghStrings;
+            }
+            const btn = document.getElementById('saveConfigBtn');
+            if (btn) btn.disabled = !isReady;
+        }
+
+        async function startAnalysis() {
+            const loadingText = document.querySelector('#analysis-loading h2');
+            const progressBox = document.getElementById('download-progress-box');
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+            const logBox = document.getElementById('download-log');
+
+            document.getElementById('analysis-loading').style.display = 'flex';
+            logBox.innerHTML = '';
+            progressFill.style.width = '0%';
+            progressText.innerText = '0 / 0 (0%)';
+
+            try {
+                let bodyData = {
+                    mode: configMode,
+                    lang: lang
+                };
+
+                let stopPolling = false;
+                if (configMode === 'local') {
+                    bodyData.cdb_dir = paths.cdb;
+                    bodyData.script_dir = paths.scripts;
+                    bodyData.strings_conf = paths.strings;
+                    bodyData.pics_dir = paths.pics; // Nueva ruta
+                    progressBox.style.display = 'none';
+                } else {
+                    bodyData.github_cdb = document.getElementById('gh-cdb').value.trim();
+                    bodyData.github_scripts = document.getElementById('gh-scripts').value.trim();
+                    bodyData.github_strings = document.getElementById('gh-strings').value.trim();
+                    loadingText.innerText = lang === 'es' ? "Descargando de GitHub..." : "Downloading from GitHub...";
+                    progressBox.style.display = 'flex';
+
+                    // Iniciar polling de progreso
+                    const pollProgress = async () => {
+                        if (stopPolling) return;
+                        try {
+                            const pResp = await fetch('/api/progress');
+                            const pData = await pResp.json();
+
+                            const percent = pData.total > 0 ? Math.round((pData.current / pData.total) * 100) : 0;
+                            progressFill.style.width = `${percent}%`;
+                            progressText.innerText = `${pData.current} / ${pData.total} (${percent}%)`;
+
+                            if (pData.last_file) {
+                                const entry = document.createElement('div');
+                                entry.className = 'log-entry';
+                                entry.innerText = `> ${pData.last_file}`;
+                                logBox.appendChild(entry);
+                                logBox.scrollTop = logBox.scrollHeight;
+                            }
+
+                            if (!stopPolling) setTimeout(pollProgress, 500);
+                        } catch (e) { console.error("Poll error", e); }
+                    };
+                    pollProgress();
+                }
+
+                const resp = await fetch('/api/run', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bodyData)
+                });
+
+                stopPolling = true;
+
+                if (resp.ok) {
+                    await loadData(true);
+                } else {
+                    const err = await resp.json();
+                    alert("Error: " + (err.error || "Unknown"));
+                }
+            } catch (e) {
+                console.error("Analysis Error:", e);
+            } finally {
+                document.getElementById('analysis-loading').style.display = 'none';
+                loadingText.innerText = t('loading_text');
+            }
+        }
+
+        function t(key, params = {}) {
+            // Primero buscar en UI_STRINGS
+            let text = UI_STRINGS[lang][key];
+            if (!text && allData.i18n && allData.i18n[lang]) {
+                // Luego buscar en I18N del backend
+                text = allData.i18n[lang][key];
+            }
+            if (!text) return key;
+
+            // Reemplazar parámetros
+            Object.keys(params).forEach(k => {
+                text = text.replace(`{${k}}`, params[k]);
+            });
+            return text;
+        }
+
+        function setLang(newLang) {
+            lang = newLang;
+            localStorage.setItem('lang', lang);
+            updateUI();
+            render();
+        }
+
+        function updateUI() {
+            // Actualizar elementos con data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.innerText = t(key);
+            });
+            // Placeholder del buscador
+            document.getElementById('searchInput').placeholder = t('search_placeholder');
+
+            // Placeholders de configuración
+            document.querySelectorAll('[data-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-placeholder');
+                if (el.innerText === '...' || el.dataset.isPlaceholder) {
+                    el.innerText = t(key);
+                    el.dataset.isPlaceholder = "true";
+                }
+            });
+
+            // Botones de idioma
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            if (document.getElementById(`lang-${lang}`)) document.getElementById(`lang-${lang}`).classList.add('active');
+            if (document.getElementById(`lang-${lang}-cfg`)) document.getElementById(`lang-${lang}-cfg`).classList.add('active');
+        }
+
+        async function loadData(forceHideConfig = false) {
+            try {
+                const r = await fetch('resultados.json?t=' + new Date().getTime());
+                if (!r.ok) throw new Error("No data");
+                allData = await r.json();
+
+                const hasResults = allData && (
+                    (allData.coincidencias && allData.coincidencias.length > 0) ||
+                    (allData.anomalias && allData.anomalias.length > 0) ||
+                    (allData.scripts_faltantes && allData.scripts_faltantes.length > 0) ||
+                    (allData.excluidas && allData.excluidas.length > 0)
+                );
+
+                if (hasResults) {
+                    const total = (allData.coincidencias ? allData.coincidencias.length : 0) +
+                        (allData.anomalias ? allData.anomalias.length : 0) +
+                        (allData.scripts_faltantes ? allData.scripts_faltantes.length : 0);
+
+                    document.getElementById('stat-total').innerText = total;
+                    document.getElementById('stat-ok').innerText = allData.coincidencias ? allData.coincidencias.length : 0;
+                    document.getElementById('stat-error').innerText = allData.anomalias ? allData.anomalias.length : 0;
+                    document.getElementById('stat-missing').innerText = allData.faltantes ? allData.faltantes.length : 0;
+                    document.getElementById('stat-no-script').innerText = allData.scripts_faltantes ? allData.scripts_faltantes.length : 0;
+                    if (document.getElementById('stat-excluded')) document.getElementById('stat-excluded').innerText = allData.excluidas ? allData.excluidas.length : 0;
+
+                    if (allData.excluidas) {
+                        let normalCount = 0;
+                        let tokenCount = 0;
+                        let aliasCount = 0;
+                        allData.excluidas.forEach(c => {
+                            if (c.reason === "Monstruo Normal") normalCount++;
+                            else if (c.reason === "Ficha/Token") tokenCount++;
+                            else if (c.reason && c.reason.startsWith("Alias")) aliasCount++;
+                        });
+                        const breakdownEl = document.getElementById('excluidas-breakdown');
+                        if (breakdownEl) {
+                            const lblNormal = lang === 'en' ? "Normal Monsters:" : "Monstruos Normales:";
+                            const lblToken = lang === 'en' ? "Tokens:" : "Fichas/Tokens:";
+                            const lblAlias = lang === 'en' ? "Aliases:" : "Alias:";
+                            breakdownEl.innerHTML = `
+                                <div><strong style="color:var(--text-muted)">${lblNormal}</strong> <span style="color:var(--accent-secondary); font-size:1.2rem; font-weight:bold">${normalCount}</span></div>
+                                <div><strong style="color:var(--text-muted)">${lblToken}</strong> <span style="color:var(--accent-secondary); font-size:1.2rem; font-weight:bold">${tokenCount}</span></div>
+                                <div><strong style="color:var(--text-muted)">${lblAlias}</strong> <span style="color:var(--accent-secondary); font-size:1.2rem; font-weight:bold">${aliasCount}</span></div>
+                            `;
+                        }
+                    }
+
+                    document.getElementById('analyzer-welcome').style.display = 'none';
+                    document.getElementById('analyzer-results').style.display = 'block';
+
+                    updateFilteredList();
+                    updateUI();
+                    render();
+                } else {
+                    document.getElementById('analyzer-welcome').style.display = 'block';
+                    document.getElementById('analyzer-results').style.display = 'none';
+                }
+                return hasResults;
+            } catch (e) {
+                allData = { coincidencias: [], anomalias: [], faltantes: [], scripts_faltantes: [] };
+                return false;
+            }
+        }
+
+        function switchView(viewId) {
+            // Si salimos del editor, resetear el estado para que al volver se vea "como la primera vez".
+            try {
+                const editorEl = document.getElementById('module-editor');
+                const wasEditorVisible = editorEl && editorEl.style.display !== 'none';
+                if (wasEditorVisible && viewId !== 'module-editor') {
+                    resetEditorState();
+                }
+            } catch { }
+
+            // Ocultar todas las vistas principales
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('module-analyzer').style.display = 'none';
+            document.getElementById('module-editor').style.display = 'none';
+            document.getElementById('config-view').style.display = 'none';
+
+            // Mostrar la seleccionada
+            const flexViews = new Set(['main-menu', 'config-view', 'module-editor']);
+            document.getElementById(viewId).style.display = flexViews.has(viewId) ? 'flex' : 'block';
+
+            if (viewId === 'module-analyzer') {
+                document.getElementById('analyzer-main-view').style.display = 'block';
+                render();
+            }
+
+            if (viewId === 'module-editor') {
+                initEditor();
+                // Ajustar zoom de la página para que el editor quepa en el viewport (sin depender del zoom del navegador)
+                requestAnimationFrame(() => fitEditorPageToViewport());
+            } else {
+                applyEditorPageZoom(1);
+            }
+
+            // Si estamos en menú, mostrar cancelar solo si hay datos
+            if (viewId === 'config-view') {
+                const hasResults = allData && (allData.coincidencias.length > 0 || allData.anomalias.length > 0);
+                document.getElementById('cancelConfigBtn').style.display = hasResults ? 'block' : 'none';
+            }
+        }
+
+        // --- LÓGICA DEL EDITOR ---
+        let editorAllCards = [];
+        let editorFilteredCards = [];
+        let editorPage = 1;
+        let editorSelectedCardId = null;
+        let editorSelectedCard = null;
+        let editorIsLoading = false;
+        let editorIsEditMode = false;
+        let editorAdvancedFilterMode = false;
+        let editorConstants = null;
+        let editorSearchQuery = '';
+        let editorSearchQueryRaw = '';
+        let editorSearchQueryFold = '';
+        let editorTypeMaskFilter = 0; // 0 => all; else OR-mask of monster/spell/trap
+        let editorPreFilter = false; // true => ID length > 8
+        const editorItemsPerPage = 50;
+
+        const EDITOR_TYPE_MASKS = { monster: 0x1, spell: 0x2, trap: 0x4 };
+
+        function resetEditorState() {
+            // Importante: NO resetear `editorAllCards` para evitar re-cargar la base de datos al volver a entrar.
+            editorPage = 1;
+            editorSelectedCardId = null;
+            editorSelectedCard = null;
+            editorIsLoading = false;
+            editorIsEditMode = false;
+            editorAdvancedFilterMode = false;
+            editorSearchQuery = '';
+            editorSearchQueryRaw = '';
+            editorSearchQueryFold = '';
+            editorTypeMaskFilter = 0;
+            editorPreFilter = false;
+
+            // Reset UI controls
+            try {
+                const module = document.getElementById('module-editor');
+                if (module) module.classList.remove('has-link-markers', 'editor-compact');
+
+                const search = document.getElementById('editor-search');
+                if (search) search.value = '';
+
+                // Clear selects to defaults
+                ['edit-rule', 'edit-attribute', 'edit-level', 'edit-race', 'edit-setcode1', 'edit-setcode2', 'edit-setcode3', 'edit-setcode4'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '0';
+                });
+
+                // Clear checkboxes (types/category/flags + link markers)
+                document.querySelectorAll('#type-checkbox-grid input[type=\"checkbox\"], #category-checkbox-grid input[type=\"checkbox\"], #flags-checkbox-grid input[type=\"checkbox\"], #field-link-markers input[type=\"checkbox\"]').forEach(cb => {
+                    cb.checked = false;
+                });
+                // Quitar "ghost marks" (card-on)
+                document.querySelectorAll('#type-checkbox-grid .checkbox-item, #category-checkbox-grid .checkbox-item, #flags-checkbox-grid .checkbox-item').forEach(l => {
+                    l.classList.remove('card-on', 'is-checked');
+                });
+
+                // Restore attribute/link markers position (no-link layout)
+                const gridTop = document.getElementById('editor-form-grid-top');
+                const fieldAttr = document.getElementById('field-attribute');
+                const fieldLM = document.getElementById('field-link-markers');
+                const attrAnchor = document.getElementById('attribute-anchor');
+                const lmAnchor = document.getElementById('link-markers-anchor');
+                if (gridTop && fieldAttr && attrAnchor && fieldAttr.parentElement !== gridTop) attrAnchor.after(fieldAttr);
+                if (gridTop && fieldLM && lmAnchor && fieldLM.parentElement !== gridTop) lmAnchor.after(fieldLM);
+                if (fieldLM) fieldLM.style.display = 'none';
+
+                // Reset simple fields + highlights
+                const nameEl = document.getElementById('edit-name');
+                const idEl = document.getElementById('edit-passcode');
+                if (nameEl) { nameEl.value = ''; nameEl.classList.remove('editor-search-match'); }
+                if (idEl) { idEl.value = ''; idEl.classList.remove('editor-search-match'); }
+                const atkEl = document.getElementById('edit-atk'); if (atkEl) atkEl.value = '0';
+                const defEl = document.getElementById('edit-def'); if (defEl) defEl.value = '0';
+                const aliasEl = document.getElementById('edit-alias'); if (aliasEl) aliasEl.value = '0';
+
+                // Reset image
+                const img = document.getElementById('editor-img-preview');
+                const ph = document.getElementById('editor-img-placeholder');
+                if (img) { img.src = ''; img.style.display = 'none'; }
+                if (ph) ph.style.display = 'block';
+
+                // Reset analysis/strings displays
+                const analysis = document.getElementById('editor-analysis-display');
+                if (analysis) analysis.innerHTML = 'Esperando selección de carta...';
+                const strings = document.getElementById('editor-strings-display');
+                if (strings) {
+                    strings.innerHTML = `
+                        <div style="color: var(--text-muted); font-style: italic; padding: 1rem; text-align: center;">
+                            Selecciona una carta para ver sus strings...
+                        </div>
+                    `;
+                }
+                setEditorDetailsTab('analysis');
+
+                const details = document.getElementById('editor-form-details');
+                if (details) details.open = true;
+
+                // Reset filter buttons
+                updateEditorTypeFilterButtons();
+                document.querySelectorAll('#module-editor [data-editor-prefilter]').forEach(btn => btn.classList.remove('active'));
+                updateEditorAdvancedFilterButtons();
+
+                // Disable controls (solo-lectura)
+                setEditorControlsEnabledForMode();
+
+                // Reset scroll
+                const main = document.querySelector('#module-editor .editor-main-content');
+                if (main) main.scrollTop = 0;
+            } catch { }
+
+            // Reaplicar filtros (vacíos) sobre la data ya cargada
+            applyEditorFilters();
+        }
+
+        function escapeHtml(val) {
+            return String(val ?? '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#39;');
+        }
+
+        function escapeRegExp(val) {
+            return String(val ?? '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function foldForSearch(val) {
+            const s = String(val ?? '');
+            try {
+                return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+            } catch {
+                return s.toLowerCase();
+            }
+        }
+
+        function highlightAndEscape(text, queryRaw) {
+            const t = String(text ?? '');
+            const q = String(queryRaw ?? '').trim();
+            if (!q) return escapeHtml(t);
+
+            const qFold = foldForSearch(q);
+            if (!qFold) return escapeHtml(t);
+
+            // Construir texto "folded" + mapa de posición (fold idx -> original idx)
+            let folded = '';
+            const map = [];
+            for (let i = 0; i < t.length; i++) {
+                const ch = t[i];
+                const f = foldForSearch(ch);
+                if (!f) continue;
+                folded += f;
+                for (let k = 0; k < f.length; k++) map.push(i);
+            }
+
+            if (!folded) return escapeHtml(t);
+
+            // Buscar matches en el texto folded
+            const ranges = [];
+            let from = 0;
+            while (true) {
+                const pos = folded.indexOf(qFold, from);
+                if (pos < 0) break;
+                const startOrig = map[pos];
+                const endOrig = map[pos + qFold.length - 1] + 1;
+                if (startOrig != null && endOrig != null) ranges.push([startOrig, endOrig]);
+                from = pos + Math.max(1, qFold.length);
+            }
+
+            if (!ranges.length) return escapeHtml(t);
+
+            // Merge ranges solapados
+            ranges.sort((a, b) => a[0] - b[0]);
+            const merged = [];
+            for (const r of ranges) {
+                const last = merged[merged.length - 1];
+                if (!last || r[0] > last[1]) merged.push(r);
+                else last[1] = Math.max(last[1], r[1]);
+            }
+
+            // Render resaltado
+            let out = '';
+            let cursor = 0;
+            for (const [a, b] of merged) {
+                out += escapeHtml(t.slice(cursor, a));
+                out += `<mark class="editor-search-hit">${escapeHtml(t.slice(a, b))}</mark>`;
+                cursor = b;
+            }
+            out += escapeHtml(t.slice(cursor));
+            return out;
+        }
+
+        function applyEditorFilters() {
+            const qFold = String(editorSearchQueryFold || '').trim();
+            const typeMask = Number(editorTypeMaskFilter || 0);
+            const adv = editorAdvancedFilterMode ? getEditorAdvancedFiltersFromUI() : null;
+
+            editorFilteredCards = editorAllCards.filter(c => {
+                // Pre-lanzadas: IDs con longitud > 8
+                if (editorPreFilter) {
+                    const idLen = String(c.id ?? '').length;
+                    if (idLen <= 8) return false;
+                }
+
+                // Search
+                if (qFold) {
+                    const idMatch = String(c.id ?? '').includes(editorSearchQueryRaw);
+                    const nameMatch = foldForSearch(c.name).includes(qFold);
+                    const descMatch = foldForSearch(c.desc).includes(qFold);
+                    if (!idMatch && !nameMatch && !descMatch) return false;
+                }
+
+                // Type filter
+                const typeValue = parseInt(c.type || 0);
+                if (!typeMask) return true;
+                return (typeValue & typeMask) !== 0;
+            });
+
+            if (adv) {
+                editorFilteredCards = editorFilteredCards.filter(c => {
+                    const typeValue = parseInt(c.type || 0);
+                    const otValue = parseInt(c.ot || c.rule || 0);
+                    const attrValue = parseInt(c.attribute || 0);
+                    const raceValue = parseInt(c.race || 0);
+                    const levelValue = parseInt((c.level_primary ?? (parseInt(c.level || 0) & 0xFF)) || 0);
+                    const categoryValue = parseInt(c.category || 0);
+                    const setcodes16 = Array.isArray(c.setcodes16) ? c.setcodes16 : [];
+
+                    if (adv.ruleMask && ((otValue & adv.ruleMask) !== adv.ruleMask)) return false;
+                    if (adv.requiredOtFlagsMask && ((otValue & adv.requiredOtFlagsMask) !== adv.requiredOtFlagsMask)) return false;
+
+                    if (adv.attribute && attrValue !== adv.attribute) return false;
+                    if (adv.race && raceValue !== adv.race) return false;
+                    if (adv.level && levelValue !== adv.level) return false;
+
+                    if (adv.requiredTypeMask && ((typeValue & adv.requiredTypeMask) !== adv.requiredTypeMask)) return false;
+                    if (adv.requiredCategoryMask && ((categoryValue & adv.requiredCategoryMask) !== adv.requiredCategoryMask)) return false;
+
+                    if (adv.setcodes && adv.setcodes.length) {
+                        for (const sc of adv.setcodes) {
+                            if (!setcodes16.includes(sc)) return false;
+                        }
+                    }
+                    return true;
+                });
+            }
+
+            editorPage = 1;
+            renderEditorList();
+        }
+
+        function updateEditorTypeFilterButtons() {
+            document.querySelectorAll('#module-editor [data-editor-type]').forEach(btn => {
+                const t = btn.getAttribute('data-editor-type');
+                if (t === 'all') {
+                    btn.classList.toggle('active', editorTypeMaskFilter === 0);
+                } else {
+                    const bit = EDITOR_TYPE_MASKS[t] || 0;
+                    btn.classList.toggle('active', bit ? ((editorTypeMaskFilter & bit) === bit) : false);
+                }
+            });
+        }
+
+        function toggleEditorTypeFilter(type) {
+            const t = String(type || 'all');
+            if (t === 'all') {
+                editorTypeMaskFilter = 0;
+            } else {
+                const bit = EDITOR_TYPE_MASKS[t] || 0;
+                if (bit) editorTypeMaskFilter = editorTypeMaskFilter ^ bit;
+            }
+            updateEditorTypeFilterButtons();
+            applyEditorFilters();
+        }
+
+        function toggleEditorPreFilter() {
+            editorPreFilter = !editorPreFilter;
+            document.querySelectorAll('#module-editor [data-editor-prefilter]').forEach(btn => {
+                btn.classList.toggle('active', editorPreFilter);
+            });
+            applyEditorFilters();
+        }
+
+        function updateEditorActionButtons() {
+            const modifyBtn = document.getElementById('editor-btn-modify');
+            const saveBtn = document.getElementById('editor-btn-save');
+            if (modifyBtn) modifyBtn.disabled = !editorSelectedCardId || editorIsEditMode;
+            if (saveBtn) saveBtn.disabled = !editorSelectedCardId || !editorIsEditMode;
+        }
+
+        function updateEditorAdvancedFilterButtons() {
+            const advBtn = document.getElementById('editor-btn-adv-filters');
+            const clearBtn = document.getElementById('editor-btn-clear-adv-filters');
+            if (advBtn) advBtn.classList.toggle('active', editorAdvancedFilterMode);
+            if (clearBtn) clearBtn.disabled = !editorAdvancedFilterMode;
+        }
+
+        function setEditorControlsEnabledForMode() {
+            const module = document.getElementById('module-editor');
+            if (!module) return;
+
+            const enable = (selector, on) => {
+                module.querySelectorAll(selector).forEach(el => { el.disabled = !on; });
+            };
+
+            // Por defecto: todo deshabilitado fuera de "Modify"
+            const enableAll = Boolean(editorIsEditMode);
+            const enableFilters = Boolean(!editorIsEditMode && editorAdvancedFilterMode);
+
+            // Campos siempre solo lectura (se muestran, pero no editan ni filtran)
+            enable('#edit-name, #edit-passcode, #edit-alias, #edit-atk, #edit-def', enableAll);
+
+            // Selects usados como filtros (y editables en Modify)
+            enable('#edit-rule, #edit-attribute, #edit-level, #edit-race, #edit-setcode1, #edit-setcode2, #edit-setcode3, #edit-setcode4', enableAll || enableFilters);
+
+            // Checkboxes: Types/Category/Flags actúan como filtros cuando editorAdvancedFilterMode está activo
+            enable('#type-checkbox-grid input[type=\"checkbox\"], #category-checkbox-grid input[type=\"checkbox\"], #flags-checkbox-grid input[type=\"checkbox\"]', enableAll || enableFilters);
+
+            // Link Markers: solo edición real en Modify
+            enable('#field-link-markers input[type=\"checkbox\"]', enableAll);
+
+            updateEditorActionButtons();
+            updateEditorAdvancedFilterButtons();
+        }
+
+        function setEditorEditMode(enabled) {
+            editorIsEditMode = Boolean(enabled);
+
+            const module = document.getElementById('module-editor');
+            if (!module) return;
+
+            if (editorIsEditMode) {
+                editorAdvancedFilterMode = false;
+            }
+            setEditorControlsEnabledForMode();
+        }
+
+        function toggleEditorAdvancedFilters() {
+            if (editorIsEditMode) return;
+            editorAdvancedFilterMode = !editorAdvancedFilterMode;
+            if (editorAdvancedFilterMode) {
+                // Al activar filtros, no sobreescribir con la carta seleccionada.
+                clearEditorAdvancedFilters();
+            } else {
+                // Al desactivar filtros, restaurar vista de carta seleccionada.
+                if (editorSelectedCard) selectEditorCard(editorSelectedCard, { keepListHighlight: true });
+            }
+            setEditorControlsEnabledForMode();
+            applyEditorFilters();
+        }
+
+        function clearEditorAdvancedFilters() {
+            // Resetear selects a 0 y desmarcar checks.
+            ['edit-rule', 'edit-attribute', 'edit-level', 'edit-race', 'edit-setcode1', 'edit-setcode2', 'edit-setcode3', 'edit-setcode4'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '0';
+            });
+            document.querySelectorAll('#type-checkbox-grid input[type=\"checkbox\"], #category-checkbox-grid input[type=\"checkbox\"], #flags-checkbox-grid input[type=\"checkbox\"]').forEach(cb => {
+                cb.checked = false;
+            });
+            updateEditorTypeFilterButtons();
+            updateEditorAdvancedFilterButtons();
+            applyEditorFilters();
+        }
+
+        function getEditorAdvancedFiltersFromUI() {
+            const getInt = (id) => {
+                const el = document.getElementById(id);
+                if (!el) return 0;
+                return parseInt(el.value || '0') || 0;
+            };
+
+            const ruleMask = getInt('edit-rule');
+            const attribute = getInt('edit-attribute');
+            const level = getInt('edit-level');
+            const race = getInt('edit-race');
+            const setcodes = ['edit-setcode1', 'edit-setcode2', 'edit-setcode3', 'edit-setcode4']
+                .map(getInt)
+                .filter(v => v > 0);
+
+            let requiredTypeMask = 0;
+            document.querySelectorAll('#type-checkbox-grid input[type=\"checkbox\"]:checked').forEach(cb => {
+                requiredTypeMask |= (parseInt(cb.value) || 0);
+            });
+
+            let requiredCategoryMask = 0;
+            document.querySelectorAll('#category-checkbox-grid input[type=\"checkbox\"]:checked').forEach(cb => {
+                requiredCategoryMask |= (parseInt(cb.value) || 0);
+            });
+
+            let requiredOtFlagsMask = 0;
+            document.querySelectorAll('#flags-checkbox-grid input[type=\"checkbox\"]:checked').forEach(cb => {
+                const bit = (parseInt(cb.value) || 0);
+                // Evitar solapamiento con Rule (0x1/0x2/0x4). Flags reales empiezan en 0x8.
+                if ((bit & 0x7) !== 0) return;
+                requiredOtFlagsMask |= bit;
+            });
+
+            return { ruleMask, attribute, level, race, setcodes, requiredTypeMask, requiredCategoryMask, requiredOtFlagsMask };
+        }
+
+        function renderEditorConstants(constants) {
+            editorConstants = constants || null;
+            // Llenar Selects
+            const populateSelect = (id, data, defaultText = "NONE") => {
+                const sel = document.getElementById(id);
+                if (!sel || !data) return;
+                sel.innerHTML = `<option value="0">${defaultText}</option>`;
+                Object.entries(data).forEach(([key, val]) => {
+                    if (key !== "0" && key !== "-1" && val.toUpperCase() !== defaultText.toUpperCase()) {
+                        sel.innerHTML += `<option value="${key}">${val}</option>`;
+                    }
+                });
+            };
+
+            populateSelect('edit-attribute', constants['attribute'], 'Attribute');
+            populateSelect('edit-race', constants['race'], 'Race');
+            populateSelect('edit-level', constants['level'], 'Level/Rank/Link');
+            ['edit-setcode1', 'edit-setcode2', 'edit-setcode3', 'edit-setcode4'].forEach(id => {
+                populateSelect(id, constants['setname'], 'Archetype');
+            });
+            populateSelect('edit-rule', constants['rule'], 'Rule');
+
+            // Llenar Checkboxes
+            const populateChecks = (id, data) => {
+                const grid = document.getElementById(id);
+                if (!grid || !data) return;
+                grid.innerHTML = '';
+                Object.entries(data).forEach(([key, val]) => {
+                    if (val && val.toUpperCase() !== "N/A" && key !== "0") {
+                        const safeVal = String(val).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+                        grid.innerHTML += `<label class="checkbox-item"><input type="checkbox" value="${key}"><span class="checkbox-text" title="${safeVal}">${safeVal}</span></label>`;
+                    }
+                });
+            };
+
+            populateChecks('type-checkbox-grid', constants['type']);
+            populateChecks('category-checkbox-grid', constants['category (genre)']);
+            populateChecks('flags-checkbox-grid', constants['flags (category)']);
+        }
+
+        async function initEditor(force = false) {
+            const isStale = editorAllCards.length > 0 && (editorAllCards[0]?.category == null);
+            if (editorAllCards.length > 0 && !force && !isStale) {
+                applyEditorFilters();
+                setEditorEditMode(false);
+                return;
+            }
+
+            editorIsLoading = true;
+            renderEditorList(); // Mostrar estado de carga
+
+            try {
+                // Cargar constantes primero
+                const constResp = await fetch('/api/editor/constants');
+                const constants = await constResp.json();
+                renderEditorConstants(constants);
+                updateEditorTypeFilterButtons();
+
+                // Cargar cartas
+                const resp = await fetch('/api/editor/load');
+                const data = await resp.json();
+                editorAllCards = data;
+                applyEditorFilters();
+            } catch (e) {
+                console.error("Editor Load Error:", e);
+                editorAllCards = [];
+                editorFilteredCards = [];
+            } finally {
+                editorIsLoading = false;
+                renderEditorList();
+                setEditorEditMode(false);
+            }
+        }
+
+        function renderEditorList() {
+            const listContainer = document.getElementById('editor-card-list');
+            if (!listContainer) return;
+
+            if (editorIsLoading) {
+                listContainer.innerHTML = `
+                    <div style="padding: 2rem; text-align: center; color: var(--accent-primary);">
+                        <div class="loading-spinner" style="margin: 0 auto 1rem; width: 40px; height: 40px; border: 4px solid rgba(139, 92, 246, 0.1); border-top-color: var(--accent-primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                        Cargando Base de Datos...
+                    </div>
+                `;
+                return;
+            }
+
+            listContainer.innerHTML = '';
+
+            const start = (editorPage - 1) * editorItemsPerPage;
+            const end = start + editorItemsPerPage;
+            const pageItems = editorFilteredCards.slice(start, end);
+            const qRaw = String(editorSearchQueryRaw || '').trim();
+
+            pageItems.forEach(card => {
+                const item = document.createElement('div');
+                item.className = 'editor-card-item' + (editorSelectedCardId === card.id ? ' active' : '');
+                if (qRaw) {
+                    item.innerHTML = `<strong>${highlightAndEscape(String(card.id), qRaw)}</strong> - ${highlightAndEscape(String(card.name || ''), qRaw)}`;
+                } else {
+                    item.innerHTML = `<strong>${escapeHtml(card.id)}</strong> - ${escapeHtml(card.name || '')}`;
+                }
+                item.onclick = () => selectEditorCard(card);
+                listContainer.appendChild(item);
+            });
+
+            // Actualizar contador y paginación
+            const total = editorFilteredCards.length;
+            const totalPages = Math.ceil(total / editorItemsPerPage) || 1;
+            document.getElementById('editor-card-count').innerText = `${total} Cards`;
+            document.getElementById('editor-page-info').innerText = `${editorPage} / ${totalPages}`;
+            updateEditorActionButtons();
+        }
+
+        function prevEditorPage() {
+            if (editorPage > 1) {
+                editorPage--;
+                renderEditorList();
+            }
+        }
+
+        function nextEditorPage() {
+            const totalPages = Math.ceil(editorFilteredCards.length / editorItemsPerPage);
+            if (editorPage < totalPages) {
+                editorPage++;
+                renderEditorList();
+            }
+        }
+
+        function selectEditorCard(card, opts = {}) {
+            editorSelectedCard = card;
+            editorSelectedCardId = card.id;
+            // Al seleccionar una carta, iniciar en modo solo-lectura.
+            setEditorEditMode(false);
+            // Resaltar seleccionado en la lista
+            document.querySelectorAll('.editor-card-item').forEach(el => {
+                const id = parseInt(el.querySelector('strong').innerText);
+                el.classList.toggle('active', id === card.id);
+            });
+
+            // Cargar datos en el formulario central
+            document.getElementById('edit-passcode').value = card.id || "";
+            document.getElementById('edit-name').value = card.name || "";
+
+            // Resaltar coincidencias de búsqueda en ID/Nombre (inputs)
+            try {
+                const qRaw = String(editorSearchQueryRaw || '').trim();
+                const nameEl = document.getElementById('edit-name');
+                const idEl = document.getElementById('edit-passcode');
+                if (nameEl) nameEl.classList.remove('editor-search-match');
+                if (idEl) idEl.classList.remove('editor-search-match');
+                if (qRaw) {
+                    const qFold = foldForSearch(qRaw);
+                    if (nameEl && foldForSearch(card.name).includes(qFold)) nameEl.classList.add('editor-search-match');
+                    if (idEl && String(card.id || '').includes(qRaw)) idEl.classList.add('editor-search-match');
+                }
+            } catch { }
+
+            // Campos numéricos y selects
+            const canPopulateFilterControls = !editorAdvancedFilterMode || editorIsEditMode;
+            if (canPopulateFilterControls) {
+                if (document.getElementById('edit-attribute')) document.getElementById('edit-attribute').value = card.attribute || 0;
+                if (document.getElementById('edit-level')) document.getElementById('edit-level').value = card.level_primary || card.level || 0;
+                if (document.getElementById('edit-race')) document.getElementById('edit-race').value = card.race || 0;
+            }
+            if (document.getElementById('edit-atk')) document.getElementById('edit-atk').value = (card.atk ?? 0);
+            if (document.getElementById('edit-def')) document.getElementById('edit-def').value = (card.def ?? 0);
+            if (document.getElementById('edit-alias')) document.getElementById('edit-alias').value = card.alias || 0;
+            const setSetcodeSelectValue = (sel, desired) => {
+                if (!sel) return;
+                const val = parseInt(desired || 0);
+                sel.querySelectorAll('option[data-dynamic="1"]').forEach(o => o.remove());
+                sel.value = String(val || 0);
+                if (val && sel.value !== String(val)) {
+                    const opt = document.createElement('option');
+                    opt.value = String(val);
+                    opt.setAttribute('data-dynamic', '1');
+                    opt.textContent = `Unknown Set (${('0x' + val.toString(16)).toUpperCase()})`;
+                    sel.appendChild(opt);
+                    sel.value = String(val);
+                }
+            };
+
+            if (canPopulateFilterControls) {
+                const parts = Array.isArray(card.setcodes16) ? card.setcodes16.slice(0, 4) : [];
+                const slots = [parts[0] || 0, parts[1] || 0, parts[2] || 0, parts[3] || 0];
+                setSetcodeSelectValue(document.getElementById('edit-setcode1'), slots[0] || card.setcode_primary || 0);
+                setSetcodeSelectValue(document.getElementById('edit-setcode2'), slots[1]);
+                setSetcodeSelectValue(document.getElementById('edit-setcode3'), slots[2]);
+                setSetcodeSelectValue(document.getElementById('edit-setcode4'), slots[3]);
+                if (document.getElementById('edit-rule')) document.getElementById('edit-rule').value = card.ot || card.rule || 0;
+            }
+
+            // Sincronizar Checkboxes (Binario)
+            const typeValue = parseInt(card.type || 0);
+            const isMonster = (typeValue & 0x1) === 0x1;
+            const isLink = (typeValue & 0x4000000) === 0x4000000;
+            try {
+                const module = document.getElementById('module-editor');
+                if (module) module.classList.toggle('has-link-markers', Boolean(isMonster && isLink));
+            } catch { }
+
+            // Reubicar Attribute + Link Markers en un stack centrado (columna derecha) para cartas Link
+            try {
+                const gridTop = document.getElementById('editor-form-grid-top');
+                const stack = document.getElementById('link-side-stack');
+                const fieldAttr = document.getElementById('field-attribute');
+                const fieldLM = document.getElementById('field-link-markers');
+                const attrAnchor = document.getElementById('attribute-anchor');
+                const lmAnchor = document.getElementById('link-markers-anchor');
+
+                if (isMonster && isLink) {
+                    if (stack && fieldAttr && fieldAttr.parentElement !== stack) stack.appendChild(fieldAttr);
+                    if (stack && fieldLM && fieldLM.parentElement !== stack) stack.appendChild(fieldLM);
+                } else {
+                    if (gridTop && attrAnchor && fieldAttr && fieldAttr.parentElement !== gridTop) attrAnchor.after(fieldAttr);
+                    if (gridTop && lmAnchor && fieldLM && fieldLM.parentElement !== gridTop) lmAnchor.after(fieldLM);
+                }
+            } catch { }
+            const catValue = parseInt(card.category || 0);
+            const markOrGhost = (selector, mask, { forceClearChecks = false } = {}) => {
+                document.querySelectorAll(selector).forEach(cb => {
+                    const bit = parseInt(cb.value) || 0;
+                    const on = bit ? ((mask & bit) === bit) : false;
+                    const label = cb.closest('label');
+                    if (label) {
+                        if (canPopulateFilterControls) {
+                            label.classList.remove('card-on');
+                            label.classList.toggle('is-checked', on);
+                        } else {
+                            label.classList.remove('is-checked');
+                            label.classList.toggle('card-on', on);
+                        }
+                    }
+                    if (canPopulateFilterControls) {
+                        cb.checked = on;
+                    } else if (forceClearChecks) {
+                        cb.checked = false;
+                    }
+                });
+            };
+
+            // Si Advanced Filters está activo, NO sobreescribir checks (son filtros): usamos "ghost marks".
+            markOrGhost('#type-checkbox-grid input[type="checkbox"]', typeValue);
+            markOrGhost('#category-checkbox-grid input[type="checkbox"]', catValue);
+            // Flags: en .cdb típicos no existe un campo separado como en DataEditorX (Omega),
+            // así que no se auto-marcan. En modo filtros los limpiamos para evitar confusión visual.
+            markOrGhost('#flags-checkbox-grid input[type="checkbox"]', 0, { forceClearChecks: true });
+
+            // Ocultar campos irrelevantes en Magias/Trampas
+            ['edit-atk', 'edit-def', 'edit-alias', 'edit-race'].forEach(id => {
+                const el = document.getElementById(id);
+                const container = el ? el.closest('.input-field') : null;
+                if (container) container.style.display = isMonster ? '' : 'none';
+            });
+
+            // Link markers
+            const linkMarkersField = document.getElementById('field-link-markers');
+            if (linkMarkersField) linkMarkersField.style.display = (isMonster && isLink) ? '' : 'none';
+            if (isMonster && isLink) {
+                // En algunas DB (como la tuya), los Link Markers vienen en `def` (bitmask) en vez de `level`.
+                const markerMask = (parseInt(card.def ?? 0) || 0) & 0x1FF;
+                document.querySelectorAll('#field-link-markers input[type=\"checkbox\"]').forEach(cb => {
+                    const bit = parseInt(cb.value);
+                    cb.checked = bit ? ((markerMask & bit) === bit) : false;
+                });
+            } else {
+                document.querySelectorAll('#field-link-markers input[type=\"checkbox\"]').forEach(cb => { cb.checked = false; });
+            }
+
+            // Nota: en tu DB el campo `def` se usa para el bitmask de Link Markers.
+            // Aún así se mantiene visible el campo DEF para consistencia/edición.
+
+            // Reubicar Passcode: junto a Archetype en Magias/Trampas
+            const passcodeField = document.getElementById('field-passcode');
+            const passcodeAnchorTop = document.getElementById('passcode-anchor-top');
+            const passcodeAnchorBottom = document.getElementById('passcode-anchor-bottom');
+            if (passcodeField && passcodeAnchorTop && passcodeAnchorBottom) {
+                const anchor = isMonster ? passcodeAnchorBottom : passcodeAnchorTop;
+                if (anchor.parentElement && passcodeField.parentElement !== anchor.parentElement) {
+                    anchor.parentElement.insertBefore(passcodeField, anchor);
+                }
+            }
+
+            // Cargar Imagen
+            const imgPreview = document.getElementById('editor-img-preview');
+            const placeholder = document.getElementById('editor-img-placeholder');
+
+            imgPreview.style.display = 'none';
+            placeholder.style.display = 'block';
+
+            imgPreview.src = `/pics/${card.id}.jpg`;
+            imgPreview.onload = () => {
+                imgPreview.style.display = 'block';
+                placeholder.style.display = 'none';
+            };
+            imgPreview.onerror = () => {
+                imgPreview.style.display = 'none';
+                placeholder.style.display = 'block';
+            };
+
+            // Cargar Strings en el VisorEstructurado
+            const stringsDisplay = document.getElementById('editor-strings-display');
+            if (stringsDisplay) {
+                stringsDisplay.innerHTML = "";
+                let hasStrings = false;
+                for (let i = 1; i <= 16; i++) {
+                    const val = card[`str${i}`];
+                    if (val && val.trim() !== "") {
+                        hasStrings = true;
+                        const item = document.createElement('div');
+                        item.className = 'string-item';
+                        item.innerHTML = `
+                            <span class="string-label">STRING ${i}</span>
+                            <div class="string-content">${val}</div>
+                        `;
+                        stringsDisplay.appendChild(item);
+                    }
+                }
+
+                if (!hasStrings) {
+                    const descItem = document.createElement('div');
+                    descItem.className = 'string-item';
+                    descItem.style.borderColor = 'var(--accent-primary)';
+                    descItem.innerHTML = `
+                        <span class="string-label">DESCRIPTION (FALLBACK)</span>
+                        <div class="string-content">${card.desc || "No hay descripción disponible."}</div>
+                    `;
+                    stringsDisplay.appendChild(descItem);
+                }
+            }
+
+            // Tab por defecto al seleccionar carta
+            setEditorDetailsTab('analysis');
+            autoFitCardInformation();
+            // Al cambiar de carta, mantener el panel al inicio (no saltar al final)
+            try {
+                const main = document.querySelector('#module-editor .editor-main-content');
+                if (main) main.scrollTop = 0;
+            } catch { }
+
+            // Llamar al análisis al seleccionar
+            const analysisContainer = document.getElementById('editor-analysis-display');
+            if (analysisContainer) {
+                analysisContainer.innerHTML = "Analizando...";
+                fetch('/api/editor/analyze_card', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(card)
+                })
+                    .then(res => res.json())
+                    .then(analysis => {
+                        const escapeHtml = (val) => String(val ?? '')
+                            .replaceAll('&', '&amp;')
+                            .replaceAll('<', '&lt;')
+                            .replaceAll('>', '&gt;')
+                            .replaceAll('"', '&quot;')
+                            .replaceAll("'", '&#39;');
+                        const qRaw = String(editorSearchQueryRaw || '').trim();
+                        const h = (val) => highlightAndEscape(val, qRaw);
+
+                        if (analysis && analysis.error) {
+                            analysisContainer.innerHTML = `<span style="color:var(--danger)">Error al decodificar: ${escapeHtml(analysis.error)}</span>`;
+                            return;
+                        }
+
+                        // Asegurar que Category/Genre se sincroniza (viene de datas.category)
+                        try {
+                            const canSyncFilterControls = !editorAdvancedFilterMode || editorIsEditMode;
+                            if (canSyncFilterControls) {
+                                const catValue = parseInt(analysis?.category?.category_decimal ?? card.category ?? 0) || 0;
+                                document.querySelectorAll('#category-checkbox-grid input[type="checkbox"]').forEach(cb => {
+                                    const bit = parseInt(cb.value) || 0;
+                                    cb.checked = bit ? ((catValue & bit) === bit) : false;
+                                });
+                            }
+                        } catch { }
+
+                        const typeDisplay = analysis?.type_display || card.type_display || "???";
+                        const typeString = analysis?.type_string || card.type_string || "";
+                        const otName = analysis?.ot?.ot_name || card.ot_name || "";
+                        const setnamesDisplay = analysis?.setcode?.setnames_display || card.setname_display || "";
+
+                        const isMonster = Boolean(analysis?.type?.isMonster) || ((parseInt(card.type || 0) & 0x1) === 0x1);
+                        const attributeName = analysis?.attribute?.attribute_name || "";
+                        const raceName = analysis?.race?.race_name || "";
+                        const levelNum = analysis?.level?.level;
+                        const lscale = analysis?.level?.lscale;
+                        const rscale = analysis?.level?.rscale;
+                        const linkMarkers = analysis?.level?.link_markers || [];
+                        const linkRating = analysis?.level?.link_rating;
+
+                        const bitLabelsFromConstants = (sectionKey, mask, { skipLowBits = false } = {}) => {
+                            const m = Number(mask || 0);
+                            const sec = editorConstants?.[sectionKey];
+                            if (!sec || !m) return [];
+                            const out = [];
+                            for (const [k, v] of Object.entries(sec)) {
+                                const bit = parseInt(k || '0') || 0;
+                                if (!bit) continue;
+                                if (skipLowBits && (bit & 0x7) !== 0) continue;
+                                if ((m & bit) === bit) out.push(String(v));
+                            }
+                            return out;
+                        };
+
+                        const categoryMask = parseInt(analysis?.category?.category_decimal ?? card.category ?? 0) || 0;
+                        const categoryLabels = bitLabelsFromConstants('category (genre)', categoryMask);
+                        const flagsMask = 0;
+                        const flagsLabels = bitLabelsFromConstants('flags (category)', flagsMask, { skipLowBits: true });
+
+                        const chips = [];
+                        if (otName) chips.push(`<span><strong>Rule:</strong> ${h(otName)}</span>`);
+                        if (setnamesDisplay) chips.push(`<span><strong>Archetype:</strong> ${h(setnamesDisplay)}</span>`);
+                        if (categoryLabels.length) {
+                            const shown = categoryLabels.slice(0, 8);
+                            const extra = categoryLabels.length > shown.length ? ` (+${categoryLabels.length - shown.length})` : '';
+                            chips.push(`<span><strong>Genre:</strong> ${h(shown.join(', '))}${h(extra)}</span>`);
+                        }
+                        if (flagsLabels.length) {
+                            const shown = flagsLabels.slice(0, 8);
+                            const extra = flagsLabels.length > shown.length ? ` (+${flagsLabels.length - shown.length})` : '';
+                            chips.push(`<span><strong>Flags:</strong> ${h(shown.join(', '))}${h(extra)}</span>`);
+                        }
+
+                        if (isMonster) {
+                            if (attributeName) chips.push(`<span><strong>Attribute:</strong> ${h(attributeName)}</span>`);
+                            if (raceName) chips.push(`<span><strong>Race:</strong> ${h(raceName)}</span>`);
+                            if (typeof levelNum === 'number') chips.push(`<span><strong>Level/Rank/Link:</strong> ${h(String(levelNum))}</span>`);
+                            if (typeof linkRating === 'number') chips.push(`<span><strong>Link:</strong> ${h(String(linkRating))}</span>`);
+                            if (Array.isArray(linkMarkers) && linkMarkers.length) chips.push(`<span><strong>Markers:</strong> ${h(linkMarkers.join(' '))}</span>`);
+                            if (typeof lscale === 'number' || typeof rscale === 'number') chips.push(`<span><strong>Scale:</strong> ${h((lscale ?? '?') + '/' + (rscale ?? '?'))}</span>`);
+                        }
+
+                        const desc = card.desc || "No hay descripción disponible.";
+
+                        analysisContainer.innerHTML = `
+                            <div style="display:flex; flex-direction:column; gap:0.6rem;">
+                                <div>
+                                    <div style="font-weight:700; color: var(--accent-primary);">${h(typeDisplay)}</div>
+                                    ${typeString ? `<div style="font-size:0.75rem; color: var(--text-muted);">${h(typeString)}</div>` : ``}
+                                </div>
+                                ${chips.length ? `
+                                    <div style="display:flex; flex-wrap:wrap; gap:0.6rem; color: var(--text);">
+                                        ${chips.join('')}
+                                    </div>
+                                ` : ``}
+                                <div style="border-top:1px solid var(--card-border); padding-top:0.6rem;">
+                                    <div style="font-weight:600; color: var(--text); margin-bottom:0.25rem;">Descripción</div>
+                                    <div style="white-space: pre-wrap; color: var(--text);">${h(desc)}</div>
+                                </div>
+                            </div>
+                        `;
+
+                        autoFitCardInformation();
+                        // Mantener al inicio incluso si el análisis cambia el alto
+                        try {
+                            const main = document.querySelector('#module-editor .editor-main-content');
+                            if (main) main.scrollTop = 0;
+                        } catch { }
+                    })
+                    .catch(err => {
+                        analysisContainer.innerHTML = `<span style="color:var(--danger)">Error al decodificar: ${err}</span>`;
+                    });
+            }
+        }
+
+        function applyEditorPageZoom(zoom) {
+            // Preferir `zoom` (Chromium/Edge) porque afecta el layout.
+            try {
+                if (window.CSS && CSS.supports && CSS.supports('zoom', '1')) {
+                    document.documentElement.style.zoom = String(zoom);
+                    return;
+                }
+            } catch { }
+        }
+
+        function fitEditorPageToViewport() {
+            const editor = document.getElementById('module-editor');
+            if (!editor || editor.style.display === 'none') return;
+
+            // Medir en zoom 1 para calcular escala necesaria.
+            applyEditorPageZoom(1);
+
+            const margin = 12; // pequeño margen para evitar recortes
+            const availableH = Math.max(1, document.documentElement.clientHeight - margin);
+            const availableW = Math.max(1, document.documentElement.clientWidth - margin);
+            const contentH = Math.max(1, editor.scrollHeight);
+            const contentW = Math.max(1, editor.scrollWidth);
+
+            let z = Math.min(1, availableH / contentH, availableW / contentW);
+            // limitar y cuantizar a pasos de 0.05 (para estabilidad visual)
+            z = Math.max(0.8, Math.floor(z * 20) / 20);
+
+            applyEditorPageZoom(z);
+        }
+
+        window.addEventListener('resize', () => {
+            const editor = document.getElementById('module-editor');
+            if (editor && editor.style.display !== 'none') {
+                requestAnimationFrame(() => fitEditorPageToViewport());
+            }
+        });
+
+        function autoFitCardInformation(elToPrefer) {
+            const module = document.getElementById('module-editor');
+            const main = module ? module.querySelector('.editor-main-content') : null;
+            const details = document.getElementById('editor-form-details');
+            if (!module || !main || !details) return;
+
+            // Con scroll habilitado en todo el panel, NO debemos colapsar el formulario
+            // ni recortar contenido. Solo podemos activar un modo compacto opcional.
+            module.classList.remove('editor-compact');
+            if (main.scrollHeight > main.clientHeight + 2) module.classList.add('editor-compact');
+
+            // Nota: no hacer scroll automático aquí; el panel debe quedarse al inicio.
+        }
+
+        function setEditorDetailsTab(tab) {
+            const analysis = document.getElementById('editor-tab-analysis');
+            const strings = document.getElementById('editor-tab-strings');
+            if (!analysis || !strings) return;
+
+            analysis.style.display = tab === 'analysis' ? 'block' : 'none';
+            strings.style.display = tab === 'strings' ? 'block' : 'none';
+
+            document.querySelectorAll('.editor-tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-tab') === tab);
+            });
+        }
+
+        // Delegación de clicks para tabs (evita depender de orden de carga)
+        document.addEventListener('click', (e) => {
+            const btn = e.target && e.target.closest ? e.target.closest('.editor-tab-btn') : null;
+            if (!btn) return;
+            const tab = btn.getAttribute('data-tab');
+            if (tab) setEditorDetailsTab(tab);
+        });
+
+        function searchEditor() {
+            editorSearchQueryRaw = String(document.getElementById('editor-search')?.value || '').trim();
+            editorSearchQueryFold = foldForSearch(editorSearchQueryRaw);
+            applyEditorFilters();
+        }
+
+        function editorModifySelected() {
+            if (!editorSelectedCardId) return;
+            setEditorEditMode(true);
+        }
+
+        // Cuando estamos en modo filtros avanzados, cualquier cambio en selects/checkboxes aplica el filtro.
+        document.addEventListener('change', (e) => {
+            const t = e.target;
+            if (!editorAdvancedFilterMode || editorIsEditMode) return;
+            if (!t) return;
+
+            const id = t.id || '';
+            const isFilterSelect = ['edit-rule', 'edit-attribute', 'edit-level', 'edit-race', 'edit-setcode1', 'edit-setcode2', 'edit-setcode3', 'edit-setcode4'].includes(id);
+            const isFilterCheckbox = !!(t.closest && (t.closest('#type-checkbox-grid') || t.closest('#category-checkbox-grid') || t.closest('#flags-checkbox-grid')));
+
+            if (isFilterSelect || isFilterCheckbox) applyEditorFilters();
+        });
+
+        function showConfig() {
+            document.getElementById('config-view').style.display = 'flex';
+            document.getElementById('analyzer-main-view').style.display = 'none';
+
+            // Solo mostrar cancelar si hay datos cargados
+            const hasResults = allData && (allData.coincidencias.length > 0 || allData.anomalias.length > 0);
+            document.getElementById('cancelConfigBtn').style.display = hasResults ? 'block' : 'none';
+
+            updateUI();
+        }
+
+        function hideConfig() {
+            document.getElementById('config-view').style.display = 'none';
+            document.getElementById('analyzer-main-view').style.display = 'block';
+        }
+
+        function updateFilteredList() {
+            const searchTerm = document.getElementById('searchInput').value.toUpperCase();
+            let source = [];
+            if (currentTab === 'tab-coincidencias') source = allData.coincidencias;
+            else if (currentTab === 'tab-anomalias') source = allData.anomalias;
+            else if (currentTab === 'tab-faltantes') source = allData.faltantes;
+            else if (currentTab === 'tab-scripts-faltantes') source = allData.scripts_faltantes;
+            else source = allData.excluidas || [];
+
+            if (searchTerm) {
+                filteredList = source.filter(item => String(item.id).includes(searchTerm));
+            } else {
+                filteredList = source;
+            }
+        }
+
+        function createRow(item, tabId, isAnomaly) {
+            const id = item.id;
+            const name = item.name || "Sin Nombre";
+            const mainRow = `
+                <tr>
+                    <td class="id-cell">${id}</td>
+                    <td style="font-weight:600; font-size:0.9rem">${name}</td>
+                    <td>${item.pred_count} ${t('effects_suffix')}</td>
+                    <td>${item.script_count} ${t('effects_suffix')}</td>
+                    <td><span class="expand-btn" onclick="toggleDetail(this)">${t('btn_expand')}</span></td>
+                </tr>
+            `;
+
+            let anomaliesHtml = "";
+            if (isAnomaly && item.anomalies && item.anomalies.length > 0) {
+                anomaliesHtml = `
+                    <div class="detail-box" style="border-color: var(--error); background: rgba(239, 68, 68, 0.05); margin-top:1rem">
+                        <h4 style="color:var(--error)">${t('anomalies_title')}</h4>
+                        <table class="inner-table">
+                            <thead><tr>
+                                <th>${t('anomalies_th_type')}</th>
+                                <th>${t('anomalies_th_ref')}</th>
+                                <th>${t('anomalies_th_code')}</th>
+                                <th>${t('anomalies_th_desc')}</th>
+                            </tr></thead>
+                            <tbody>
+                                ${item.anomalies.map(a => `
+                                    <tr>
+                                        <td><span class="badge badge-error" style="background:rgba(239,68,68,0.2); color:var(--error)">${t(a.tipo)}</span></td>
+                                        <td style="color:var(--warning)">${a.ref}</td>
+                                        <td class="code-column"><code>${a.code || 'N/A'}</code></td>
+                                        <td>${t(a.desc, { ref: a.ref, idx: a.idx_num })}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            const detailRow = `
+                <tr class="detail-row">
+                    <td colspan="5">
+                        <div class="detail-content" style="grid-template-columns: 1fr;">
+                            ${anomaliesHtml}
+                            <div class="detail-box">
+                                <h4>${t('pred_title')}</h4>
+                                ${item.pred_texts.map((t, idx) => `<div class="text-item"><span class="prev-badge">PREV ${idx + 1}</span>${t}</div>`).join('') || t('pred_no_effects')}
+                            </div>
+                            <div class="detail-box">
+                                <h4>${t('script_title')}</h4>
+                                <table class="inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>${t('script_th_ref')}</th>
+                                            <th>${t('script_th_code')}</th>
+                                            <th>${t('script_th_text')}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${item.script_details.map(d => `
+                                            <tr>
+                                                <td><span class="${d.type === 'SYS' ? 'sys-badge' : 'cdb-badge'}">${d.type} ${d.id}</span></td>
+                                                <td class="code-column"><code>${d.code || 'N/A'}</code></td>
+                                                <td class="text-column">${d.text}</td>
+                                            </tr>
+                                        `).join('') || `<tr><td colspan="3">${t('script_no_effects')}</td></tr>`}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            return mainRow + detailRow;
+        }
+
+        function render() {
+            const totalPages = Math.ceil(filteredList.length / pageSize) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageItems = filteredList.slice(start, end);
+
+            const tbodyId = currentTab === 'tab-coincidencias' ? 'body-coincidencias' :
+                currentTab === 'tab-anomalias' ? 'body-anomalias' :
+                    currentTab === 'tab-faltantes' ? 'body-faltantes' :
+                        currentTab === 'tab-scripts-faltantes' ? 'body-scripts-faltantes' : 'body-excluidas';
+
+            const tbody = document.getElementById(tbodyId);
+
+            if (currentTab === 'tab-excluidas') {
+                tbody.innerHTML = pageItems.map(i => `
+                    <tr>
+                        <td class="id-cell">${i.id}</td>
+                        <td style="font-weight:600; font-size:0.9rem">${i.name || "Sin Nombre"}</td>
+                        <td><span class="badge" style="background:rgba(255,255,255,0.1); color:var(--text-muted); border: 1px solid var(--card-border); padding: 0.3rem 0.6rem; border-radius: 0.25rem; font-size: 0.75rem;">${i.reason}</span></td>
+                    </tr>
+                `).join('');
+            } else {
+                tbody.innerHTML = pageItems.map(i => createRow(i, currentTab, currentTab === 'tab-anomalias' || currentTab === 'tab-faltantes')).join('');
+            }
+
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const container = document.getElementById('paginationControls');
+            let html = `
+                <button class="page-btn" onclick="jumpToPage(1)" ${currentPage === 1 ? 'disabled' : ''}>${t('pagination_first')}</button>
+                <button class="page-btn" onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>${t('pagination_prev')}</button>
+            `;
+
+            // Páginas numéricas (rango de 5)
+            let start = Math.max(1, currentPage - 2);
+            let end = Math.min(totalPages, start + 4);
+            if (end - start < 4) start = Math.max(1, end - 4);
+
+            for (let i = start; i <= end; i++) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="jumpToPage(${i})">${i}</button>`;
+            }
+
+            html += `
+                <button class="page-btn" onclick="changePage(1)" ${currentPage === totalPages ? 'disabled' : ''}>${t('pagination_next')}</button>
+                <button class="page-btn" onclick="jumpToPage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>${t('pagination_last')}</button>
+            `;
+            container.innerHTML = html;
+        }
+
+        function toggleDetail(btn) {
+            // Buscamos la fila detalle que está justo después de la fila actual
+            const mainRow = btn.closest('tr');
+            const detailRow = mainRow.nextElementSibling;
+            if (detailRow && detailRow.classList.contains('detail-row')) {
+                const isVisible = detailRow.style.display === 'table-row';
+                detailRow.style.display = isVisible ? 'none' : 'table-row';
+            }
+        }
+
+        function changeTab(tabId, btn) {
+            currentTab = tabId;
+            currentPage = 1;
+
+            // UI Update
+            document.querySelectorAll('.table-wrapper').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            if (btn) btn.classList.add('active');
+
+            updateFilteredList();
+            render();
+        }
+
+        function handleSearch() {
+            currentPage = 1;
+            updateFilteredList();
+            render();
+        }
+
+        function changePage(offset) {
+            currentPage += offset;
+            render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function jumpToPage(page) {
+            currentPage = page;
+            render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.onload = async () => {
+            // Cargar configuración persistente del servidor
+            try {
+                const resp = await fetch('/api/get_config');
+                const config = await resp.json();
+                if (config.cdb_dir) {
+                    paths.cdb = config.cdb_dir;
+                    document.getElementById('path-cdb').innerText = config.cdb_dir;
+                    document.getElementById('path-cdb').classList.remove('placeholder');
+                }
+                if (config.script_dir) {
+                    paths.scripts = config.script_dir;
+                    document.getElementById('path-scripts').innerText = config.script_dir;
+                    document.getElementById('path-scripts').classList.remove('placeholder');
+                }
+                if (config.strings_conf) {
+                    paths.strings = config.strings_conf;
+                    document.getElementById('path-strings').innerText = config.strings_conf;
+                    document.getElementById('path-strings').classList.remove('placeholder');
+                }
+                if (config.pics_dir) {
+                    paths.pics = config.pics_dir;
+                    document.getElementById('path-pics').innerText = config.pics_dir;
+                    document.getElementById('path-pics').classList.remove('placeholder');
+                }
+                validatePaths();
+            } catch (e) {
+                console.error("Error cargando configuración:", e);
+            }
+
+            const hasData = await loadData();
+            if (!hasData) {
+                switchView('config-view');
+            } else {
+                switchView('main-menu');
+            }
+            updateUI();
+        };
+    </script>
+</body>
+
+</html>
