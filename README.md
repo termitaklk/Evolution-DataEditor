@@ -1,5 +1,9 @@
 # Evolution DataEditor
 
+<img width="1403" height="747" alt="Editor1" src="https://github.com/user-attachments/assets/cc7e5d40-b2c3-48e6-96c0-8725e27321ea" />
+<img width="1883" height="891" alt="Editor2" src="https://github.com/user-attachments/assets/e79e1cf5-9c75-4c94-8159-7d5e8c028ca8" />
+<img width="1665" height="761" alt="Editor3" src="https://github.com/user-attachments/assets/145a8a57-7aca-446e-9999-450eab4f1578" />
+
 All-in-one tool to **analyze Yu-Gi-Oh! scripts** and **edit/inspect cards** from `.cdb` (SQLite) databases and local resources (scripts `c*.lua`, `strings.conf`, images).
 
 Includes:
