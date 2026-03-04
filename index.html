@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -152,6 +152,15 @@
             gap: 0.5rem;
         }
 
+        /* When the language switcher is inside the main menu */
+        #main-menu {
+            position: relative;
+        }
+        #main-menu .lang-switcher {
+            top: 0.5rem;
+            right: 0.5rem;
+        }
+
         .lang-btn {
             background: var(--glass-bg);
             border: 1px solid var(--card-border);
@@ -164,6 +173,22 @@
         }
 
         .lang-btn.active {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .profile-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .profile-btn.active {
             border-color: var(--accent-primary);
             color: var(--accent-primary);
         }
@@ -222,20 +247,24 @@
 
         .config-tabs {
             display: flex;
-            gap: 1rem;
+            gap: 0.5rem;
             margin-bottom: 2rem;
             border-bottom: 1px solid var(--card-border);
             padding-bottom: 1rem;
         }
 
         .config-tab {
-            padding: 0.6rem 1.2rem;
+            padding: 0.5rem 0.9rem;
             border-radius: 0.8rem;
             cursor: pointer;
             font-weight: 600;
             color: var(--text-muted);
             transition: all 0.3s ease;
             border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            user-select: none;
         }
 
         .config-tab.active {
@@ -249,7 +278,72 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
-        .github-input {
+        .config-tab.renaming {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.14);
+        }
+
+        .config-tab .tab-label {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .config-tab .tab-rename-input {
+            width: 7.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.6rem;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(0, 0, 0, 0.25);
+            color: var(--text-main);
+            outline: none;
+            font-size: 0.85rem;
+        }
+
+        .config-tab .tab-actions {
+            display: flex;
+            gap: 0.35rem;
+            margin-left: 0.25rem;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .config-tab:hover .tab-actions {
+            opacity: 1;
+        }
+
+        .config-tab .tab-action-btn.danger {
+            display: none;
+        }
+
+        .config-tab.delete-armed .tab-actions {
+            opacity: 1;
+        }
+
+        .config-tab.delete-armed .tab-action-btn.danger {
+            display: inline-flex;
+        }
+
+        .config-tab .tab-action-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            color: var(--text-main);
+            border-radius: 0.55rem;
+            padding: 0.15rem 0.45rem;
+            font-size: 0.75rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .config-tab .tab-action-btn:hover {
+            background: rgba(255, 255, 255, 0.10);
+        }
+
+        .config-tab .tab-action-btn.danger {
+            border-color: rgba(239, 68, 68, 0.35);
+            color: rgba(239, 68, 68, 0.95);
+        }
+
+        .text-input {
             width: 100%;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--card-border);
@@ -261,7 +355,7 @@
             transition: border-color 0.3s;
         }
 
-        .github-input:focus {
+        .text-input:focus {
             border-color: var(--accent-primary);
         }
 
@@ -548,7 +642,7 @@
             cursor: not-allowed;
         }
 
-        /* Estilos para tabla de códigos */
+        /* Estilos para tabla de cÃ³digos */
         .inner-table {
             width: 100%;
             border-collapse: collapse;
@@ -585,7 +679,7 @@
             line-height: 1.4;
         }
 
-        /* --- ESTILOS MENÚ PRINCIPAL --- */
+        /* --- ESTILOS MENÃš PRINCIPAL --- */
         #main-menu {
             display: flex;
             flex-direction: column;
@@ -677,7 +771,7 @@
             line-height: 1.5;
         }
 
-        /* --- ESTILOS MÓDULO EDITOR --- */
+        /* --- ESTILOS MÃ“DULO EDITOR --- */
         #module-editor {
             max-width: 100%;
             height: calc(100dvh - 4rem);
@@ -874,6 +968,22 @@
             color: var(--text-main);
         }
 
+        /* Resaltar el botÃ³n de "Filtros" (Advanced Filters) con tono rojizo */
+        #editor-btn-adv-filters {
+            border-color: rgba(239, 68, 68, 0.35);
+            color: rgba(248, 113, 113, 0.95);
+            background: rgba(239, 68, 68, 0.06);
+        }
+        #editor-btn-adv-filters:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+        #editor-btn-adv-filters.active {
+            background: rgba(239, 68, 68, 0.18);
+            border-color: rgba(239, 68, 68, 0.65);
+            color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 6px 18px rgba(239, 68, 68, 0.18);
+        }
+
         /* Panel Central: Formulario */
         .editor-main-content {
             flex: 1;
@@ -888,7 +998,7 @@
             scrollbar-color: rgba(139, 92, 246, 0.55) rgba(255, 255, 255, 0.03); /* Firefox */
         }
 
-        /* Solo lectura: mantener estética al deshabilitar */
+        /* Solo lectura: mantener estÃ©tica al deshabilitar */
         #module-editor .editor-main-content input:disabled,
         #module-editor .editor-main-content select:disabled,
         #module-editor .editor-main-content textarea:disabled {
@@ -909,7 +1019,7 @@
             filter: brightness(1.25) contrast(1.05);
         }
 
-        /* Resaltado de coincidencias de búsqueda */
+        /* Resaltado de coincidencias de bÃºsqueda */
         #module-editor mark.editor-search-hit {
             background: rgba(255, 230, 90, 0.35);
             color: rgba(255, 255, 255, 0.98);
@@ -1044,7 +1154,7 @@
             padding-left: 0.35rem;
         }
 
-        /* Card Information: hacer campos más compactos por defecto */
+        /* Card Information: hacer campos mÃ¡s compactos por defecto */
         #module-editor .editor-form-area .input-field {
             gap: 0.3rem;
         }
@@ -1332,7 +1442,7 @@
             height: 0;
         }
 
-        /* Alturas por sección (estilo DataEditorX) */
+        /* Alturas por secciÃ³n (estilo DataEditorX) */
         #type-checkbox-grid {
             max-height: clamp(170px, 22vh, 240px);
         }
@@ -1349,19 +1459,15 @@
         .checkbox-item.card-on {
             box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.45);
             background: rgba(139, 92, 246, 0.06);
-            border-radius: 8px;
-            padding: 4px 6px;
         }
         .checkbox-item.card-on .checkbox-text {
             color: rgba(229, 231, 235, 0.98);
         }
 
-        /* Checks marcados (especialmente cuando están disabled) */
+        /* Checks marcados (especialmente cuando estÃ¡n disabled) */
         .checkbox-item.is-checked {
             box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.65);
             background: rgba(139, 92, 246, 0.12);
-            border-radius: 8px;
-            padding: 4px 6px;
         }
         .checkbox-item.is-checked .checkbox-text {
             color: rgba(243, 244, 246, 0.98);
@@ -1444,6 +1550,9 @@
             transition: color 0.2s;
             min-width: 0;
             white-space: normal;
+            padding: 4px 6px;
+            border-radius: 8px;
+            box-sizing: border-box;
         }
 
         .checkbox-item:hover {
@@ -1453,6 +1562,7 @@
         .checkbox-item input {
             accent-color: var(--accent-primary);
             flex: 0 0 auto;
+            margin-top: 1px;
         }
 
         .checkbox-text {
@@ -1506,8 +1616,11 @@
 </head>
 
 <body>
-    <!-- MENÚ PRINCIPAL -->
+    <!-- MENÃš PRINCIPAL -->
     <div id="main-menu" class="container">
+        <div class="lang-switcher" id="main-profile-switcher" style="margin: 0;">
+            <!-- DinÃ¡mico: perfiles creados en ConfiguraciÃ³n -->
+        </div>
         <header>
             <h1 data-i18n="app_suite_title">Yu-Gi-Oh! Script Suite</h1>
             <p class="subtitle" data-i18n="app_suite_subtitle">Selecciona una herramienta para comenzar</p>
@@ -1515,46 +1628,93 @@
 
         <div class="menu-grid">
             <div class="menu-card" onclick="switchView('module-analyzer')">
-                <div class="menu-icon">🔍</div>
+                <div class="menu-icon">&#128269;</div>
                 <h2 data-i18n="menu_analyzer_title">Analizador</h2>
-                <p data-i18n="menu_analyzer_desc">Verifica la integridad estructural de tus scripts y detecta anomalías.
+                <p data-i18n="menu_analyzer_desc">Verifica la integridad estructural de tus scripts y detecta anomalÃ­as.
                 </p>
             </div>
             <div class="menu-card" onclick="switchView('module-editor')">
-                <div class="menu-icon">✍️</div>
+                <div class="menu-icon">&#9997;&#65039;</div>
                 <h2 data-i18n="menu_editor_title">Editor</h2>
-                <p data-i18n="menu_editor_desc">Crea o modifica scripts y configura parámetros de cartas.</p>
+                <p data-i18n="menu_editor_desc">Crea o modifica scripts y configura parÃ¡metros de cartas.</p>
             </div>
             <div class="menu-card" onclick="switchView('config-view')">
-                <div class="menu-icon">⚙️</div>
-                <h2 data-i18n="menu_config_title">Configuración</h2>
-                <p data-i18n="menu_config_desc">Cambia las rutas base del CDB, Scripts e Imágenes.</p>
+                <div class="menu-icon">&#9881;&#65039;</div>
+                <h2 data-i18n="menu_config_title">ConfiguraciÃ³n</h2>
+                <p data-i18n="menu_config_desc">Cambia las rutas base del CDB, Scripts e ImÃ¡genes.</p>
             </div>
         </div>
     </div>
 
 
-    <!-- CONFIGURACIÓN GLOBAL -->
+    <!-- CONFIGURACIÃ“N GLOBAL -->
     <div id="config-view" class="config-overlay" style="display: none;">
         <div class="config-card" style="position: relative;">
-            <div class="lang-switcher" style="position: absolute; top: 1.5rem; right: 1.5rem; margin: 0;">
-                <button class="lang-btn" id="lang-es-cfg" onclick="setLang('es')">ES</button>
-                <button class="lang-btn" id="lang-en-cfg" onclick="setLang('en')">EN</button>
-            </div>
             <header style="padding-top: 0; margin-bottom: 1.5rem;">
-                <h1 data-i18n="config_title">Parametrización Global</h1>
+                <h1 data-i18n="config_title">ParametrizaciÃ³n Global</h1>
                 <p class="subtitle" data-i18n="config_subtitle">Configura las rutas base para la Suite</p>
             </header>
 
-            <div class="config-tabs">
-                <div id="tab-local" class="config-tab active" onclick="setConfigMode('local')" data-i18n="tab_local">
-                    Local</div>
-                <div id="tab-github" class="config-tab" onclick="setConfigMode('github')" data-i18n="tab_github">GitHub
-                </div>
+            <div class="config-tabs" id="db-lang-tabs">
+                <!-- DinÃ¡mico: ES / EN / + -->
             </div>
 
-            <!-- MODO LOCAL -->
+            <!-- PERFIL (idioma de la base de datos) -->
             <div id="mode-local">
+                <div class="config-row">
+                    <label data-i18n="label_ui_lang">Idioma de la interfaz web</label>
+                    <div class="config-input-group">
+                        <input id="profile-ui-lang" class="text-input" list="profile-language-options"
+                            data-placeholder="profile_lang_placeholder" placeholder="Busca idioma..."
+                            onchange="onProfileUiLangChange(this.value)">
+                        <datalist id="profile-language-options">
+                            <option value="German (de-DE)" data-code="de-de"></option>
+                            <option value="English (en-US)" data-code="en-us"></option>
+                            <option value="Spanish (es-ES)" data-code="es-es"></option>
+                            <option value="French (fr-FR)" data-code="fr-fr"></option>
+                            <option value="German Alt (ge-DE)" data-code="ge-de"></option>
+                            <option value="Italian (it-IT)" data-code="it-it"></option>
+                            <option value="Japanese (ja-JP)" data-code="ja-jp"></option>
+                            <option value="Korean (ko-KR)" data-code="ko-kr"></option>
+                            <option value="Portuguese (pt-PT)" data-code="pt-pt"></option>
+                            <option value="Chinese Simplified (zh-CN)" data-code="zh-cn"></option>
+                            <option value="Chinese Traditional (zh-TW)" data-code="zh-tw"></option>
+                            <option value="Arabic (ar)" data-code="ar"></option>
+                            <option value="Chinese Simplified (zh-CN)" data-code="zh-cn"></option>
+                            <option value="Chinese Traditional (zh-TW)" data-code="zh-tw"></option>
+                            <option value="Czech (cs)" data-code="cs"></option>
+                            <option value="Danish (da)" data-code="da"></option>
+                            <option value="Dutch (nl)" data-code="nl"></option>
+                            <option value="English (en)" data-code="en"></option>
+                            <option value="Finnish (fi)" data-code="fi"></option>
+                            <option value="French (fr)" data-code="fr"></option>
+                            <option value="German (de)" data-code="de"></option>
+                            <option value="Greek (el)" data-code="el"></option>
+                            <option value="Hebrew (he)" data-code="he"></option>
+                            <option value="Hindi (hi)" data-code="hi"></option>
+                            <option value="Hungarian (hu)" data-code="hu"></option>
+                            <option value="Indonesian (id)" data-code="id"></option>
+                            <option value="Italian (it)" data-code="it"></option>
+                            <option value="Japanese (ja)" data-code="ja"></option>
+                            <option value="Korean (ko-KR)" data-code="ko-kr"></option>
+                            <option value="Norwegian (no)" data-code="no"></option>
+                            <option value="Polish (pl)" data-code="pl"></option>
+                            <option value="Portuguese (pt)" data-code="pt"></option>
+                            <option value="Portuguese Brazil (pt-BR)" data-code="pt-br"></option>
+                            <option value="Romanian (ro)" data-code="ro"></option>
+                            <option value="Russian (ru)" data-code="ru"></option>
+                            <option value="Slovak (sk)" data-code="sk"></option>
+                            <option value="Spanish (es)" data-code="es"></option>
+                            <option value="Spanish Latin America (es-419)" data-code="es-419"></option>
+                            <option value="Swedish (sv)" data-code="sv"></option>
+                            <option value="Thai (th)" data-code="th"></option>
+                            <option value="Turkish (tr)" data-code="tr"></option>
+                            <option value="Ukrainian (uk)" data-code="uk"></option>
+                            <option value="Vietnamese (vi)" data-code="vi"></option>
+                        </datalist>
+                    </div>
+                </div>
+
                 <div class="config-row">
                     <label data-i18n="label_cdb">Carpeta de Bases de Datos (.cdb)</label>
                     <div class="config-input-group">
@@ -1585,31 +1745,12 @@
                 </div>
 
                 <div class="config-row">
-                    <label data-i18n="label_pics">Carpeta de Imágenes (pics)</label>
+                    <label data-i18n="label_pics">Carpeta de ImÃ¡genes (pics)</label>
                     <div class="config-input-group">
                         <div id="path-pics" class="config-path" data-placeholder="select_pics">...</div>
                         <button class="browse-btn" onclick="browse('pics', true, 'title_pics')"
                             data-i18n="btn_select">Seleccionar</button>
                     </div>
-                </div>
-            </div>
-
-            <!-- MODO GITHUB -->
-            <div id="mode-github" style="display: none;">
-                <div class="config-row">
-                    <label data-i18n="label_cdb_gh">URL Carpeta CDBs (GitHub)</label>
-                    <input type="text" id="gh-cdb" class="github-input" placeholder="https://github.com/.../cdb"
-                        oninput="validatePaths()">
-                </div>
-                <div class="config-row">
-                    <label data-i18n="label_scripts_gh">URL Carpeta Scripts (GitHub)</label>
-                    <input type="text" id="gh-scripts" class="github-input" placeholder="https://github.com/.../script"
-                        oninput="validatePaths()">
-                </div>
-                <div class="config-row">
-                    <label data-i18n="label_strings_gh">URL Raw strings.conf (GitHub)</label>
-                    <input type="text" id="gh-strings" class="github-input"
-                        placeholder="https://raw.githubusercontent.com/.../strings.conf" oninput="validatePaths()">
                 </div>
             </div>
 
@@ -1621,36 +1762,32 @@
         </div>
     </div>
 
-    <!-- MÓDULO ANALIZADOR -->
+    <!-- MÃ“DULO ANALIZADOR -->
     <div id="module-analyzer" style="display: none;">
 
         <div class="container" id="analyzer-main-view" style="display: none;">
             <button class="back-to-menu" onclick="switchView('main-menu')">
-                <span>←</span> <span data-i18n="btn_back_menu">Volver al Menú</span>
+                <span>&larr;</span> <span data-i18n="btn_back_menu">Volver al Menú</span>
             </button>
             <div style="display: flex; align-items: flex-start; margin-top: 1rem;">
                 <header style="flex: 1;">
-                    <h1 data-i18n="app_title">Reporte de Análisis Estructural</h1>
-                    <p class="subtitle" data-i18n="app_subtitle">Validación de Efectos: Previsión vs. Implementación LUA
+                    <h1 data-i18n="app_title">Reporte de AnÃ¡lisis Estructural</h1>
+                    <p class="subtitle" data-i18n="app_subtitle">ValidaciÃ³n de Efectos: PrevisiÃ³n vs. ImplementaciÃ³n LUA
                     </p>
                 </header>
                 <div class="header-actions" style="display: flex; gap: 1rem; align-items: center;">
                     <button id="startAnalysisBtn" class="run-btn" onclick="startAnalysis()"
                         style="font-size: 0.8rem; padding: 0.6rem 1rem; width: auto; margin: 0;">
-                        <span data-i18n="btn_start">Iniciar Análisis</span>
+                        <span data-i18n="btn_start">Iniciar AnÃ¡lisis</span>
                     </button>
                     <button class="browse-btn" onclick="showConfig()" data-i18n="btn_new_analysis"
-                        style="font-size: 0.8rem; padding: 0.6rem 1rem;">Nuevo Análisis</button>
-                    <div class="lang-switcher" style="margin: 0; position: static;">
-                        <button class="lang-btn" id="lang-es" onclick="setLang('es')">ES</button>
-                        <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
-                    </div>
+                        style="font-size: 0.8rem; padding: 0.6rem 1rem;">Nuevo AnÃ¡lisis</button>
                 </div>
             </div>
 
             <div id="analyzer-welcome" class="stats-grid" style="display: block; text-align: center; padding: 3rem;">
                 <h2 data-i18n="analyzer_welcome_title">Analizador de Scripts</h2>
-                <p data-i18n="analyzer_welcome_desc" style="opacity: 0.7;">Presiona el botón superior para
+                <p data-i18n="analyzer_welcome_desc" style="opacity: 0.7;">Presiona el botÃ³n superior para
                     escanear la base de datos y scripts configurados.</p>
             </div>
 
@@ -1678,7 +1815,7 @@
                         <div class="value" id="stat-ok" style="color: var(--success)">0</div>
                     </div>
                     <div class="stat-card">
-                        <h3 data-i18n="stat_error">Anomalías</h3>
+                        <h3 data-i18n="stat_error">AnomalÃ­as</h3>
                         <div class="value" id="stat-error" style="color: var(--error)">0</div>
                     </div>
                     <div class="stat-card">
@@ -1699,7 +1836,7 @@
                     <button class="tab-btn active" id="btn-tab-coincidencias"
                         onclick="changeTab('tab-coincidencias', this)" data-i18n="tab_ok">Coincidencias</button>
                     <button class="tab-btn" id="btn-tab-anomalias" onclick="changeTab('tab-anomalias', this)"
-                        data-i18n="tab_error">Anomalías</button>
+                        data-i18n="tab_error">AnomalÃ­as</button>
                     <button class="tab-btn" id="btn-tab-faltantes" onclick="changeTab('tab-faltantes', this)"
                         data-i18n="tab_missing">Datos Faltantes</button>
                     <button class="tab-btn" id="btn-tab-scripts-faltantes"
@@ -1722,7 +1859,7 @@
                                 <th data-i18n="col_name">Nombre</th>
                                 <th data-i18n="col_pred">Previsto</th>
                                 <th data-i18n="col_script">Script</th>
-                                <th data-i18n="col_action">Acción</th>
+                                <th data-i18n="col_action">AcciÃ³n</th>
                             </tr>
                         </thead>
                         <tbody id="body-coincidencias"></tbody>
@@ -1737,7 +1874,7 @@
                                 <th data-i18n="col_name">Nombre</th>
                                 <th data-i18n="col_pred">Previsto</th>
                                 <th data-i18n="col_script">Script</th>
-                                <th data-i18n="col_action">Acción</th>
+                                <th data-i18n="col_action">AcciÃ³n</th>
                             </tr>
                         </thead>
                         <tbody id="body-anomalias"></tbody>
@@ -1752,7 +1889,7 @@
                                 <th data-i18n="col_name">Nombre</th>
                                 <th data-i18n="col_pred">Previsto</th>
                                 <th data-i18n="col_script">Script</th>
-                                <th data-i18n="col_action">Acción</th>
+                                <th data-i18n="col_action">AcciÃ³n</th>
                             </tr>
                         </thead>
                         <tbody id="body-faltantes"></tbody>
@@ -1767,7 +1904,7 @@
                                 <th data-i18n="col_name">Nombre</th>
                                 <th data-i18n="col_pred">Previsto</th>
                                 <th data-i18n="col_script">Script</th>
-                                <th data-i18n="col_action">Acción</th>
+                                <th data-i18n="col_action">AcciÃ³n</th>
                             </tr>
                         </thead>
                         <tbody id="body-scripts-faltantes"></tbody>
@@ -1783,7 +1920,7 @@
                             <tr>
                                 <th data-i18n="col_id">ID Carta</th>
                                 <th data-i18n="col_name">Nombre</th>
-                                <th data-i18n="col_reason">Motivo Exclusión</th>
+                                <th data-i18n="col_reason">Motivo ExclusiÃ³n</th>
                             </tr>
                         </thead>
                         <tbody id="body-excluidas"></tbody>
@@ -1791,21 +1928,21 @@
                 </div>
 
                 <div class="pagination" id="paginationControls">
-                    <!-- Los controles se generan dinámicamente -->
+                    <!-- Los controles se generan dinÃ¡micamente -->
                 </div>
             </div> <!-- Fin analyzer-results -->
         </div> <!-- Fin analyzer-main-view -->
     </div> <!-- Fin module-analyzer -->
 
-    <!-- MÓDULO EDITOR (Diseño Visual) -->
+    <!-- MÃ“DULO EDITOR (DiseÃ±o Visual) -->
     <div id="module-editor" class="container" style="display: none; max-width: 100%;">
         <button class="back-to-menu" onclick="switchView('main-menu')">
-            <span>←</span> <span data-i18n="btn_back_menu">Volver al Menú</span>
+            <span>&larr;</span> <span data-i18n="btn_back_menu">Volver al Menú</span>
         </button>
 
         <header style="margin-bottom: 1.5rem;">
             <h1 data-i18n="menu_editor_title">Editor de Scripts</h1>
-            <p class="subtitle" data-i18n="editor_subtitle">Herramientas de creación y edición</p>
+            <p class="subtitle" data-i18n="editor_subtitle">Herramientas de creaciÃ³n y ediciÃ³n</p>
         </header>
 
         <div class="editor-grid">
@@ -1814,15 +1951,15 @@
                 <div class="panel-header">
                     <span data-i18n="editor_tab_list">Card List</span>
                     <div style="display: flex; align-items: center; gap: 0.8rem;">
-                        <span id="editor-card-count" style="font-size: 0.7rem; opacity: 0.6;">0 Cards</span>
+                            <span id="editor-card-count" style="font-size: 0.7rem; opacity: 0.6;">0</span>
                         <button onclick="initEditor(true)" title="Sincronizar CDB"
                             style="background: none; border: none; color: var(--accent-primary); cursor: pointer; font-size: 0.9rem; padding: 0; display: flex; align-items: center; transition: transform 0.3s ease;">
-                            🔄
+                            &#128260;
                         </button>
                     </div>
                 </div>
                 <div style="padding: 0.8rem;">
-                    <input type="text" id="editor-search" class="github-input" placeholder="Search card..."
+                    <input type="text" id="editor-search" class="text-input" data-placeholder="editor_search_placeholder" placeholder="Search card..."
                         oninput="searchEditor()" style="padding: 0.5rem; font-size: 0.8rem;">
                     <div class="editor-filter-bar" role="group" aria-label="Card type filters">
                         <button class="editor-filter-btn active" type="button" data-editor-type="all"
@@ -1844,25 +1981,31 @@
                     </div>
                 </div>
                 <div id="editor-card-list" class="card-list-container">
-                    <!-- Dinámico -->
+                    <!-- DinÃ¡mico -->
                 </div>
                 <div class="panel-header" style="border-top: 1px solid var(--card-border); border-bottom: none;">
                     <div style="display: flex; gap: 0.5rem; width: 100%; justify-content: center;">
-                        <button class="page-btn" onclick="prevEditorPage()"
-                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;">«</button>
+                        <button class="page-btn" id="editor-page-first" onclick="firstEditorPage()"
+                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;" title="First page">&laquo;&laquo;</button>
+                        <button class="page-btn" id="editor-page-prev" onclick="prevEditorPage()"
+                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;">&laquo;</button>
+                        <button class="page-btn" id="editor-card-up" onclick="prevEditorCard()"
+                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;" title="Previous card">&uarr;</button>
                         <span id="editor-page-info" style="font-size: 0.75rem; align-self: center;">1 / 1</span>
-                        <button class="page-btn" onclick="nextEditorPage()"
-                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;">»</button>
+                        <button class="page-btn" id="editor-card-down" onclick="nextEditorCard()"
+                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;" title="Next card">&darr;</button>
+                        <button class="page-btn" id="editor-page-next" onclick="nextEditorPage()"
+                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;">&raquo;</button>
                     </div>
                 </div>
             </div>
 
             <!-- PANEL CENTRAL: DETALLES -->
             <div class="editor-panel">
-                <div class="panel-header">Card Information</div>
+                <div class="panel-header" data-i18n="editor_tab_info">Card Information</div>
                 <div class="editor-main-content">
                     <details id="editor-form-details" class="editor-form-details" open>
-                        <summary>Datos de carta</summary>
+                        <summary data-i18n="editor_details_card_data">Datos de carta</summary>
                         <div class="editor-form-details-content">
                             <div class="editor-form-area">
                                 <div class="editor-row">
@@ -1870,30 +2013,30 @@
                                         <img id="editor-img-preview" src=""
                                             style="width: 100%; height: 100%; object-fit: contain; display: block;">
                                         <div id="editor-img-placeholder" style="text-align: center; opacity: 0.3;">
-                                            <div style="font-size: 2rem;">🎴</div>
-                                            <div style="font-size: 0.6rem; margin-top: 0.5rem;">NO IMAGE</div>
+                                            <div style="font-size: 2rem;">&#127183;</div>
+                                            <div style="font-size: 0.6rem; margin-top: 0.5rem;" data-i18n="editor_no_image">NO IMAGE</div>
                                         </div>
                                     </div>
                                     <div class="form-grid" id="editor-form-grid-top">
                                         <div class="input-field">
                                             <label data-i18n="col_name">Name</label>
-                                            <input type="text" id="edit-name" placeholder="Card Name...">
+                                            <input type="text" id="edit-name" data-placeholder="editor_card_name_placeholder" placeholder="Card Name...">
                                         </div>
                                         <div class="input-field">
-                                            <label>Rule (Format)</label>
+                                            <label data-i18n="editor_rule">Rule (Format)</label>
                                             <select id="edit-rule">
                                                 <option value="0">Rule</option>
                                             </select>
                                         </div>
                                         <div id="attribute-anchor" style="display:none"></div>
                                         <div class="input-field" id="field-attribute">
-                                            <label>Attribute</label>
+                                            <label data-i18n="editor_attribute">Attribute</label>
                                             <select id="edit-attribute">
                                                 <option value="0">NONE</option>
                                             </select>
                                         </div>
                                         <div class="input-field">
-                                            <label>Level/Rank/Link</label>
+                                            <label data-i18n="editor_level">Level/Rank/Link</label>
                                             <select id="edit-level">
                                                 <option value="0">0</option>
                                             </select>
@@ -1902,43 +2045,43 @@
                                         <div class="input-field" id="field-link-markers" style="display:none">
                                             <label data-i18n="editor_link_markers">Link Markers</label>
                                             <div class="link-marker-grid" aria-label="Link Markers">
-                                                <div class="lm-cell"><input id="lm-tl" type="checkbox" value="0x40" title="↖"></div>
-                                                <div class="lm-cell"><input id="lm-t" type="checkbox" value="0x80" title="↑"></div>
-                                                <div class="lm-cell"><input id="lm-tr" type="checkbox" value="0x100" title="↗"></div>
-                                                <div class="lm-cell"><input id="lm-l" type="checkbox" value="0x8" title="←"></div>
+                                                <div class="lm-cell"><input id="lm-tl" type="checkbox" value="0x40" title="â†–"></div>
+                                                <div class="lm-cell"><input id="lm-t" type="checkbox" value="0x80" title="â†‘"></div>
+                                                <div class="lm-cell"><input id="lm-tr" type="checkbox" value="0x100" title="â†—"></div>
+                                                <div class="lm-cell"><input id="lm-l" type="checkbox" value="0x8" title="â†"></div>
                                                 <div class="lm-cell center"></div>
-                                                <div class="lm-cell"><input id="lm-r" type="checkbox" value="0x20" title="→"></div>
-                                                <div class="lm-cell"><input id="lm-bl" type="checkbox" value="0x1" title="↙"></div>
-                                                <div class="lm-cell"><input id="lm-b" type="checkbox" value="0x2" title="↓"></div>
-                                                <div class="lm-cell"><input id="lm-br" type="checkbox" value="0x4" title="↘"></div>
+                                                <div class="lm-cell"><input id="lm-r" type="checkbox" value="0x20" title="â†’"></div>
+                                                <div class="lm-cell"><input id="lm-bl" type="checkbox" value="0x1" title="â†™"></div>
+                                                <div class="lm-cell"><input id="lm-b" type="checkbox" value="0x2" title="â†“"></div>
+                                                <div class="lm-cell"><input id="lm-br" type="checkbox" value="0x4" title="â†˜"></div>
                                             </div>
                                         </div>
                                         <div class="input-field">
-                                            <label>Race</label>
+                                            <label data-i18n="editor_race">Race</label>
                                             <select id="edit-race">
                                                 <option value="0">NONE</option>
                                             </select>
                                         </div>
                                         <div class="input-field" id="field-setcode1">
-                                            <label>Archetype (SetCode)</label>
+                                            <label data-i18n="editor_archetype_setcode">Archetype (SetCode)</label>
                                             <select id="edit-setcode1">
                                                 <option value="0">None / Custom</option>
                                             </select>
                                         </div>
                                         <div class="input-field" id="field-setcode2">
-                                            <label>Archetype 2</label>
+                                            <label data-i18n="editor_archetype_2">Archetype 2</label>
                                             <select id="edit-setcode2">
                                                 <option value="0">None / Custom</option>
                                             </select>
                                         </div>
                                         <div class="input-field" id="field-setcode3">
-                                            <label>Archetype 3</label>
+                                            <label data-i18n="editor_archetype_3">Archetype 3</label>
                                             <select id="edit-setcode3">
                                                 <option value="0">None / Custom</option>
                                             </select>
                                         </div>
                                         <div class="input-field" id="field-setcode4">
-                                            <label>Archetype 4</label>
+                                            <label data-i18n="editor_archetype_4">Archetype 4</label>
                                             <select id="edit-setcode4">
                                                 <option value="0">None / Custom</option>
                                             </select>
@@ -1951,12 +2094,12 @@
                                 <div class="form-grid">
                                     <div class="input-field" id="field-passcode">
                                         <label data-i18n="col_id">Passcode</label>
-                                        <input type="number" id="edit-passcode" placeholder="8 digits...">
+                                        <input type="number" id="edit-passcode" data-placeholder="editor_passcode_placeholder" placeholder="8 digits...">
                                     </div>
                                     <div id="passcode-anchor-bottom" style="display:none"></div>
                                     <div class="input-field">
-                                        <label>Alias Card</label>
-                                        <input type="number" id="edit-alias" placeholder="0 if none">
+                                        <label data-i18n="editor_alias_card">Alias Card</label>
+                                        <input type="number" id="edit-alias" data-placeholder="editor_alias_placeholder" placeholder="0 if none">
                                     </div>
                                     <div class="input-field">
                                         <label>ATK</label>
@@ -1973,14 +2116,14 @@
 
                     <div class="editor-details">
                         <div class="editor-tabs">
-                            <button class="editor-tab-btn active" type="button" data-tab="analysis">Análisis</button>
-                            <button class="editor-tab-btn" type="button" data-tab="strings">Strings</button>
+                            <button class="editor-tab-btn active" type="button" data-tab="analysis" data-i18n="editor_tab_analysis">Análisis</button>
+                            <button class="editor-tab-btn" type="button" data-tab="strings" data-i18n="editor_tab_strings">Strings</button>
                         </div>
 
                         <div id="editor-tab-analysis" class="editor-tab-content">
                             <div id="editor-analysis-display"
                                 style="padding: 0.8rem; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--card-border); border-radius: 1rem; font-size: 0.85rem; color: var(--text-main); line-height: 1.45;">
-                                Esperando selección de carta...
+                                <span data-i18n="editor_details_analysis_wait">Esperando selección de carta...</span>
                             </div>
                         </div>
 
@@ -1988,7 +2131,7 @@
                             <div id="editor-strings-display" class="strings-display-container">
                                 <div
                                     style="color: var(--text-muted); font-style: italic; padding: 1rem; text-align: center;">
-                                    Selecciona una carta para ver sus strings...
+                                    <span data-i18n="editor_details_strings_wait">Selecciona una carta para ver sus strings...</span>
                                 </div>
                             </div>
                         </div>
@@ -1998,24 +2141,24 @@
 
             <!-- PANEL DERECHO: FLAGS -->
             <div class="editor-panel">
-                <div class="panel-header">Types & Flags</div>
+                <div class="panel-header" data-i18n="editor_tab_flags">Types & Flags</div>
                 <div class="checkbox-panel">
                     <div class="checkbox-section">
-                        <h4>Card Type & Monster Type</h4>
+                        <h4 data-i18n="editor_section_type_monster">Card Type & Monster Type</h4>
                         <div class="checkbox-grid" id="type-checkbox-grid">
-                            <!-- Dinámico -->
+                            <!-- DinÃ¡mico -->
                         </div>
                     </div>
                     <div class="checkbox-section">
-                        <h4>Category / Genre</h4>
+                        <h4 data-i18n="editor_section_category_genre">Category / Genre</h4>
                         <div class="checkbox-grid" id="category-checkbox-grid">
-                            <!-- Dinámico -->
+                            <!-- DinÃ¡mico -->
                         </div>
                     </div>
                     <div class="checkbox-section">
-                        <h4>Flags</h4>
+                        <h4 data-i18n="editor_section_flags">Flags</h4>
                         <div class="checkbox-grid" id="flags-checkbox-grid">
-                            <!-- Dinámico -->
+                            <!-- DinÃ¡mico -->
                         </div>
                     </div>
                 </div>
@@ -2024,10 +2167,10 @@
 
         <!-- ACCIONES INFERIORES -->
         <div class="editor-footer">
-            <button class="editor-btn" type="button">🔍 Search</button>
-            <button class="editor-btn" type="button">🧹 Clear All</button>
-            <button class="editor-btn" type="button">🖼️ Load Image</button>
-            <button class="editor-btn" type="button">📂 Open LUA</button>
+            <button class="editor-btn" type="button" data-i18n="editor_btn_search">🔍 Search</button>
+            <button class="editor-btn" type="button" data-i18n="editor_btn_clear">🧹 Clear All</button>
+            <button class="editor-btn" type="button" data-i18n="editor_btn_image">🖼️ Load Image</button>
+            <button class="editor-btn" type="button" data-i18n="editor_btn_open_lua">📂 Open LUA</button>
             <div style="width: 2px; background: var(--card-border); height: 30px; margin: 0 0.5rem;"></div>
             <button class="editor-btn primary" id="editor-btn-add" type="button">➕ Add Card</button>
             <button class="editor-btn primary" id="editor-btn-modify" type="button" onclick="editorModifySelected()">📝 Modify</button>
@@ -2046,57 +2189,62 @@
 
         const UI_STRINGS = {
             'es': {
-                'app_title': 'Reporte de Análisis Estructural',
-                'app_subtitle': 'Validación de Efectos: Previsión vs. Implementación LUA',
+                'app_title': 'Reporte de AnÃ¡lisis Estructural',
+                'app_subtitle': 'ValidaciÃ³n de Efectos: PrevisiÃ³n vs. ImplementaciÃ³n LUA',
                 'stat_total': 'Total Analizado',
                 'stat_ok': 'Coincidencias',
-                'stat_error': 'Anomalías',
+                'stat_error': 'AnomalÃ­as',
                 'stat_missing': 'Problemas Datos',
                 'tab_ok': 'Coincidencias',
-                'tab_error': 'Anomalías',
+                'tab_error': 'AnomalÃ­as',
                 'tab_missing': 'Datos Faltantes',
                 'search_placeholder': 'Filtrar por ID de carta...',
                 'col_id': 'ID Carta',
                 'col_name': 'Nombre',
                 'col_pred': 'Previsto',
                 'col_script': 'Script',
-                'col_action': 'Acción',
+                'col_action': 'AcciÃ³n',
                 'btn_expand': 'Ver Detalle Textos',
-                'anomalies_title': '⚠️ Anomalías Técnicas Detectadas',
+                'anomalies_title': 'âš ï¸ AnomalÃ­as TÃ©cnicas Detectadas',
                 'anomalies_th_type': 'Tipo',
                 'anomalies_th_ref': 'Referencia',
-                'anomalies_th_code': 'Código LUA',
-                'anomalies_th_desc': 'Descripción',
-                'pred_title': 'Efectos Previstos (Descripción)',
+                'anomalies_th_code': 'CÃ³digo LUA',
+                'anomalies_th_desc': 'DescripciÃ³n',
+                'pred_title': 'Efectos Previstos (DescripciÃ³n)',
                 'script_title': 'Efectos Hallados (LUA + CDB/SYS)',
                 'script_th_ref': 'Ref',
-                'script_th_code': 'Código LUA',
-                'script_th_text': 'Texto Extraído',
-                'pagination_first': '« Primera',
-                'pagination_last': 'Última »',
+                'script_th_code': 'CÃ³digo LUA',
+                'script_th_text': 'Texto ExtraÃ­do',
+                'pagination_first': 'Â« Primera',
+                'pagination_last': 'Ãšltima Â»',
                 'pagination_prev': 'Anterior',
                 'pagination_next': 'Siguiente',
                 'effects_suffix': 'efectos',
                 // Nuevos strings
                 'config_title': 'Analizador Yu-Gi-Oh!',
                 'config_subtitle': 'Configura las rutas para iniciar el escaneo',
+                'label_ui_lang': 'Idioma de la interfaz web',
+                'ui_lang_es': 'EspaÃ±ol',
+                'ui_lang_en': 'InglÃ©s',
+                'label_profile_lang': 'Idioma de datos del perfil',
+                'profile_lang_placeholder': 'Busca idioma...',
                 'label_cdb': 'Carpeta de Bases de Datos (.cdb)',
                 'label_scripts': 'Carpeta de Scripts (c*.lua)',
                 'label_strings': 'Archivo de Sistema (strings.conf)',
                 'label_vars': 'Carpeta de Variables (todos los .lua)',
                 'btn_select': 'Seleccionar',
-                'btn_start': 'Iniciar Análisis Estructural',
+                'btn_start': 'Iniciar AnÃ¡lisis Estructural',
                 'loading_text': 'Procesando scripts y base de datos...',
                 'select_cdb': 'Carpeta de .cdb...',
                 'select_scripts': 'Carpeta de scripts...',
                 'select_strings': 'Archivo strings.conf...',
                 'select_vars': 'Carpeta con archivos .lua...',
-                'btn_new_analysis': 'Nuevo Análisis',
+                'btn_new_analysis': 'Nuevo AnÃ¡lisis',
                 'btn_cancel': 'Cancelar',
                 'tab_local': 'Local',
                 'tab_github': 'GitHub',
-                'menu_config_title': 'Configuración Global',
-                'menu_config_desc': 'Cambia las rutas base para el CDB, Scripts e Imágenes.',
+                'menu_config_title': 'ConfiguraciÃ³n Global',
+                'menu_config_desc': 'Cambia las rutas base para el CDB, Scripts e ImÃ¡genes.',
                 'tab_github': 'GitHub',
                 'label_cdb_gh': 'URL Carpeta CDBs (GitHub)',
                 'label_scripts_gh': 'URL Carpeta Scripts (GitHub)',
@@ -2104,29 +2252,54 @@
                 'app_suite_title': 'Yu-Gi-Oh! Script Suite',
                 'app_suite_subtitle': 'Selecciona una herramienta para comenzar',
                 'menu_analyzer_title': 'Analizador',
-                'menu_analyzer_desc': 'Verifica la integridad estructural de tus scripts y detecta anomalías.',
+                'menu_analyzer_desc': 'Verifica la integridad estructural de tus scripts y detecta anomalÃ­as.',
                 'menu_editor_title': 'Editor',
-                'menu_editor_desc': 'Crea y modifica scripts LUA con herramientas avanzadas (Próximamente).',
-                'btn_back_menu': 'Volver al Menú',
-                'editor_subtitle': 'Herramientas de creación y edición',
-                'editor_coming_soon': 'Próximamente',
+                'menu_editor_desc': 'Crea y modifica scripts LUA con herramientas avanzadas (PrÃ³ximamente).',
+                'btn_back_menu': 'Volver al MenÃº',
+                'editor_subtitle': 'Herramientas de creaciÃ³n y ediciÃ³n',
+                'editor_coming_soon': 'PrÃ³ximamente',
                 'editor_desc_placeholder': 'Estamos construyendo el mejor editor para tus scripts LUA.',
-                'label_pics': 'Carpeta de Imágenes (pics)',
+                'label_pics': 'Carpeta de ImÃ¡genes (pics)',
                 'select_pics': 'Carpeta con id.jpg o id.png...',
                 'editor_tab_list': 'Lista de Cartas',
-                'editor_tab_info': 'Información de la Carta',
+                'editor_tab_info': 'InformaciÃ³n de la Carta',
                 'editor_tab_flags': 'Tipos y Flags',
+                'editor_tab_analysis': 'Análisis',
+                'editor_tab_strings': 'Strings',
+                'editor_details_card_data': 'Datos de carta',
+                'editor_details_analysis_wait': 'Esperando selección de carta...',
+                'editor_details_strings_wait': 'Selecciona una carta para ver sus strings...',
+                'editor_search_placeholder': 'Buscar carta...',
+                'editor_card_name_placeholder': 'Nombre de carta...',
+                'editor_passcode_placeholder': '8 dígitos...',
+                'editor_alias_placeholder': '0 si no tiene',
+                'editor_no_image': 'SIN IMAGEN',
+                'editor_rule': 'Regla (Formato)',
+                'editor_attribute': 'Atributo',
+                'editor_level': 'Nivel/Rango/Link',
+                'editor_race': 'Raza',
+                'editor_archetype_setcode': 'Arquetipo (SetCode)',
+                'editor_archetype_2': 'Arquetipo 2',
+                'editor_archetype_3': 'Arquetipo 3',
+                'editor_archetype_4': 'Arquetipo 4',
+                'editor_alias_card': 'Carta Alias',
+                'editor_none': 'NINGUNO',
+                'editor_none_custom': 'Ninguno / Custom',
+                'editor_section_type_monster': 'Tipo de Carta y Monstruo',
+                'editor_section_category_genre': 'Categoría / Género',
+                'editor_section_flags': 'Flags',
+                'editor_cards_suffix': 'Cartas',
                 'editor_btn_search': 'Buscar',
                 'editor_btn_clear': 'Limpiar Todo',
                 'editor_btn_image': 'Cargar Imagen',
                 'editor_btn_open_lua': 'Abrir LUA',
-                'editor_btn_add': 'Añadir Carta',
+                'editor_btn_add': 'AÃ±adir Carta',
                 'editor_btn_modify': 'Modificar',
                 'editor_btn_save': 'Guardar',
                 'editor_btn_delete': 'Eliminar',
                 'editor_filter_all': 'Todos',
                 'editor_filter_monster': 'Monstruo',
-                'editor_filter_spell': 'Mágica',
+                'editor_filter_spell': 'MÃ¡gica',
                 'editor_filter_trap': 'Trampa',
                 'editor_filter_pre': 'Pre-Lanzadas',
                 'editor_filter_adv': 'Filtros',
@@ -2136,10 +2309,10 @@
                 'analyzer_welcome_title': 'Analizador de Scripts',
                 'stat_no_script': 'Scripts Faltantes',
                 'tab_no_script': 'Scripts Faltantes',
-                'analyzer_welcome_desc': 'Presiona el botón para escanear la base de datos y scripts configurados.',
+                'analyzer_welcome_desc': 'Presiona el botÃ³n para escanear la base de datos y scripts configurados.',
                 'stat_excluded': 'Cartas Excluidas',
                 'tab_excluded': 'Cartas Excluidas',
-                'col_reason': 'Motivo Exclusión',
+                'col_reason': 'Motivo ExclusiÃ³n',
             },
             'en': {
                 'app_title': 'Structural Analysis Report',
@@ -2158,7 +2331,7 @@
                 'col_script': 'Script',
                 'col_action': 'Action',
                 'btn_expand': 'View Text Details',
-                'anomalies_title': '⚠️ Technical Anomalies Detected',
+                'anomalies_title': 'âš ï¸ Technical Anomalies Detected',
                 'anomalies_th_type': 'Type',
                 'anomalies_th_ref': 'Reference',
                 'anomalies_th_code': 'LUA Code',
@@ -2168,14 +2341,19 @@
                 'script_th_ref': 'Ref',
                 'script_th_code': 'LUA Code',
                 'script_th_text': 'Extracted Text',
-                'pagination_first': '« First',
-                'pagination_last': 'Last »',
+                'pagination_first': 'Â« First',
+                'pagination_last': 'Last Â»',
                 'pagination_prev': 'Previous',
                 'pagination_next': 'Next',
                 'effects_suffix': 'effects',
                 // New strings
                 'config_title': 'Yu-Gi-Oh! Analyzer',
                 'config_subtitle': 'Configure paths to start scanning',
+                'label_ui_lang': 'Web UI language',
+                'ui_lang_es': 'Spanish',
+                'ui_lang_en': 'English',
+                'label_profile_lang': 'Profile data language',
+                'profile_lang_placeholder': 'Search language...',
                 'label_cdb': 'Database Folder (.cdb)',
                 'label_scripts': 'Script Folder (c*.lua)',
                 'label_strings': 'System File (strings.conf)',
@@ -2200,6 +2378,8 @@
                 'menu_analyzer_desc': 'Verify the structural integrity of your scripts and detect anomalies.',
                 'menu_editor_title': 'Editor',
                 'menu_editor_desc': 'Create and modify LUA scripts with advanced tools (Coming Soon).',
+                'menu_config_title': 'Configuration',
+                'menu_config_desc': 'Change the base paths for CDB, Scripts, and Images.',
                 'btn_back_menu': 'Back to Menu',
                 'editor_subtitle': 'Creation and editing tools',
                 'editor_coming_soon': 'Coming Soon',
@@ -2209,6 +2389,31 @@
                 'editor_tab_list': 'Card List',
                 'editor_tab_info': 'Card Information',
                 'editor_tab_flags': 'Types & Flags',
+                'editor_tab_analysis': 'Analysis',
+                'editor_tab_strings': 'Strings',
+                'editor_details_card_data': 'Card Data',
+                'editor_details_analysis_wait': 'Waiting for card selection...',
+                'editor_details_strings_wait': 'Select a card to view its strings...',
+                'editor_search_placeholder': 'Search card...',
+                'editor_card_name_placeholder': 'Card Name...',
+                'editor_passcode_placeholder': '8 digits...',
+                'editor_alias_placeholder': '0 if none',
+                'editor_no_image': 'NO IMAGE',
+                'editor_rule': 'Rule (Format)',
+                'editor_attribute': 'Attribute',
+                'editor_level': 'Level/Rank/Link',
+                'editor_race': 'Race',
+                'editor_archetype_setcode': 'Archetype (SetCode)',
+                'editor_archetype_2': 'Archetype 2',
+                'editor_archetype_3': 'Archetype 3',
+                'editor_archetype_4': 'Archetype 4',
+                'editor_alias_card': 'Alias Card',
+                'editor_none': 'NONE',
+                'editor_none_custom': 'None / Custom',
+                'editor_section_type_monster': 'Card Type & Monster Type',
+                'editor_section_category_genre': 'Category / Genre',
+                'editor_section_flags': 'Flags',
+                'editor_cards_suffix': 'Cards',
                 'editor_btn_search': 'Search',
                 'editor_btn_clear': 'Clear All',
                 'editor_btn_image': 'Load Image',
@@ -2236,18 +2441,557 @@
             },
         };
 
+        const UI_STRINGS_CN_OVERRIDES = {
+            'app_title': '\u7ed3\u6784\u5206\u6790\u62a5\u544a',
+            'app_subtitle': '\u6548\u679c\u6821\u9a8c\uff1a\u9884\u6d4b vs LUA \u5b9e\u73b0',
+            'stat_total': '\u603b\u5206\u6790\u6570',
+            'stat_ok': '\u5339\u914d',
+            'stat_error': '\u5f02\u5e38',
+            'stat_missing': '\u6570\u636e\u95ee\u9898',
+            'tab_ok': '\u5339\u914d',
+            'tab_error': '\u5f02\u5e38',
+            'tab_missing': '\u7f3a\u5931\u6570\u636e',
+            'search_placeholder': '\u6309\u5361\u53f7\u7b5b\u9009...',
+            'col_id': '\u5361\u7247 ID',
+            'col_name': '\u540d\u79f0',
+            'col_pred': '\u9884\u6d4b',
+            'col_script': '\u811a\u672c',
+            'col_action': '\u64cd\u4f5c',
+            'btn_expand': '\u67e5\u770b\u6587\u672c\u8be6\u60c5',
+            'effects_suffix': '\u4e2a\u6548\u679c',
+            'btn_back_menu': '\u8fd4\u56de\u4e3b\u83dc\u5355',
+            'btn_start': '\u5f00\u59cb\u7ed3\u6784\u5206\u6790',
+            'btn_new_analysis': '\u65b0\u5efa\u5206\u6790',
+            'config_title': '\u6e38\u620f\u738b\u5206\u6790\u5668',
+            'config_subtitle': '\u914d\u7f6e\u8def\u5f84\u540e\u5f00\u59cb\u626b\u63cf',
+            'btn_select': '\u9009\u62e9',
+            'btn_save_config': '\u4fdd\u5b58\u5e76\u7ee7\u7eed',
+            'btn_cancel': '\u53d6\u6d88',
+            'menu_analyzer_title': '\u5206\u6790\u5668',
+            'menu_editor_title': '\u7f16\u8f91\u5668',
+            'menu_config_title': '\u914d\u7f6e',
+            'menu_analyzer_desc': '\u68c0\u67e5\u811a\u672c\u7ed3\u6784\u5e76\u68c0\u6d4b\u5f02\u5e38\u3002',
+            'menu_config_desc': '\u4fee\u6539 CDB\u3001\u811a\u672c\u548c\u56fe\u7247\u8def\u5f84\u3002',
+            'app_suite_subtitle': '\u9009\u62e9\u4e00\u4e2a\u5de5\u5177\u5f00\u59cb',
+            'analyzer_welcome_title': '\u811a\u672c\u5206\u6790\u5668',
+            'analyzer_welcome_desc': '\u70b9\u51fb\u6309\u94ae\u626b\u63cf\u5df2\u914d\u7f6e\u7684\u6570\u636e\u5e93\u548c\u811a\u672c\u3002',
+            'stat_no_script': '\u7f3a\u5c11\u811a\u672c',
+            'tab_no_script': '\u7f3a\u5c11\u811a\u672c',
+            'stat_excluded': '\u5df2\u6392\u9664\u5361\u7247',
+            'tab_excluded': '\u5df2\u6392\u9664\u5361\u7247',
+            'col_reason': '\u6392\u9664\u539f\u56e0',
+            'label_ui_lang': '\u7f51\u9875\u754c\u9762\u8bed\u8a00',
+            'profile_lang_placeholder': '\u641c\u7d22\u8bed\u8a00...',
+            'label_cdb': '\u6570\u636e\u5e93\u6587\u4ef6\u5939 (.cdb)',
+            'label_scripts': '\u811a\u672c\u6587\u4ef6\u5939 (c*.lua)',
+            'label_strings': '\u7cfb\u7edf\u6587\u4ef6 (strings.conf)',
+            'label_pics': '\u56fe\u7247\u6587\u4ef6\u5939 (pics)',
+            'editor_tab_list': '\u5361\u7247\u5217\u8868',
+            'editor_tab_info': '\u5361\u7247\u4fe1\u606f',
+            'editor_tab_flags': '\u7c7b\u578b\u4e0e\u6807\u8bb0',
+            'editor_tab_analysis': '\u5206\u6790',
+            'editor_btn_search': '\u641c\u7d22',
+            'editor_btn_clear': '\u6e05\u7a7a',
+            'editor_btn_image': '\u52a0\u8f7d\u56fe\u7247',
+            'editor_btn_open_lua': '\u6253\u5f00 LUA',
+            'editor_btn_add': '\u6dfb\u52a0\u5361\u7247',
+            'editor_btn_modify': '\u4fee\u6539',
+            'editor_btn_save': '\u4fdd\u5b58',
+            'editor_btn_delete': '\u5220\u9664'
+        };
+        const UI_STRINGS_KR_OVERRIDES = {
+            'app_title': '\uad6c\uc870 \ubd84\uc11d \ubcf4\uace0\uc11c',
+            'app_subtitle': '\ud6a8\uacfc \uac80\uc99d: \uc608\uce21 vs LUA \uad6c\ud604',
+            'stat_total': '\ucd1d \ubd84\uc11d',
+            'stat_ok': '\uc77c\uce58',
+            'stat_error': '\uc774\uc0c1',
+            'stat_missing': '\ub370\uc774\ud130 \ubb38\uc81c',
+            'tab_ok': '\uc77c\uce58',
+            'tab_error': '\uc774\uc0c1',
+            'tab_missing': '\ub204\ub77d \ub370\uc774\ud130',
+            'search_placeholder': '\uce74\ub4dc ID\ub85c \ud544\ud130...',
+            'col_id': '\uce74\ub4dc ID',
+            'col_name': '\uc774\ub984',
+            'col_pred': '\uc608\uce21',
+            'col_script': '\uc2a4\ud06c\ub9bd\ud2b8',
+            'col_action': '\uc791\uc5c5',
+            'btn_expand': '\ud14d\uc2a4\ud2b8 \uc138\ubd80\uc0ac\ud56d \ubcf4\uae30',
+            'effects_suffix': '\uac1c \ud6a8\uacfc',
+            'btn_back_menu': '\uba54\ub274\ub85c \ub3cc\uc544\uac00\uae30',
+            'btn_start': '\uad6c\uc870 \ubd84\uc11d \uc2dc\uc791',
+            'btn_new_analysis': '\uc0c8 \ubd84\uc11d',
+            'config_title': '\uc720\ud76c\uc655 \ubd84\uc11d\uae30',
+            'config_subtitle': '\uc2a4\uce94\uc744 \uc2dc\uc791\ud558\ub824\uba74 \uacbd\ub85c\ub97c \uc124\uc815\ud558\uc138\uc694',
+            'btn_select': '\uc120\ud0dd',
+            'btn_save_config': '\uc800\uc7a5 \ud6c4 \uacc4\uc18d',
+            'btn_cancel': '\ucde8\uc18c',
+            'menu_analyzer_title': '\ubd84\uc11d\uae30',
+            'menu_editor_title': '\uc5d0\ub514\ud130',
+            'menu_config_title': '\uc124\uc815',
+            'menu_analyzer_desc': '\uc2a4\ud06c\ub9bd\ud2b8 \uad6c\uc870\ub97c \uac80\uc0ac\ud558\uace0 \uc774\uc0c1\uc744 \ud0d0\uc9c0\ud569\ub2c8\ub2e4.',
+            'menu_config_desc': 'CDB, \uc2a4\ud06c\ub9bd\ud2b8, \uc774\ubbf8\uc9c0 \uacbd\ub85c\ub97c \ubcc0\uacbd\ud569\ub2c8\ub2e4.',
+            'app_suite_subtitle': '\uc2dc\uc791\ud560 \ub3c4\uad6c\ub97c \uc120\ud0dd\ud558\uc138\uc694',
+            'analyzer_welcome_title': '\uc2a4\ud06c\ub9bd\ud2b8 \ubd84\uc11d\uae30',
+            'analyzer_welcome_desc': '\ubc84\ud2bc\uc744 \ub20c\ub7ec \uc124\uc815\ub41c \ub370\uc774\ud130\uc640 \uc2a4\ud06c\ub9bd\ud2b8\ub97c \uc2a4\uce94\ud558\uc138\uc694.',
+            'stat_no_script': '\ub204\ub77d\ub41c \uc2a4\ud06c\ub9bd\ud2b8',
+            'tab_no_script': '\ub204\ub77d\ub41c \uc2a4\ud06c\ub9bd\ud2b8',
+            'stat_excluded': '\uc81c\uc678\ub41c \uce74\ub4dc',
+            'tab_excluded': '\uc81c\uc678\ub41c \uce74\ub4dc',
+            'col_reason': '\uc81c\uc678 \uc0ac\uc720',
+            'label_ui_lang': '\uc6f9 UI \uc5b8\uc5b4',
+            'profile_lang_placeholder': '\uc5b8\uc5b4 \uac80\uc0c9...',
+            'label_cdb': '\ub370\uc774\ud130\ubca0\uc774\uc2a4 \ud3f4\ub354 (.cdb)',
+            'label_scripts': '\uc2a4\ud06c\ub9bd\ud2b8 \ud3f4\ub354 (c*.lua)',
+            'label_strings': '\uc2dc\uc2a4\ud15c \ud30c\uc77c (strings.conf)',
+            'label_pics': '\uc774\ubbf8\uc9c0 \ud3f4\ub354 (pics)',
+            'editor_tab_list': '\uce74\ub4dc \ubaa9\ub85d',
+            'editor_tab_info': '\uce74\ub4dc \uc815\ubcf4',
+            'editor_tab_flags': '\ud0c0\uc785 \ubc0f \ud50c\ub798\uadf8',
+            'editor_tab_analysis': '\ubd84\uc11d',
+            'editor_btn_search': '\uac80\uc0c9',
+            'editor_btn_clear': '\ucd08\uae30\ud654',
+            'editor_btn_image': '\uc774\ubbf8\uc9c0 \ubd88\ub7ec\uc624\uae30',
+            'editor_btn_open_lua': 'LUA \uc5f4\uae30',
+            'editor_btn_add': '\uce74\ub4dc \ucd94\uac00',
+            'editor_btn_modify': '\uc218\uc815',
+            'editor_btn_save': '\uc800\uc7a5',
+            'editor_btn_delete': '\uc0ad\uc81c'
+        };
+
+        UI_STRINGS.cn = { ...UI_STRINGS.en, ...UI_STRINGS_CN_OVERRIDES };
+        UI_STRINGS.kr = { ...UI_STRINGS.en, ...UI_STRINGS_KR_OVERRIDES };
+        UI_STRINGS['en-us'] = { ...UI_STRINGS.en };
+        UI_STRINGS['es-es'] = { ...UI_STRINGS.es };
+        UI_STRINGS['de-de'] = { ...UI_STRINGS.en };
+        UI_STRINGS['ge-de'] = { ...UI_STRINGS.en };
+        UI_STRINGS['fr-fr'] = { ...UI_STRINGS.en };
+        UI_STRINGS['it-it'] = { ...UI_STRINGS.en };
+        UI_STRINGS['ja-jp'] = { ...UI_STRINGS.en };
+        UI_STRINGS['ko-kr'] = { ...UI_STRINGS.kr };
+        UI_STRINGS['pt-pt'] = { ...UI_STRINGS.en };
+        UI_STRINGS['zh-cn'] = { ...UI_STRINGS.cn };
+        UI_STRINGS['zh-tw'] = { ...UI_STRINGS.cn };
+
+        // Base de datos por idioma (perfiles)
+        let dbProfiles = {
+            es: { cdb: '', scripts: '', strings: '', pics: '', ui_lang: 'es' },
+            en: { cdb: '', scripts: '', strings: '', pics: '', ui_lang: 'en' },
+        };
+        let activeDbProfile = localStorage.getItem('db_profile') || 'es';
+        let deleteArmedProfile = '';
+
+        // `paths` refleja el perfil activo (para reutilizar la lÃ³gica existente)
         let paths = { cdb: '', scripts: '', strings: '', pics: '' };
-        let configMode = 'local'; // 'local' o 'github'
 
-        function setConfigMode(mode) {
-            configMode = mode;
-            document.getElementById('mode-local').style.display = mode === 'local' ? 'block' : 'none';
-            document.getElementById('mode-github').style.display = mode === 'github' ? 'block' : 'none';
+        function ensureDbProfile(key) {
+            const k = String(key || '').toLowerCase() || 'es';
+            if (!dbProfiles[k]) dbProfiles[k] = { cdb: '', scripts: '', strings: '', pics: '', ui_lang: inferUiLangFromProfile(k) };
+            if (!dbProfiles[k].ui_lang) dbProfiles[k].ui_lang = inferUiLangFromProfile(k);
+            return k;
+        }
 
-            document.getElementById('tab-local').classList.toggle('active', mode === 'local');
-            document.getElementById('tab-github').classList.toggle('active', mode === 'github');
+        function buildProfilesPayload() {
+            const profilesPayload = {};
+            for (const [k, v] of Object.entries(dbProfiles || {})) {
+                profilesPayload[String(k).toLowerCase()] = {
+                    cdb_dir: v.cdb || '',
+                    script_dir: v.scripts || '',
+                    strings_conf: v.strings || '',
+                    pics_dir: v.pics || '',
+                    ui_lang: String(v.ui_lang || inferUiLangFromProfile(k)).toLowerCase(),
+                };
+            }
+            return profilesPayload;
+        }
 
+        function syncCurrentPathsIntoActiveProfile() {
+            const k = ensureDbProfile(activeDbProfile);
+            dbProfiles[k] = dbProfiles[k] || { cdb: '', scripts: '', strings: '', pics: '', ui_lang: inferUiLangFromProfile(k) };
+            dbProfiles[k].cdb = paths.cdb || '';
+            dbProfiles[k].scripts = paths.scripts || '';
+            dbProfiles[k].strings = paths.strings || '';
+            dbProfiles[k].pics = paths.pics || '';
+        }
+
+        async function persistProfilesConfig({ silent = true } = {}) {
+            try {
+                syncCurrentPathsIntoActiveProfile();
+                const resp = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        profiles: buildProfilesPayload(),
+                        active_profile: activeDbProfile,
+                    })
+                });
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                return true;
+            } catch (e) {
+                console.error("Config Sync Error:", e);
+                if (!silent) {
+                    alert(lang === 'en'
+                        ? 'Could not save configuration. Please try again.'
+                        : 'No se pudo guardar la configuraciÃ³n. Intenta nuevamente.');
+                }
+                return false;
+            }
+        }
+
+        function clearDeleteArmedTabs(exceptKey = '') {
+            deleteArmedProfile = String(exceptKey || '').toLowerCase();
+            renderDbLangTabs();
+        }
+
+        function inferUiLangFromProfile(profileKey) {
+            const k = String(profileKey || '').toLowerCase();
+            const p = dbProfiles?.[k];
+            if (p?.ui_lang) return String(p.ui_lang).toLowerCase();
+            if (/^[a-z]{2}(?:-[a-z0-9]{2,4})?$/i.test(k)) return k;
+            if (k.startsWith('es')) return 'es';
+            if (k.startsWith('en')) return 'en';
+            if (k === 'cn' || k.startsWith('zh')) return 'zh-cn';
+            if (k === 'kr' || k.startsWith('ko')) return 'ko-kr';
+            if (k.startsWith('ja')) return 'ja';
+            return 'en';
+        }
+
+        function syncUiLangFromActiveProfile() {
+            const code = String(inferUiLangFromProfile(activeDbProfile)).toLowerCase();
+            const inferred =
+                UI_STRINGS[code] ? code :
+                ((code === 'cn' || code.startsWith('zh')) ? 'cn' :
+                    ((code === 'kr' || code.startsWith('ko')) ? 'kr' :
+                        (code.startsWith('es') ? 'es' : 'en')));
+            if (lang !== inferred) {
+                lang = inferred;
+                localStorage.setItem('lang', lang);
+            }
+        }
+
+        function parseProfileUiLangCode(raw) {
+            const txt = String(raw || '').trim();
+            if (!txt) return '';
+            const m = txt.match(/\(([A-Za-z]{2}(?:-[A-Za-z0-9]{2,4})?)\)\s*$/);
+            if (m && m[1]) return m[1].toLowerCase();
+            if (/^[a-z]{2}(?:-[a-z0-9]{2,4})?$/i.test(txt)) return txt.toLowerCase();
+            return '';
+        }
+
+        function formatProfileUiLangValue(code) {
+            const c = String(code || '').toLowerCase();
+            const opt = document.querySelector(`#profile-language-options option[data-code="${c}"]`);
+            return opt ? opt.value : c;
+        }
+
+        function renderMainProfileTabs() {
+            const host = document.getElementById('main-profile-switcher');
+            if (!host) return;
+            host.innerHTML = '';
+
+            const keys = Object.keys(dbProfiles || {});
+            keys.sort((a, b) => {
+                const A = String(a).toLowerCase();
+                const B = String(b).toLowerCase();
+                const pref = (x) => (x === 'es' ? 0 : x === 'en' ? 1 : 2);
+                const pa = pref(A), pb = pref(B);
+                if (pa !== pb) return pa - pb;
+                return A.localeCompare(B);
+            });
+
+            for (const k of keys) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'profile-btn' + (k === activeDbProfile ? ' active' : '');
+                btn.textContent = String(k).toUpperCase();
+                btn.title = `DB: ${String(k).toUpperCase()}`;
+                btn.onclick = () => setDbProfile(k);
+                host.appendChild(btn);
+            }
+        }
+
+        document.addEventListener('click', (ev) => {
+            const tabsWrap = document.getElementById('db-lang-tabs');
+            if (!tabsWrap) return;
+            if (!tabsWrap.contains(ev.target)) clearDeleteArmedTabs();
+        });
+
+        function renderDbLangTabs() {
+            const tabs = document.getElementById('db-lang-tabs');
+            if (!tabs) return;
+            tabs.innerHTML = '';
+
+            const keys = Object.keys(dbProfiles || {});
+            keys.sort((a, b) => {
+                const A = String(a).toLowerCase();
+                const B = String(b).toLowerCase();
+                const pref = (x) => (x === 'es' ? 0 : x === 'en' ? 1 : 2);
+                const pa = pref(A), pb = pref(B);
+                if (pa !== pb) return pa - pb;
+                return A.localeCompare(B);
+            });
+
+            for (const k of keys) {
+                const tab = document.createElement('div');
+                const isDeleteArmed = (k === deleteArmedProfile);
+                tab.className = 'config-tab' + (k === activeDbProfile ? ' active' : '') + (isDeleteArmed ? ' delete-armed' : '');
+                tab.dataset.profileKey = k;
+
+                const label = document.createElement('span');
+                label.className = 'tab-label';
+                label.textContent = String(k).toUpperCase();
+                tab.appendChild(label);
+                tab.title = `DB: ${String(k).toUpperCase()}`;
+                tab.onclick = (ev) => {
+                    if (ev.detail > 1) return;
+                    setDbProfile(k);
+                };
+                tab.ondblclick = (ev) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    deleteArmedProfile = (deleteArmedProfile === k) ? '' : k;
+                    renderDbLangTabs();
+                };
+
+                // Solo en esta ventana (Config) se permite renombrar/eliminar perfiles
+                const actions = document.createElement('div');
+                actions.className = 'tab-actions';
+
+                const editBtn = document.createElement('button');
+                editBtn.type = 'button';
+                editBtn.className = 'tab-action-btn';
+                editBtn.textContent = '✎';
+                editBtn.title = 'Rename';
+                editBtn.onclick = (ev) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    beginRenameDbProfile(k);
+                };
+
+                const delBtn = document.createElement('button');
+                delBtn.type = 'button';
+                delBtn.className = 'tab-action-btn danger';
+                delBtn.textContent = '✕';
+                delBtn.title = 'Delete';
+                delBtn.onclick = (ev) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    deleteDbProfile(k);
+                };
+
+                actions.appendChild(editBtn);
+                actions.appendChild(delBtn);
+                tab.appendChild(actions);
+                tabs.appendChild(tab);
+            }
+
+            const plus = document.createElement('div');
+            plus.className = 'config-tab';
+            plus.textContent = '+';
+            plus.title = 'Add language profile';
+            plus.onclick = () => addDbProfile();
+            tabs.appendChild(plus);
+            renderMainProfileTabs();
+        }
+
+        function syncActiveProfileToUI() {
+            const p = dbProfiles[activeDbProfile] || { cdb: '', scripts: '', strings: '', pics: '', ui_lang: 'es' };
+            paths.cdb = p.cdb || '';
+            paths.scripts = p.scripts || '';
+            paths.strings = p.strings || '';
+            paths.pics = p.pics || '';
+            const profileUiLang = String(p.ui_lang || inferUiLangFromProfile(activeDbProfile)).toLowerCase();
+            p.ui_lang = profileUiLang;
+
+            const setPath = (id, value) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (value) {
+                    el.innerText = value;
+                    el.dataset.isPlaceholder = "false";
+                } else {
+                    el.innerText = '...';
+                    el.dataset.isPlaceholder = "true";
+                }
+            };
+
+            setPath('path-cdb', paths.cdb);
+            setPath('path-scripts', paths.scripts);
+            setPath('path-strings', paths.strings);
+            setPath('path-pics', paths.pics);
+            const uiLangSelect = document.getElementById('profile-ui-lang');
+            if (uiLangSelect) uiLangSelect.value = formatProfileUiLangValue(profileUiLang);
+
+            updateUI();
             validatePaths();
+        }
+
+        function onProfileUiLangChange(nextUiLang) {
+            const normalized = parseProfileUiLangCode(nextUiLang) || inferUiLangFromProfile(activeDbProfile);
+            const k = ensureDbProfile(activeDbProfile);
+            dbProfiles[k].ui_lang = normalized;
+            const uiLangSelect = document.getElementById('profile-ui-lang');
+            if (uiLangSelect) uiLangSelect.value = formatProfileUiLangValue(normalized);
+            syncUiLangFromActiveProfile();
+            updateUI();
+            persistProfilesConfig();
+        }
+
+        function setDbProfile(key) {
+            syncCurrentPathsIntoActiveProfile();
+            deleteArmedProfile = '';
+            activeDbProfile = ensureDbProfile(key);
+            localStorage.setItem('db_profile', activeDbProfile);
+            editorLoadedProfile = '';
+            editorAllCards = [];
+            editorFilteredCards = [];
+            editorSelectedCard = null;
+            editorSelectedCardId = null;
+            syncUiLangFromActiveProfile();
+            renderDbLangTabs();
+            syncActiveProfileToUI();
+            try { renderEditorList(); } catch { }
+            loadData().then(() => { try { render(); } catch { } }).catch(() => {});
+            persistProfilesConfig();
+        }
+
+        function addDbProfile() {
+            const hint = (lang === 'en')
+                ? "New language key (examples: es, en, pt-br)."
+                : "Clave del idioma (ej: es, en, pt-br).";
+            const raw = prompt(hint, '');
+            if (raw === null) return;
+            const key = String(raw || '').trim().toLowerCase();
+            if (!key) return;
+            if (!/^[a-z0-9][a-z0-9_-]{0,15}$/.test(key)) {
+                alert(lang === 'en'
+                    ? 'Invalid key. Use letters/numbers and "-" or "_", max 16 chars.'
+                    : 'Clave invÃ¡lida. Usa letras/nÃºmeros y "-" o "_", mÃ¡ximo 16 caracteres.');
+                return;
+            }
+            if (dbProfiles[key]) {
+                alert(lang === 'en'
+                    ? 'That language already exists.'
+                    : 'Ese idioma ya existe.');
+                return;
+            }
+            ensureDbProfile(key);
+            setDbProfile(key);
+        }
+
+        function findDbProfileTab(key) {
+            const k = String(key || '').toLowerCase();
+            return document.querySelector(`#db-lang-tabs .config-tab[data-profile-key="${k}"]`);
+        }
+
+        function beginRenameDbProfile(oldKey) {
+            const ok = ensureDbProfile(oldKey);
+            const tab = findDbProfileTab(ok);
+            if (!tab) return;
+            if (tab.classList.contains('renaming')) return;
+
+            tab.classList.add('renaming');
+
+            const label = tab.querySelector('.tab-label');
+            const actions = tab.querySelector('.tab-actions');
+            if (!label) return;
+            if (actions) actions.style.display = 'none';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'tab-rename-input';
+            input.value = ok;
+            input.autocomplete = 'off';
+            input.spellcheck = false;
+
+            label.textContent = '';
+            label.appendChild(input);
+
+            const cleanup = () => {
+                tab.classList.remove('renaming');
+                if (actions) actions.style.display = '';
+                renderDbLangTabs();
+            };
+
+            const commit = () => {
+                const nextKey = String(input.value || '').trim().toLowerCase();
+                if (!nextKey || nextKey === ok) {
+                    cleanup();
+                    return;
+                }
+                applyDbProfileRename(ok, nextKey);
+            };
+
+            input.addEventListener('keydown', (ev) => {
+                if (ev.key === 'Enter') {
+                    ev.preventDefault();
+                    commit();
+                } else if (ev.key === 'Escape') {
+                    ev.preventDefault();
+                    cleanup();
+                }
+            });
+            input.addEventListener('blur', () => commit());
+
+            setTimeout(() => {
+                input.focus();
+                input.select();
+            }, 0);
+        }
+
+        function applyDbProfileRename(oldKey, nextKey) {
+            const ok = ensureDbProfile(oldKey);
+            const nk = String(nextKey || '').trim().toLowerCase();
+
+            if (!/^[a-z0-9][a-z0-9_-]{0,15}$/.test(nk)) {
+                alert(lang === 'en'
+                    ? 'Invalid key. Use letters/numbers and "-" or "_", max 16 chars.'
+                    : 'Clave invÃ¡lida. Usa letras/nÃºmeros y "-" o "_", mÃ¡ximo 16 caracteres.');
+                renderDbLangTabs();
+                return;
+            }
+            if (dbProfiles[nk]) {
+                alert(lang === 'en'
+                    ? 'That language already exists.'
+                    : 'Ese idioma ya existe.');
+                renderDbLangTabs();
+                return;
+            }
+
+            dbProfiles[nk] = dbProfiles[ok];
+            delete dbProfiles[ok];
+            if (activeDbProfile === ok) activeDbProfile = nk;
+            localStorage.setItem('db_profile', activeDbProfile);
+            renderDbLangTabs();
+            syncActiveProfileToUI();
+            persistProfilesConfig();
+        }
+
+        function deleteDbProfile(key) {
+            const k = String(key || '').toLowerCase();
+            if (!dbProfiles[k]) return;
+            const keys = Object.keys(dbProfiles || {});
+            if (keys.length <= 1) {
+                alert(lang === 'en'
+                    ? 'You must keep at least one language.'
+                    : 'Debes mantener al menos un idioma.');
+                return;
+            }
+            const msg = (lang === 'en')
+                ? `Delete language "${k.toUpperCase()}"?`
+                : `Â¿Eliminar el idioma "${k.toUpperCase()}"?`;
+            if (!confirm(msg)) return;
+
+            delete dbProfiles[k];
+            if (deleteArmedProfile === k) deleteArmedProfile = '';
+            if (activeDbProfile === k) {
+                const remaining = Object.keys(dbProfiles);
+                remaining.sort((a, b) => a.localeCompare(b));
+                activeDbProfile = remaining[0];
+                localStorage.setItem('db_profile', activeDbProfile);
+            }
+            renderDbLangTabs();
+            syncActiveProfileToUI();
+            persistProfilesConfig();
         }
 
         async function browse(key, isFolder, titleKey = '') {
@@ -2257,8 +3001,15 @@
                 const data = await resp.json();
                 if (data.path) {
                     paths[key] = data.path;
-                    document.getElementById(`path-${key}`).innerText = data.path;
+                    const pathEl = document.getElementById(`path-${key}`);
+                    if (pathEl) {
+                        pathEl.innerText = data.path;
+                        pathEl.dataset.isPlaceholder = "false";
+                    }
+                    ensureDbProfile(activeDbProfile);
+                    dbProfiles[activeDbProfile][key] = data.path;
                     validatePaths();
+                    await persistProfilesConfig();
                 }
             } catch (e) {
                 console.error("API Error:", e);
@@ -2266,35 +3017,49 @@
         }
 
         async function saveGlobalConfig() {
-            if (configMode === 'local') {
-                try {
-                    await fetch('/api/config', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            pics_dir: paths.pics,
-                            cdb_dir: paths.cdb,
-                            script_dir: paths.scripts,
-                            strings_conf: paths.strings
-                        })
-                    });
-                } catch (e) { console.error("Config Sync Error:", e); }
+            const synced = await persistProfilesConfig({ silent: false });
+            if (synced) switchView('main-menu');
+            /* legacy path disabled
+            let ok = false;
+            try {
+                const profilesPayload = {};
+                for (const [k, v] of Object.entries(dbProfiles || {})) {
+                    profilesPayload[String(k).toLowerCase()] = {
+                        cdb_dir: v.cdb || '',
+                        script_dir: v.scripts || '',
+                        strings_conf: v.strings || '',
+                        pics_dir: v.pics || '',
+                    };
+                }
+                const resp = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        profiles: profilesPayload,
+                        active_profile: activeDbProfile,
+                    })
+                });
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                ok = true;
+            } catch (e) {
+                console.error("Config Sync Error:", e);
+                alert(lang === 'en'
+                    ? 'Could not save configuration. Please try again.'
+                    : 'No se pudo guardar la configuraciÃ³n. Intenta nuevamente.');
             }
-            switchView('main-menu');
+            if (ok) switchView('main-menu'); */
         }
 
         function validatePaths() {
-            let isReady = false;
-            if (configMode === 'local') {
-                isReady = paths.cdb && paths.scripts && paths.strings;
-            } else {
-                const ghCdb = document.getElementById('gh-cdb').value.trim();
-                const ghScripts = document.getElementById('gh-scripts').value.trim();
-                const ghStrings = document.getElementById('gh-strings').value.trim();
-                isReady = ghCdb && ghScripts && ghStrings;
-            }
+            const isReady = Boolean(paths.cdb && paths.scripts && paths.strings);
             const btn = document.getElementById('saveConfigBtn');
-            if (btn) btn.disabled = !isReady;
+            if (btn) btn.disabled = false; // permitir guardar perfiles aunque alguno estÃ© incompleto
+
+            // BotÃ³n de "Start Analysis" solo si el perfil activo estÃ¡ listo
+            try {
+                const startBtn = document.getElementById('startAnalysisBtn');
+                if (startBtn) startBtn.disabled = !isReady;
+            } catch { }
         }
 
         async function startAnalysis() {
@@ -2305,62 +3070,37 @@
             const logBox = document.getElementById('download-log');
 
             document.getElementById('analysis-loading').style.display = 'flex';
-            logBox.innerHTML = '';
-            progressFill.style.width = '0%';
-            progressText.innerText = '0 / 0 (0%)';
+            try { if (logBox) logBox.innerHTML = ''; } catch { }
+            try { if (progressFill) progressFill.style.width = '0%'; } catch { }
+            try { if (progressText) progressText.innerText = '0 / 0 (0%)'; } catch { }
 
             try {
-                let bodyData = {
-                    mode: configMode,
-                    lang: lang
+                const isReady = Boolean(paths.cdb && paths.scripts && paths.strings);
+                if (!isReady) {
+                    alert(lang === 'en'
+                        ? 'Please configure CDB, Scripts and strings.conf for the selected language.'
+                        : 'Configura CDB, Scripts y strings.conf para el idioma seleccionado.');
+                    showConfig();
+                    return;
+                }
+
+                const bodyData = {
+                    mode: 'local',
+                    lang: lang,
+                    active_profile: activeDbProfile,
+                    cdb_dir: paths.cdb,
+                    script_dir: paths.scripts,
+                    strings_conf: paths.strings,
+                    pics_dir: paths.pics
                 };
 
-                let stopPolling = false;
-                if (configMode === 'local') {
-                    bodyData.cdb_dir = paths.cdb;
-                    bodyData.script_dir = paths.scripts;
-                    bodyData.strings_conf = paths.strings;
-                    bodyData.pics_dir = paths.pics; // Nueva ruta
-                    progressBox.style.display = 'none';
-                } else {
-                    bodyData.github_cdb = document.getElementById('gh-cdb').value.trim();
-                    bodyData.github_scripts = document.getElementById('gh-scripts').value.trim();
-                    bodyData.github_strings = document.getElementById('gh-strings').value.trim();
-                    loadingText.innerText = lang === 'es' ? "Descargando de GitHub..." : "Downloading from GitHub...";
-                    progressBox.style.display = 'flex';
-
-                    // Iniciar polling de progreso
-                    const pollProgress = async () => {
-                        if (stopPolling) return;
-                        try {
-                            const pResp = await fetch('/api/progress');
-                            const pData = await pResp.json();
-
-                            const percent = pData.total > 0 ? Math.round((pData.current / pData.total) * 100) : 0;
-                            progressFill.style.width = `${percent}%`;
-                            progressText.innerText = `${pData.current} / ${pData.total} (${percent}%)`;
-
-                            if (pData.last_file) {
-                                const entry = document.createElement('div');
-                                entry.className = 'log-entry';
-                                entry.innerText = `> ${pData.last_file}`;
-                                logBox.appendChild(entry);
-                                logBox.scrollTop = logBox.scrollHeight;
-                            }
-
-                            if (!stopPolling) setTimeout(pollProgress, 500);
-                        } catch (e) { console.error("Poll error", e); }
-                    };
-                    pollProgress();
-                }
+                try { if (progressBox) progressBox.style.display = 'none'; } catch { }
 
                 const resp = await fetch('/api/run', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(bodyData)
                 });
-
-                stopPolling = true;
 
                 if (resp.ok) {
                     await loadData(true);
@@ -2377,15 +3117,28 @@
         }
 
         function t(key, params = {}) {
+            const normalizeMojibake = (val) => {
+                if (typeof val !== 'string') return val;
+                if (!/[ÃÂâð]/.test(val)) return val;
+                try {
+                    const bytes = Uint8Array.from(Array.from(val).map(ch => ch.charCodeAt(0) & 0xFF));
+                    return new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+                } catch {
+                    return val;
+                }
+            };
             // Primero buscar en UI_STRINGS
-            let text = UI_STRINGS[lang][key];
+            const uiDict = UI_STRINGS[lang] || UI_STRINGS.en || {};
+            let text = normalizeMojibake(uiDict[key]);
             if (!text && allData.i18n && allData.i18n[lang]) {
                 // Luego buscar en I18N del backend
-                text = allData.i18n[lang][key];
+                text = normalizeMojibake(allData.i18n[lang][key]);
+            } else if (!text && allData.i18n && allData.i18n['en']) {
+                text = normalizeMojibake(allData.i18n['en'][key]);
             }
             if (!text) return key;
 
-            // Reemplazar parámetros
+            // Reemplazar parÃ¡metros
             Object.keys(params).forEach(k => {
                 text = text.replace(`{${k}}`, params[k]);
             });
@@ -2408,15 +3161,18 @@
             // Placeholder del buscador
             document.getElementById('searchInput').placeholder = t('search_placeholder');
 
-            // Placeholders de configuración
+            // Placeholders de configuraciÃ³n
             document.querySelectorAll('[data-placeholder]').forEach(el => {
                 const key = el.getAttribute('data-placeholder');
-                if (el.innerText === '...' || el.dataset.isPlaceholder) {
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = t(key);
+                    return;
+                }
+                if (el.innerText === '...' || el.dataset.isPlaceholder === "true") {
                     el.innerText = t(key);
                     el.dataset.isPlaceholder = "true";
                 }
             });
-
             // Botones de idioma
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             if (document.getElementById(`lang-${lang}`)) document.getElementById(`lang-${lang}`).classList.add('active');
@@ -2425,7 +3181,15 @@
 
         async function loadData(forceHideConfig = false) {
             try {
-                const r = await fetch('resultados.json?t=' + new Date().getTime());
+                const ts = new Date().getTime();
+                const profileKey = String(activeDbProfile || '').toLowerCase().replace(/[^a-z0-9_-]/g, '');
+                let r = null;
+                if (profileKey) {
+                    r = await fetch(`resultados_${profileKey}.json?t=${ts}`);
+                }
+                if (!r || !r.ok) {
+                    r = await fetch('resultados.json?t=' + ts);
+                }
                 if (!r.ok) throw new Error("No data");
                 allData = await r.json();
 
@@ -2514,22 +3278,23 @@
 
             if (viewId === 'module-editor') {
                 initEditor();
-                // Ajustar zoom de la página para que el editor quepa en el viewport (sin depender del zoom del navegador)
+                // Ajustar zoom de la pÃ¡gina para que el editor quepa en el viewport (sin depender del zoom del navegador)
                 requestAnimationFrame(() => fitEditorPageToViewport());
             } else {
                 applyEditorPageZoom(1);
             }
 
-            // Si estamos en menú, mostrar cancelar solo si hay datos
+            // Si estamos en menÃº, mostrar cancelar solo si hay datos
             if (viewId === 'config-view') {
                 const hasResults = allData && (allData.coincidencias.length > 0 || allData.anomalias.length > 0);
                 document.getElementById('cancelConfigBtn').style.display = hasResults ? 'block' : 'none';
             }
         }
 
-        // --- LÓGICA DEL EDITOR ---
+        // --- LÃ“GICA DEL EDITOR ---
         let editorAllCards = [];
         let editorFilteredCards = [];
+        let editorLoadedProfile = '';
         let editorPage = 1;
         let editorSelectedCardId = null;
         let editorSelectedCard = null;
@@ -2610,12 +3375,12 @@
 
                 // Reset analysis/strings displays
                 const analysis = document.getElementById('editor-analysis-display');
-                if (analysis) analysis.innerHTML = 'Esperando selección de carta...';
+                if (analysis) analysis.innerHTML = t('editor_details_analysis_wait');
                 const strings = document.getElementById('editor-strings-display');
                 if (strings) {
                     strings.innerHTML = `
                         <div style="color: var(--text-muted); font-style: italic; padding: 1rem; text-align: center;">
-                            Selecciona una carta para ver sus strings...
+                            ${t('editor_details_strings_wait')}
                         </div>
                     `;
                 }
@@ -2637,7 +3402,7 @@
                 if (main) main.scrollTop = 0;
             } catch { }
 
-            // Reaplicar filtros (vacíos) sobre la data ya cargada
+            // Reaplicar filtros (vacÃ­os) sobre la data ya cargada
             applyEditorFilters();
         }
 
@@ -2671,7 +3436,7 @@
             const qFold = foldForSearch(q);
             if (!qFold) return escapeHtml(t);
 
-            // Construir texto "folded" + mapa de posición (fold idx -> original idx)
+            // Construir texto "folded" + mapa de posiciÃ³n (fold idx -> original idx)
             let folded = '';
             const map = [];
             for (let i = 0; i < t.length; i++) {
@@ -2842,10 +3607,10 @@
             // Selects usados como filtros (y editables en Modify)
             enable('#edit-rule, #edit-attribute, #edit-level, #edit-race, #edit-setcode1, #edit-setcode2, #edit-setcode3, #edit-setcode4', enableAll || enableFilters);
 
-            // Checkboxes: Types/Category/Flags actúan como filtros cuando editorAdvancedFilterMode está activo
+            // Checkboxes: Types/Category/Flags actÃºan como filtros cuando editorAdvancedFilterMode estÃ¡ activo
             enable('#type-checkbox-grid input[type=\"checkbox\"], #category-checkbox-grid input[type=\"checkbox\"], #flags-checkbox-grid input[type=\"checkbox\"]', enableAll || enableFilters);
 
-            // Link Markers: solo edición real en Modify
+            // Link Markers: solo ediciÃ³n real en Modify
             enable('#field-link-markers input[type=\"checkbox\"]', enableAll);
 
             updateEditorActionButtons();
@@ -2942,13 +3707,13 @@
                 });
             };
 
-            populateSelect('edit-attribute', constants['attribute'], 'Attribute');
-            populateSelect('edit-race', constants['race'], 'Race');
-            populateSelect('edit-level', constants['level'], 'Level/Rank/Link');
+            populateSelect('edit-attribute', constants['attribute'], t('editor_attribute'));
+            populateSelect('edit-race', constants['race'], t('editor_race'));
+            populateSelect('edit-level', constants['level'], t('editor_level'));
             ['edit-setcode1', 'edit-setcode2', 'edit-setcode3', 'edit-setcode4'].forEach(id => {
-                populateSelect(id, constants['setname'], 'Archetype');
+                populateSelect(id, constants['setname'], t('editor_archetype_setcode'));
             });
-            populateSelect('edit-rule', constants['rule'], 'Rule');
+            populateSelect('edit-rule', constants['rule'], t('editor_rule'));
 
             // Llenar Checkboxes
             const populateChecks = (id, data) => {
@@ -2969,8 +3734,22 @@
         }
 
         async function initEditor(force = false) {
+            const activeProfileData = dbProfiles[activeDbProfile] || {};
+            const hasEditorSource = Boolean(String(activeProfileData.cdb || '').trim());
+            if (!hasEditorSource) {
+                editorAllCards = [];
+                editorFilteredCards = [];
+                editorSelectedCard = null;
+                editorSelectedCardId = null;
+                editorLoadedProfile = String(activeDbProfile || '').toLowerCase();
+                renderEditorList();
+                setEditorEditMode(false);
+                return;
+            }
+
             const isStale = editorAllCards.length > 0 && (editorAllCards[0]?.category == null);
-            if (editorAllCards.length > 0 && !force && !isStale) {
+            const profileChanged = editorLoadedProfile !== String(activeDbProfile || '').toLowerCase();
+            if (editorAllCards.length > 0 && !force && !isStale && !profileChanged) {
                 applyEditorFilters();
                 setEditorEditMode(false);
                 return;
@@ -2987,14 +3766,16 @@
                 updateEditorTypeFilterButtons();
 
                 // Cargar cartas
-                const resp = await fetch('/api/editor/load');
+                const resp = await fetch(`/api/editor/load?active_profile=${encodeURIComponent(activeDbProfile)}`);
                 const data = await resp.json();
                 editorAllCards = data;
+                editorLoadedProfile = String(activeDbProfile || '').toLowerCase();
                 applyEditorFilters();
             } catch (e) {
                 console.error("Editor Load Error:", e);
                 editorAllCards = [];
                 editorFilteredCards = [];
+                editorLoadedProfile = '';
             } finally {
                 editorIsLoading = false;
                 renderEditorList();
@@ -3002,9 +3783,77 @@
             }
         }
 
+        function ensureEditorPaginationButtons() {
+            try {
+                const pageInfo = document.getElementById('editor-page-info');
+                const row = pageInfo ? pageInfo.parentElement : null;
+                if (!row) return;
+
+                const nextBtn = document.getElementById('editor-page-next');
+                if (nextBtn && !document.getElementById('editor-page-last')) {
+                    const btn = document.createElement('button');
+                    btn.className = 'page-btn';
+                    btn.id = 'editor-page-last';
+                    btn.onclick = () => lastEditorPage();
+                    btn.title = 'Last page';
+                    btn.style.padding = '0.3rem 0.6rem';
+                    btn.style.fontSize = '0.7rem';
+                    btn.innerHTML = '&raquo;&raquo;';
+                    row.insertBefore(btn, nextBtn.nextSibling);
+                }
+            } catch { }
+        }
+
+        function getEditorSelectedIndex() {
+            const id = editorSelectedCardId;
+            if (!id) return -1;
+            return editorFilteredCards.findIndex(c => c && c.id === id);
+        }
+
+        function selectEditorCardByIndex(idx) {
+            if (!Array.isArray(editorFilteredCards) || editorFilteredCards.length === 0) return;
+            const clamped = Math.max(0, Math.min(idx, editorFilteredCards.length - 1));
+            const desiredPage = Math.floor(clamped / editorItemsPerPage) + 1;
+            const card = editorFilteredCards[clamped];
+            if (!card) return;
+
+            if (editorPage !== desiredPage) {
+                editorPage = desiredPage;
+                renderEditorList();
+            }
+
+            selectEditorCard(card, { keepListHighlight: true });
+            try {
+                const listContainer = document.getElementById('editor-card-list');
+                const active = listContainer ? listContainer.querySelector('.editor-card-item.active') : null;
+                if (active) active.scrollIntoView({ block: 'nearest' });
+            } catch { }
+        }
+
+        function prevEditorCard() {
+            const idx = getEditorSelectedIndex();
+            if (idx <= 0) {
+                if (idx === -1 && editorFilteredCards.length) selectEditorCardByIndex(0);
+                return;
+            }
+            selectEditorCardByIndex(idx - 1);
+        }
+
+        function nextEditorCard() {
+            const idx = getEditorSelectedIndex();
+            if (idx === -1) {
+                if (editorFilteredCards.length) selectEditorCardByIndex(0);
+                return;
+            }
+            if (idx >= editorFilteredCards.length - 1) return;
+            selectEditorCardByIndex(idx + 1);
+        }
+
         function renderEditorList() {
             const listContainer = document.getElementById('editor-card-list');
             if (!listContainer) return;
+
+            ensureEditorPaginationButtons();
 
             if (editorIsLoading) {
                 listContainer.innerHTML = `
@@ -3035,12 +3884,35 @@
                 listContainer.appendChild(item);
             });
 
-            // Actualizar contador y paginación
+            // Actualizar contador y paginaciÃ³n
             const total = editorFilteredCards.length;
             const totalPages = Math.ceil(total / editorItemsPerPage) || 1;
-            document.getElementById('editor-card-count').innerText = `${total} Cards`;
+            document.getElementById('editor-card-count').innerText = `${total} ${t('editor_cards_suffix')}`;
             document.getElementById('editor-page-info').innerText = `${editorPage} / ${totalPages}`;
             updateEditorActionButtons();
+
+            // Estado de botones de paginaciÃ³n
+            try {
+                const firstBtn = document.getElementById('editor-page-first');
+                const prevBtn = document.getElementById('editor-page-prev');
+                const nextBtn = document.getElementById('editor-page-next');
+                const lastBtn = document.getElementById('editor-page-last');
+                const upBtn = document.getElementById('editor-card-up');
+                const downBtn = document.getElementById('editor-card-down');
+                const atFirst = editorPage <= 1;
+                const atLast = editorPage >= totalPages;
+                if (firstBtn) firstBtn.disabled = atFirst;
+                if (prevBtn) prevBtn.disabled = atFirst;
+                if (nextBtn) nextBtn.disabled = atLast;
+                if (lastBtn) lastBtn.disabled = atLast;
+
+                const idx = getEditorSelectedIndex();
+                if (upBtn) upBtn.disabled = (idx === 0) || (idx === -1 && editorFilteredCards.length === 0);
+                if (downBtn) downBtn.disabled = (idx === editorFilteredCards.length - 1) || (idx === -1 && editorFilteredCards.length === 0);
+            } catch { }
+
+            // Al cambiar pÃ¡gina o aplicar filtros, empezar el scroll desde arriba
+            try { listContainer.scrollTop = 0; } catch { }
         }
 
         function prevEditorPage() {
@@ -3058,11 +3930,67 @@
             }
         }
 
+        function firstEditorPage() {
+            if (editorPage !== 1) {
+                editorPage = 1;
+                renderEditorList();
+            }
+        }
+
+        function lastEditorPage() {
+            const totalPages = Math.ceil(editorFilteredCards.length / editorItemsPerPage) || 1;
+            if (editorPage !== totalPages) {
+                editorPage = totalPages;
+                renderEditorList();
+            }
+        }
+
+        // Keyboard navigation in Card List: ArrowUp / ArrowDown
+        (function attachEditorKeyNavigation() {
+            if (window.__editorKeyNavAttached) return;
+            window.__editorKeyNavAttached = true;
+            document.addEventListener('keydown', (e) => {
+                try {
+                    const editorVisible = document.getElementById('module-editor')?.style?.display !== 'none';
+                    if (!editorVisible) return;
+                    if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+
+                    const t = e.target;
+                    const tag = (t && t.tagName) ? String(t.tagName).toLowerCase() : '';
+                    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+                    if (t && t.isContentEditable) return;
+
+                    e.preventDefault();
+                    if (e.key === 'ArrowUp') prevEditorCard();
+                    else nextEditorCard();
+                } catch { }
+            }, { passive: false });
+        })();
+
         function selectEditorCard(card, opts = {}) {
             editorSelectedCard = card;
             editorSelectedCardId = card.id;
             // Al seleccionar una carta, iniciar en modo solo-lectura.
             setEditorEditMode(false);
+            // Actualizar estado de botones (sin re-renderizar la lista)
+            try {
+                const totalPages = Math.ceil(editorFilteredCards.length / editorItemsPerPage) || 1;
+                const firstBtn = document.getElementById('editor-page-first');
+                const prevBtn = document.getElementById('editor-page-prev');
+                const nextBtn = document.getElementById('editor-page-next');
+                const lastBtn = document.getElementById('editor-page-last');
+                const upBtn = document.getElementById('editor-card-up');
+                const downBtn = document.getElementById('editor-card-down');
+                const atFirst = editorPage <= 1;
+                const atLast = editorPage >= totalPages;
+                if (firstBtn) firstBtn.disabled = atFirst;
+                if (prevBtn) prevBtn.disabled = atFirst;
+                if (nextBtn) nextBtn.disabled = atLast;
+                if (lastBtn) lastBtn.disabled = atLast;
+                const idx = getEditorSelectedIndex();
+                if (upBtn) upBtn.disabled = (idx === 0) || (idx === -1 && editorFilteredCards.length === 0);
+                if (downBtn) downBtn.disabled = (idx === editorFilteredCards.length - 1) || (idx === -1 && editorFilteredCards.length === 0);
+            } catch { }
             // Resaltar seleccionado en la lista
             document.querySelectorAll('.editor-card-item').forEach(el => {
                 const id = parseInt(el.querySelector('strong').innerText);
@@ -3073,7 +4001,7 @@
             document.getElementById('edit-passcode').value = card.id || "";
             document.getElementById('edit-name').value = card.name || "";
 
-            // Resaltar coincidencias de búsqueda en ID/Nombre (inputs)
+            // Resaltar coincidencias de bÃºsqueda en ID/Nombre (inputs)
             try {
                 const qRaw = String(editorSearchQueryRaw || '').trim();
                 const nameEl = document.getElementById('edit-name');
@@ -3087,7 +4015,7 @@
                 }
             } catch { }
 
-            // Campos numéricos y selects
+            // Campos numÃ©ricos y selects
             const canPopulateFilterControls = !editorAdvancedFilterMode || editorIsEditMode;
             if (canPopulateFilterControls) {
                 if (document.getElementById('edit-attribute')) document.getElementById('edit-attribute').value = card.attribute || 0;
@@ -3171,11 +4099,11 @@
                 });
             };
 
-            // Si Advanced Filters está activo, NO sobreescribir checks (son filtros): usamos "ghost marks".
+            // Si Advanced Filters estÃ¡ activo, NO sobreescribir checks (son filtros): usamos "ghost marks".
             markOrGhost('#type-checkbox-grid input[type="checkbox"]', typeValue);
             markOrGhost('#category-checkbox-grid input[type="checkbox"]', catValue);
-            // Flags: en .cdb típicos no existe un campo separado como en DataEditorX (Omega),
-            // así que no se auto-marcan. En modo filtros los limpiamos para evitar confusión visual.
+            // Flags: en .cdb tÃ­picos no existe un campo separado como en DataEditorX (Omega),
+            // asÃ­ que no se auto-marcan. En modo filtros los limpiamos para evitar confusiÃ³n visual.
             markOrGhost('#flags-checkbox-grid input[type="checkbox"]', 0, { forceClearChecks: true });
 
             // Ocultar campos irrelevantes en Magias/Trampas
@@ -3200,7 +4128,7 @@
             }
 
             // Nota: en tu DB el campo `def` se usa para el bitmask de Link Markers.
-            // Aún así se mantiene visible el campo DEF para consistencia/edición.
+            // AÃºn asÃ­ se mantiene visible el campo DEF para consistencia/ediciÃ³n.
 
             // Reubicar Passcode: junto a Archetype en Magias/Trampas
             const passcodeField = document.getElementById('field-passcode');
@@ -3255,7 +4183,7 @@
                     descItem.style.borderColor = 'var(--accent-primary)';
                     descItem.innerHTML = `
                         <span class="string-label">DESCRIPTION (FALLBACK)</span>
-                        <div class="string-content">${card.desc || "No hay descripción disponible."}</div>
+                        <div class="string-content">${card.desc || "No hay descripciÃ³n disponible."}</div>
                     `;
                     stringsDisplay.appendChild(descItem);
                 }
@@ -3270,7 +4198,7 @@
                 if (main) main.scrollTop = 0;
             } catch { }
 
-            // Llamar al análisis al seleccionar
+            // Llamar al anÃ¡lisis al seleccionar
             const analysisContainer = document.getElementById('editor-analysis-display');
             if (analysisContainer) {
                 analysisContainer.innerHTML = "Analizando...";
@@ -3363,7 +4291,7 @@
                             if (typeof lscale === 'number' || typeof rscale === 'number') chips.push(`<span><strong>Scale:</strong> ${h((lscale ?? '?') + '/' + (rscale ?? '?'))}</span>`);
                         }
 
-                        const desc = card.desc || "No hay descripción disponible.";
+                        const desc = card.desc || "No hay descripciÃ³n disponible.";
 
                         analysisContainer.innerHTML = `
                             <div style="display:flex; flex-direction:column; gap:0.6rem;">
@@ -3377,14 +4305,14 @@
                                     </div>
                                 ` : ``}
                                 <div style="border-top:1px solid var(--card-border); padding-top:0.6rem;">
-                                    <div style="font-weight:600; color: var(--text); margin-bottom:0.25rem;">Descripción</div>
+                                    <div style="font-weight:600; color: var(--text); margin-bottom:0.25rem;">DescripciÃ³n</div>
                                     <div style="white-space: pre-wrap; color: var(--text);">${h(desc)}</div>
                                 </div>
                             </div>
                         `;
 
                         autoFitCardInformation();
-                        // Mantener al inicio incluso si el análisis cambia el alto
+                        // Mantener al inicio incluso si el anÃ¡lisis cambia el alto
                         try {
                             const main = document.querySelector('#module-editor .editor-main-content');
                             if (main) main.scrollTop = 0;
@@ -3413,7 +4341,7 @@
             // Medir en zoom 1 para calcular escala necesaria.
             applyEditorPageZoom(1);
 
-            const margin = 12; // pequeño margen para evitar recortes
+            const margin = 12; // pequeÃ±o margen para evitar recortes
             const availableH = Math.max(1, document.documentElement.clientHeight - margin);
             const availableW = Math.max(1, document.documentElement.clientWidth - margin);
             const contentH = Math.max(1, editor.scrollHeight);
@@ -3444,7 +4372,7 @@
             module.classList.remove('editor-compact');
             if (main.scrollHeight > main.clientHeight + 2) module.classList.add('editor-compact');
 
-            // Nota: no hacer scroll automático aquí; el panel debe quedarse al inicio.
+            // Nota: no hacer scroll automÃ¡tico aquÃ­; el panel debe quedarse al inicio.
         }
 
         function setEditorDetailsTab(tab) {
@@ -3460,7 +4388,7 @@
             });
         }
 
-        // Delegación de clicks para tabs (evita depender de orden de carga)
+        // DelegaciÃ³n de clicks para tabs (evita depender de orden de carga)
         document.addEventListener('click', (e) => {
             const btn = e.target && e.target.closest ? e.target.closest('.editor-tab-btn') : null;
             if (!btn) return;
@@ -3639,7 +4567,7 @@
                 <button class="page-btn" onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>${t('pagination_prev')}</button>
             `;
 
-            // Páginas numéricas (rango de 5)
+            // PÃ¡ginas numÃ©ricas (rango de 5)
             let start = Math.max(1, currentPage - 2);
             let end = Math.min(totalPages, start + 4);
             if (end - start < 4) start = Math.max(1, end - 4);
@@ -3656,7 +4584,7 @@
         }
 
         function toggleDetail(btn) {
-            // Buscamos la fila detalle que está justo después de la fila actual
+            // Buscamos la fila detalle que estÃ¡ justo despuÃ©s de la fila actual
             const mainRow = btn.closest('tr');
             const detailRow = mainRow.nextElementSibling;
             if (detailRow && detailRow.classList.contains('detail-row')) {
@@ -3699,33 +4627,81 @@
         }
 
         window.onload = async () => {
-            // Cargar configuración persistente del servidor
+            // Cargar configuraciÃ³n persistente del servidor
             try {
                 const resp = await fetch('/api/get_config');
                 const config = await resp.json();
-                if (config.cdb_dir) {
+                // DB language profiles (new config format)
+                const incomingProfiles = (config && typeof config === 'object' && config.profiles && typeof config.profiles === 'object')
+                    ? config.profiles
+                    : null;
+
+                if (incomingProfiles) {
+                    dbProfiles = {};
+                    for (const [k, v] of Object.entries(incomingProfiles)) {
+                        const kk = String(k || '').toLowerCase();
+                        dbProfiles[kk] = {
+                            cdb: v?.cdb_dir || '',
+                            scripts: v?.script_dir || '',
+                            strings: v?.strings_conf || '',
+                            pics: v?.pics_dir || '',
+                            ui_lang: String(v?.ui_lang || inferUiLangFromProfile(kk)).toLowerCase(),
+                        };
+                    }
+
+                    const storedProfile = String(localStorage.getItem('db_profile') || '').toLowerCase();
+                    const cfgActive = String(config?.active_profile || '').toLowerCase();
+                    const hasStored = storedProfile && dbProfiles[storedProfile];
+                    const hasCfgActive = cfgActive && dbProfiles[cfgActive];
+                    if (hasStored) activeDbProfile = storedProfile;
+                    else if (hasCfgActive) activeDbProfile = cfgActive;
+                    else if (dbProfiles.es) activeDbProfile = 'es';
+                    else activeDbProfile = Object.keys(dbProfiles)[0] || 'es';
+                    ensureDbProfile(activeDbProfile);
+                    syncUiLangFromActiveProfile();
+                    renderDbLangTabs();
+                    syncActiveProfileToUI();
+                } else if (config.cdb_dir) {
                     paths.cdb = config.cdb_dir;
                     document.getElementById('path-cdb').innerText = config.cdb_dir;
                     document.getElementById('path-cdb').classList.remove('placeholder');
                 }
-                if (config.script_dir) {
+                if (!incomingProfiles && config.script_dir) {
                     paths.scripts = config.script_dir;
                     document.getElementById('path-scripts').innerText = config.script_dir;
                     document.getElementById('path-scripts').classList.remove('placeholder');
                 }
-                if (config.strings_conf) {
+                if (!incomingProfiles && config.strings_conf) {
                     paths.strings = config.strings_conf;
                     document.getElementById('path-strings').innerText = config.strings_conf;
                     document.getElementById('path-strings').classList.remove('placeholder');
                 }
-                if (config.pics_dir) {
+                if (!incomingProfiles && config.pics_dir) {
                     paths.pics = config.pics_dir;
                     document.getElementById('path-pics').innerText = config.pics_dir;
                     document.getElementById('path-pics').classList.remove('placeholder');
                 }
-                validatePaths();
+                if (!incomingProfiles) {
+                    // Legacy config -> seed ES profile
+                    dbProfiles = dbProfiles || {};
+                    dbProfiles.es = {
+                        cdb: paths.cdb || '',
+                        scripts: paths.scripts || '',
+                        strings: paths.strings || '',
+                        pics: paths.pics || '',
+                        ui_lang: 'es',
+                    };
+                    if (!dbProfiles.en) dbProfiles.en = { cdb: '', scripts: '', strings: '', pics: '', ui_lang: 'en' };
+
+                    const storedProfile = localStorage.getItem('db_profile');
+                    activeDbProfile = String(storedProfile || 'es').toLowerCase();
+                    ensureDbProfile(activeDbProfile);
+                    syncUiLangFromActiveProfile();
+                    renderDbLangTabs();
+                    syncActiveProfileToUI();
+                }
             } catch (e) {
-                console.error("Error cargando configuración:", e);
+                console.error("Error cargando configuraciÃ³n:", e);
             }
 
             const hasData = await loadData();
@@ -3740,3 +4716,5 @@
 </body>
 
 </html>
+
+

@@ -24,18 +24,85 @@ CURRENT_LANG = 'es'
 CURRENT_PICS_DIR = None
 CONFIG_FILE = 'config_app.json'
 
+def normalize_config(config: dict) -> dict:
+    """
+    Backward-compatible normalization:
+    - Old format: {cdb_dir, script_dir, strings_conf, pics_dir}
+    - New format: {profiles: {lang: {...}}, active_profile: lang}
+    """
+    if not isinstance(config, dict):
+        return {'profiles': {}, 'active_profile': 'es'}
+
+    if isinstance(config.get('profiles'), dict):
+        config.setdefault('active_profile', 'es')
+        return config
+
+    profiles = {}
+    if any(k in config for k in ('cdb_dir', 'script_dir', 'strings_conf', 'pics_dir')):
+        profiles['es'] = {
+            'cdb_dir': config.get('cdb_dir', ''),
+            'script_dir': config.get('script_dir', ''),
+            'strings_conf': config.get('strings_conf', ''),
+            'pics_dir': config.get('pics_dir', ''),
+        }
+
+    out = dict(config)
+    out['profiles'] = profiles
+    out.setdefault('active_profile', 'es')
+    return out
+
+def get_active_profile_paths(config: dict) -> dict:
+    cfg = normalize_config(config)
+    profiles = cfg.get('profiles') or {}
+    active = cfg.get('active_profile') or 'es'
+    has_active_profile = active in profiles
+    if has_active_profile:
+        # Si el perfil activo existe, respetarlo tal cual (aunque tenga rutas vacías).
+        p = profiles.get(active) or {}
+        return {
+            'cdb_dir': p.get('cdb_dir', ''),
+            'script_dir': p.get('script_dir', ''),
+            'strings_conf': p.get('strings_conf', ''),
+            'pics_dir': p.get('pics_dir', ''),
+            'active_profile': active,
+            'profiles': profiles,
+        }
+
+    # Fallbacks para compatibilidad: perfil ES o claves top-level (formato legado).
+    p = profiles.get('es') or {}
+    return {
+        'cdb_dir': p.get('cdb_dir') or cfg.get('cdb_dir') or '',
+        'script_dir': p.get('script_dir') or cfg.get('script_dir') or '',
+        'strings_conf': p.get('strings_conf') or cfg.get('strings_conf') or '',
+        'pics_dir': p.get('pics_dir') or cfg.get('pics_dir') or '',
+        'active_profile': active,
+        'profiles': profiles,
+    }
+
 def load_config():
     if os.path.exists(CONFIG_FILE):
         try:
             with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
-                return json.load(f)
+                return normalize_config(json.load(f))
         except: pass
-    return {}
+    return normalize_config({})
 
 def save_config(config):
     try:
         current = load_config()
-        current.update(config)
+        # If we receive profiles, persist them as-is and also keep top-level keys in sync
+        if isinstance(config, dict) and isinstance(config.get('profiles'), dict):
+            current['profiles'] = config.get('profiles', {})
+            current['active_profile'] = config.get('active_profile') or current.get('active_profile') or 'es'
+            active_paths = get_active_profile_paths(current)
+            current['cdb_dir'] = active_paths.get('cdb_dir', '')
+            current['script_dir'] = active_paths.get('script_dir', '')
+            current['strings_conf'] = active_paths.get('strings_conf', '')
+            current['pics_dir'] = active_paths.get('pics_dir', '')
+        else:
+            current.update(config)
+            # Keep normalized wrapper
+            current = normalize_config(current)
         with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
             json.dump(current, f, indent=4)
         return True
@@ -43,7 +110,7 @@ def save_config(config):
 
 # Cargar configuración inicial
 INITIAL_CONFIG = load_config()
-CURRENT_PICS_DIR = INITIAL_CONFIG.get('pics_dir')
+CURRENT_PICS_DIR = get_active_profile_paths(INITIAL_CONFIG).get('pics_dir')
 
 def resource_path(relative_path):
     """ Obtiene la ruta absoluta para recursos, compatible con PyInstaller """
@@ -416,13 +483,13 @@ def run_analysis(cdb_dir, strings_conf, script_dir):
 # --- SERVIDOR API ---
 class APIHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
+        global CURRENT_LANG, CURRENT_PICS_DIR
         parsed_path = urllib.parse.urlparse(self.path)
         query = urllib.parse.parse_qs(parsed_path.query)
         lang = query.get('lang', ['es'])[0]
         title_key = query.get('title_key', [None])[0]
         
         # Sincronizar idioma del backend con el del frontend para las utilidades t()
-        global CURRENT_LANG
         if lang in I18N:
             CURRENT_LANG = lang
 
@@ -473,7 +540,13 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
                     self.send_error(404)
         elif parsed_path.path == '/api/editor/load':
             config = load_config()
-            cdb_dir = config.get('cdb_dir')
+            requested_profile = (query.get('active_profile', [''])[0] or '').strip().lower()
+            if requested_profile:
+                config = normalize_config(config)
+                config['active_profile'] = requested_profile
+            active_paths = get_active_profile_paths(config)
+            cdb_dir = active_paths.get('cdb_dir')
+            CURRENT_PICS_DIR = active_paths.get('pics_dir') or CURRENT_PICS_DIR
             all_cards = []
             if cdb_dir and os.path.exists(cdb_dir):
                 # Pre-cargar constantes para decodificar tipos y setcodes
@@ -559,7 +632,7 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
-            self.wfile.write(json.dumps(load_config()).encode())
+            self.wfile.write(json.dumps(load_config(), ensure_ascii=False).encode('utf-8'))
         elif parsed_path.path == '/api/editor/constants':
             constants = load_editor_constants()
             self.send_response(200)
@@ -607,20 +680,51 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
                     script_dir = params.get('script_dir')
                     strings_conf = params.get('strings_conf')
                     
-                # Guardar configuración local para persistencia
-                save_config({
+                # Guardar configuración para persistencia (por perfiles de idioma)
+                pics_dir = params.get('pics_dir')
+                try:
+                    cfg = load_config()
+                    cfg = normalize_config(cfg)
+                    active_profile = (params.get('active_profile') or params.get('db_profile') or cfg.get('active_profile') or 'es')
+                    active_profile = str(active_profile).lower()
+                    cfg['active_profile'] = active_profile
+                    cfg.setdefault('profiles', {})
+                    cfg['profiles'].setdefault(active_profile, {})
+                    cfg['profiles'][active_profile].update({
+                        'cdb_dir': cdb_dir,
+                        'script_dir': script_dir,
+                        'strings_conf': strings_conf,
+                        'pics_dir': pics_dir,
+                    })
+                    save_config(cfg)
+                    CURRENT_PICS_DIR = get_active_profile_paths(cfg).get('pics_dir') or pics_dir or CURRENT_PICS_DIR
+                except Exception:
+                    # Fallback: mantener comportamiento anterior si algo falla
+                    save_config({
+                        'cdb_dir': cdb_dir,
+                        'script_dir': script_dir,
+                        'strings_conf': strings_conf,
+                        'pics_dir': pics_dir
+                    })
+                    CURRENT_PICS_DIR = pics_dir
+
+                results = run_analysis(cdb_dir, strings_conf, script_dir)
+                profile_key = (params.get('active_profile') or params.get('db_profile') or '').strip().lower()
+                results['_meta'] = {
+                    'active_profile': profile_key,
                     'cdb_dir': cdb_dir,
                     'script_dir': script_dir,
                     'strings_conf': strings_conf,
-                    'pics_dir': params.get('pics_dir')
-                })
-                
-                CURRENT_PICS_DIR = params.get('pics_dir')
-
-                results = run_analysis(cdb_dir, strings_conf, script_dir)
+                    'generated_at': int(time.time())
+                }
                 
                 with open('resultados.json', 'w', encoding='utf-8') as f:
                     json.dump(results, f, indent=4, ensure_ascii=False)
+                if profile_key:
+                    safe = re.sub(r'[^a-z0-9_-]', '', profile_key)
+                    if safe:
+                        with open(f'resultados_{safe}.json', 'w', encoding='utf-8') as f:
+                            json.dump(results, f, indent=4, ensure_ascii=False)
                 
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
@@ -661,9 +765,12 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
             params = json.loads(post_data)
             
             save_config(params)
-            
-            if params.get('pics_dir'):
-                CURRENT_PICS_DIR = params.get('pics_dir')
+            # Actualizar pics_dir activo (si aplica)
+            try:
+                cfg = load_config()
+                CURRENT_PICS_DIR = get_active_profile_paths(cfg).get('pics_dir') or CURRENT_PICS_DIR
+            except:
+                pass
             
             self.send_response(200)
             self.send_header('Content-type', 'application/json')

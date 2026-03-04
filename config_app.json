@@ -1,6 +1,37 @@
 {
     "pics_dir": "D:/Game/MDPro3/Picture/Art",
-    "cdb_dir": "C:/Users/Juan Moscoso/Downloads/Nueva carpeta",
+    "cdb_dir": "D:/Game/MDPro3/Data/locales/zh-CN",
     "script_dir": "C:/Users/Juan Moscoso/Desktop/Analisador de scripts/script",
-    "strings_conf": "D:/Game/MDPro3/Data/locales/es-ES/strings.conf"
+    "strings_conf": "D:/Game/MDPro3/Data/locales/zh-CN/strings.conf",
+    "profiles": {
+        "es": {
+            "cdb_dir": "D:/Game/MDPro3/Data/locales/es-ES",
+            "script_dir": "C:/Users/Juan Moscoso/Desktop/Analisador de scripts/script",
+            "strings_conf": "D:/Game/MDPro3/Data/locales/es-ES/strings.conf",
+            "pics_dir": "D:/Game/MDPro3/Picture/Art",
+            "ui_lang": "es"
+        },
+        "en": {
+            "cdb_dir": "D:/Game/MDPro3/Data/locales/en-US",
+            "script_dir": "C:/Users/Juan Moscoso/Desktop/Analisador de scripts/script",
+            "strings_conf": "D:/Game/MDPro3/Data/locales/en-US/strings.conf",
+            "pics_dir": "D:/Game/MDPro3/Picture/Art",
+            "ui_lang": "en"
+        },
+        "cn": {
+            "cdb_dir": "D:/Game/MDPro3/Data/locales/zh-CN",
+            "script_dir": "C:/Users/Juan Moscoso/Desktop/Analisador de scripts/script",
+            "strings_conf": "D:/Game/MDPro3/Data/locales/zh-CN/strings.conf",
+            "pics_dir": "D:/Game/MDPro3/Picture/Art",
+            "ui_lang": "zh-cn"
+        },
+        "kr": {
+            "cdb_dir": "D:/Game/MDPro3/Data/locales/ko-KR",
+            "script_dir": "C:/Users/Juan Moscoso/Desktop/Analisador de scripts/script",
+            "strings_conf": "D:/Game/MDPro3/Data/locales/ko-KR/strings.conf",
+            "pics_dir": "D:/Game/MDPro3/Picture/Art",
+            "ui_lang": "ko-kr"
+        }
+    },
+    "active_profile": "cn"
 }
