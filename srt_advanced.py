@@ -14,6 +14,7 @@ import requests
 import shutil
 import sys
 import queue
+import zipfile
 from editor_constants import load_editor_constants
 
 # Cola para comunicación entre hilos (HTTP -> Principal)
@@ -23,6 +24,37 @@ GLOBAL_PROGRESS = {'total': 0, 'current': 0, 'last_file': ''}
 CURRENT_LANG = 'es'
 CURRENT_PICS_DIR = None
 CONFIG_FILE = 'config_app.json'
+TEMP_YPK_ROOT = 'temp_ypk'
+
+def normalize_ui_lang_code(code: str, profile_key: str = '') -> str:
+    raw = str(code or '').strip().lower().replace('_', '-')
+    if raw:
+        if raw == 'cn':
+            return 'zh-cn'
+        if raw == 'kr':
+            return 'ko-kr'
+        return raw
+
+    pk = str(profile_key or '').strip().lower()
+    if pk == 'cn' or pk.startswith('zh'):
+        return 'zh-cn'
+    if pk == 'kr' or pk.startswith('ko'):
+        return 'ko-kr'
+    if pk.startswith('es'):
+        return 'es'
+    if pk.startswith('en'):
+        return 'en'
+    if pk.startswith('ja'):
+        return 'ja'
+    if pk.startswith('pt'):
+        return 'pt'
+    if pk.startswith('fr'):
+        return 'fr'
+    if pk.startswith('de') or pk == 'ge':
+        return 'de'
+    if pk.startswith('it'):
+        return 'it'
+    return 'en'
 
 def normalize_config(config: dict) -> dict:
     """
@@ -86,6 +118,137 @@ def load_config():
                 return normalize_config(json.load(f))
         except: pass
     return normalize_config({})
+
+def _find_best_dir_by_predicate(root_dir: str, predicate):
+    best_dir = ''
+    best_count = 0
+    for dirpath, _, filenames in os.walk(root_dir):
+        try:
+            count = sum(1 for fn in filenames if predicate(dirpath, fn))
+        except Exception:
+            count = 0
+        if count > best_count:
+            best_count = count
+            best_dir = dirpath
+    return best_dir, best_count
+
+def extract_ypk_to_profile(ypk_path: str, profile_key: str):
+    if not ypk_path or not os.path.exists(ypk_path):
+        raise FileNotFoundError('YPK file does not exist')
+
+    if not zipfile.is_zipfile(ypk_path):
+        raise ValueError('Invalid YPK format (not a ZIP-compatible archive)')
+
+    profile = str(profile_key or 'es').strip().lower()
+    target_dir = os.path.join(os.getcwd(), TEMP_YPK_ROOT, profile)
+    if os.path.exists(target_dir):
+        shutil.rmtree(target_dir, ignore_errors=True)
+    os.makedirs(target_dir, exist_ok=True)
+
+    with zipfile.ZipFile(ypk_path, 'r') as zf:
+        zf.extractall(target_dir)
+
+    cdb_dir, cdb_count = _find_best_dir_by_predicate(
+        target_dir,
+        lambda _dp, fn: fn.lower().endswith('.cdb')
+    )
+    script_dir, script_count = _find_best_dir_by_predicate(
+        target_dir,
+        lambda _dp, fn: re.match(r'^c\d+\.lua$', fn.lower()) is not None
+    )
+    pics_dir, pics_count = _find_best_dir_by_predicate(
+        target_dir,
+        lambda _dp, fn: fn.lower().endswith(('.jpg', '.jpeg', '.png'))
+    )
+
+    strings_conf = ''
+    candidates = []
+    for dirpath, _, filenames in os.walk(target_dir):
+        for fn in filenames:
+            low = fn.lower()
+            if low.endswith('.conf') and 'string' in low:
+                full = os.path.join(dirpath, fn)
+                score = (0 if low == 'strings.conf' else 1, len(low))
+                candidates.append((score, full))
+    if candidates:
+        candidates.sort(key=lambda item: item[0])
+        strings_conf = candidates[0][1]
+
+    return {
+        'profile': profile,
+        'root_dir': target_dir,
+        'cdb_dir': cdb_dir if cdb_count > 0 else '',
+        'script_dir': script_dir if script_count > 0 else '',
+        'pics_dir': pics_dir if pics_count > 0 else '',
+        'strings_conf': strings_conf,
+        'cdb_count': int(cdb_count or 0),
+        'script_count': int(script_count or 0),
+        'pics_count': int(pics_count or 0),
+    }
+
+def find_picture_file(pics_dir: str, filename: str) -> str:
+    if not pics_dir:
+        return ''
+    direct = os.path.join(pics_dir, filename)
+    if os.path.exists(direct):
+        return direct
+
+    base = os.path.splitext(filename)[0]
+    exts = ('.jpg', '.png', '.jpeg', '.JPG', '.PNG', '.JPEG')
+    for ext in exts:
+        candidate = os.path.join(pics_dir, base + ext)
+        if os.path.exists(candidate):
+            return candidate
+
+    # Fallback recursivo: algunos paquetes guardan imágenes en subcarpetas.
+    targets = {f"{base}.jpg", f"{base}.png", f"{base}.jpeg"}
+    targets_upper = {t.upper() for t in targets}
+    for dirpath, _, filenames in os.walk(pics_dir):
+        for fn in filenames:
+            low = fn.lower()
+            if low in targets or fn.upper() in targets_upper:
+                return os.path.join(dirpath, fn)
+    return ''
+
+def next_temp_ypk_profile_key(config: dict) -> str:
+    cfg = normalize_config(config or {})
+    profiles = cfg.get('profiles') or {}
+    idx = 1
+    while True:
+        key = f'ypk-{idx}'
+        if key not in profiles:
+            return key
+        idx += 1
+
+def apply_ypk_load_to_config(params: dict):
+    ypk_path = (params.get('ypk_path') or '').strip()
+    if not ypk_path:
+        raise ValueError('Missing ypk_path')
+
+    cfg = load_config()
+    cfg = normalize_config(cfg)
+
+    requested_profile = str(params.get('profile_key') or '').strip().lower()
+    if requested_profile and requested_profile not in (cfg.get('profiles') or {}):
+        requested_profile = ''
+    target_profile = requested_profile or next_temp_ypk_profile_key(cfg)
+
+    extracted = extract_ypk_to_profile(ypk_path, target_profile)
+
+    cfg.setdefault('profiles', {})
+    cfg['profiles'].setdefault(target_profile, {})
+    cfg['profiles'][target_profile].update({
+        'cdb_dir': extracted.get('cdb_dir') or '',
+        'script_dir': extracted.get('script_dir') or '',
+        'strings_conf': extracted.get('strings_conf') or '',
+        'pics_dir': extracted.get('pics_dir') or '',
+        'ui_lang': str(params.get('ui_lang') or '').strip().lower() or str(cfg['profiles'][target_profile].get('ui_lang') or ''),
+        'is_temp_ypk': True,
+        'ypk_file': os.path.basename(ypk_path),
+    })
+    cfg['active_profile'] = target_profile
+    save_config(cfg)
+    return extracted, cfg
 
 def save_config(config):
     try:
@@ -525,13 +688,27 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
             with open(resource_path('index.html'), 'rb') as f:
                 self.wfile.write(f.read())
         elif parsed_path.path.startswith('/pics/'):
-            # Servir imágenes de la carpeta PICs seleccionada
-            if CURRENT_PICS_DIR and os.path.exists(CURRENT_PICS_DIR):
+            # Servir imágenes de la carpeta PICs seleccionada (por perfil activo)
+            requested_profile = (query.get('active_profile', [''])[0] or '').strip().lower()
+            pics_dir = CURRENT_PICS_DIR
+            if requested_profile:
+                try:
+                    cfg = load_config()
+                    cfg = normalize_config(cfg)
+                    cfg['active_profile'] = requested_profile
+                    pics_dir = get_active_profile_paths(cfg).get('pics_dir') or pics_dir
+                except Exception:
+                    pass
+
+            if pics_dir and os.path.exists(pics_dir):
                 filename = parsed_path.path[6:] # Eliminar '/pics/'
-                img_path = os.path.join(CURRENT_PICS_DIR, filename)
+                img_path = find_picture_file(pics_dir, filename)
+                if img_path:
+                    filename = os.path.basename(img_path)
+
                 if os.path.exists(img_path):
                     self.send_response(200)
-                    mime = 'image/jpeg' if filename.lower().endswith('.jpg') else 'image/png'
+                    mime = 'image/png' if filename.lower().endswith('.png') else 'image/jpeg'
                     self.send_header('Content-type', mime)
                     self.end_headers()
                     with open(img_path, 'rb') as f:
@@ -548,15 +725,20 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
             cdb_dir = active_paths.get('cdb_dir')
             CURRENT_PICS_DIR = active_paths.get('pics_dir') or CURRENT_PICS_DIR
             all_cards = []
+            seen_ids = set()
             if cdb_dir and os.path.exists(cdb_dir):
                 # Pre-cargar constantes para decodificar tipos y setcodes
                 from card_decoder import CardDecoder
                 editor_constants = load_editor_constants()
                 decoder = CardDecoder(editor_constants)
 
-                cdb_files = [f for f in os.listdir(cdb_dir) if f.endswith('.cdb')]
+                cdb_files = []
+                for dirpath, _, filenames in os.walk(cdb_dir):
+                    for f in filenames:
+                        if f.lower().endswith('.cdb'):
+                            cdb_files.append(os.path.join(dirpath, f))
                 for cdb_file in cdb_files:
-                    cdb_path = os.path.join(cdb_dir, cdb_file)
+                    cdb_path = cdb_file
                     try:
                         conn = sqlite3.connect(cdb_path)
                         cursor = conn.cursor()
@@ -617,6 +799,9 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
                             }
                             for i in range(1, 17):
                                 card[f'str{i}'] = str(row[12+i]) if row[12+i] else ''
+                            if card['id'] in seen_ids:
+                                continue
+                            seen_ids.add(card['id'])
                             all_cards.append(card)
                         conn.close()
                     except Exception as ex:
@@ -645,7 +830,9 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_POST(self):
         global CURRENT_PICS_DIR
-        if self.path == '/api/run':
+        parsed_path = urllib.parse.urlparse(self.path)
+        post_path = parsed_path.path
+        if post_path == '/api/run':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
             params = json.loads(post_data)
@@ -710,8 +897,16 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
 
                 results = run_analysis(cdb_dir, strings_conf, script_dir)
                 profile_key = (params.get('active_profile') or params.get('db_profile') or '').strip().lower()
+                profile_ui_lang = ''
+                try:
+                    if 'cfg' in locals():
+                        profile_ui_lang = str((cfg.get('profiles', {}).get(profile_key, {}) or {}).get('ui_lang') or '').strip().lower()
+                except Exception:
+                    profile_ui_lang = ''
+                profile_ui_lang = normalize_ui_lang_code(profile_ui_lang, profile_key)
                 results['_meta'] = {
                     'active_profile': profile_key,
+                    'ui_lang': profile_ui_lang,
                     'cdb_dir': cdb_dir,
                     'script_dir': script_dir,
                     'strings_conf': strings_conf,
@@ -720,11 +915,15 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
                 
                 with open('resultados.json', 'w', encoding='utf-8') as f:
                     json.dump(results, f, indent=4, ensure_ascii=False)
-                if profile_key:
-                    safe = re.sub(r'[^a-z0-9_-]', '', profile_key)
-                    if safe:
-                        with open(f'resultados_{safe}.json', 'w', encoding='utf-8') as f:
+                if profile_ui_lang:
+                    safe_lang = re.sub(r'[^a-z0-9_-]', '', profile_ui_lang)
+                    if safe_lang:
+                        with open(f'resultados_{safe_lang}.json', 'w', encoding='utf-8') as f:
                             json.dump(results, f, indent=4, ensure_ascii=False)
+                        base_lang = safe_lang.split('-')[0]
+                        if base_lang and base_lang != safe_lang:
+                            with open(f'resultados_{base_lang}.json', 'w', encoding='utf-8') as f:
+                                json.dump(results, f, indent=4, ensure_ascii=False)
                 
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
@@ -736,7 +935,7 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({'error': str(e)}).encode())
                 
-        elif self.path == '/api/editor/analyze_card':
+        elif post_path == '/api/editor/analyze_card':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
             card_data = json.loads(post_data)
@@ -759,11 +958,43 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_header('Content-type', 'application/json')
                 self.end_headers()
                 self.wfile.write(json.dumps({'error': str(e)}).encode())
-        elif self.path == '/api/config':
+        elif post_path == '/api/config':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
             params = json.loads(post_data)
-            
+
+            # Fallback compatible: permitir carga de YPK por /api/config
+            # para clientes/instancias donde /api/load_ypk no esté enrutando.
+            if params.get('action') == 'load_ypk' or params.get('ypk_path'):
+                try:
+                    extracted, _cfg = apply_ypk_load_to_config(params)
+                    CURRENT_PICS_DIR = extracted.get('pics_dir') or CURRENT_PICS_DIR
+
+                    self.send_response(200)
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({
+                        'status': 'ok',
+                        'active_profile': extracted['profile'],
+                        'paths': {
+                            'cdb_dir': extracted.get('cdb_dir') or '',
+                            'script_dir': extracted.get('script_dir') or '',
+                            'strings_conf': extracted.get('strings_conf') or '',
+                            'pics_dir': extracted.get('pics_dir') or '',
+                        },
+                        'counts': {
+                            'cdb': extracted.get('cdb_count') or 0,
+                            'scripts': extracted.get('script_count') or 0,
+                            'pics': extracted.get('pics_count') or 0,
+                        }
+                    }, ensure_ascii=False).encode('utf-8'))
+                except Exception as e:
+                    self.send_response(500)
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'error': str(e)}, ensure_ascii=False).encode('utf-8'))
+                return
+
             save_config(params)
             # Actualizar pics_dir activo (si aplica)
             try:
@@ -776,6 +1007,38 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Content-type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({'status': 'ok'}).encode())
+        elif post_path.startswith('/api/load_ypk') or post_path.startswith('/api/editor/load_ypk'):
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            params = json.loads(post_data)
+
+            try:
+                extracted, _cfg = apply_ypk_load_to_config(params)
+                CURRENT_PICS_DIR = extracted.get('pics_dir') or CURRENT_PICS_DIR
+
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    'status': 'ok',
+                    'active_profile': extracted['profile'],
+                    'paths': {
+                        'cdb_dir': extracted.get('cdb_dir') or '',
+                        'script_dir': extracted.get('script_dir') or '',
+                        'strings_conf': extracted.get('strings_conf') or '',
+                        'pics_dir': extracted.get('pics_dir') or '',
+                    },
+                    'counts': {
+                        'cdb': extracted.get('cdb_count') or 0,
+                        'scripts': extracted.get('script_count') or 0,
+                        'pics': extracted.get('pics_count') or 0,
+                    }
+                }, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}, ensure_ascii=False).encode('utf-8'))
         else:
             self.send_error(404)
 

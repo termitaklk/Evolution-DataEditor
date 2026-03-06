@@ -1,37 +1,56 @@
 {
     "pics_dir": "D:/Game/MDPro3/Picture/Art",
-    "cdb_dir": "D:/Game/MDPro3/Data/locales/zh-CN",
+    "cdb_dir": "D:/Game/MDPro3/Data/locales/es-ES",
     "script_dir": "C:/Users/Juan Moscoso/Desktop/Analisador de scripts/script",
-    "strings_conf": "D:/Game/MDPro3/Data/locales/zh-CN/strings.conf",
+    "strings_conf": "D:/Game/MDPro3/Data/locales/es-ES/strings.conf",
     "profiles": {
         "es": {
             "cdb_dir": "D:/Game/MDPro3/Data/locales/es-ES",
             "script_dir": "C:/Users/Juan Moscoso/Desktop/Analisador de scripts/script",
             "strings_conf": "D:/Game/MDPro3/Data/locales/es-ES/strings.conf",
             "pics_dir": "D:/Game/MDPro3/Picture/Art",
-            "ui_lang": "es"
+            "ui_lang": "es",
+            "is_temp_ypk": false,
+            "ypk_file": ""
         },
         "en": {
             "cdb_dir": "D:/Game/MDPro3/Data/locales/en-US",
             "script_dir": "C:/Users/Juan Moscoso/Desktop/Analisador de scripts/script",
             "strings_conf": "D:/Game/MDPro3/Data/locales/en-US/strings.conf",
             "pics_dir": "D:/Game/MDPro3/Picture/Art",
-            "ui_lang": "en"
+            "ui_lang": "en",
+            "is_temp_ypk": false,
+            "ypk_file": ""
         },
         "cn": {
             "cdb_dir": "D:/Game/MDPro3/Data/locales/zh-CN",
             "script_dir": "C:/Users/Juan Moscoso/Desktop/Analisador de scripts/script",
             "strings_conf": "D:/Game/MDPro3/Data/locales/zh-CN/strings.conf",
             "pics_dir": "D:/Game/MDPro3/Picture/Art",
-            "ui_lang": "zh-cn"
+            "ui_lang": "zh-cn",
+            "is_temp_ypk": false,
+            "ypk_file": ""
         },
         "kr": {
             "cdb_dir": "D:/Game/MDPro3/Data/locales/ko-KR",
             "script_dir": "C:/Users/Juan Moscoso/Desktop/Analisador de scripts/script",
             "strings_conf": "D:/Game/MDPro3/Data/locales/ko-KR/strings.conf",
             "pics_dir": "D:/Game/MDPro3/Picture/Art",
-            "ui_lang": "ko-kr"
+            "ui_lang": "ko-kr",
+            "is_temp_ypk": false,
+            "ypk_file": ""
+        },
+        "ypk-1": {
+            "cdb_dir": "C:\\Users\\Juan Moscoso\\Desktop\\Analisador de scripts\\temp_ypk\\ypk-1",
+            "script_dir": "C:\\Users\\Juan Moscoso\\Desktop\\Analisador de scripts\\temp_ypk\\ypk-1\\script",
+            "strings_conf": "C:\\Users\\Juan Moscoso\\Desktop\\Analisador de scripts\\temp_ypk\\ypk-1\\test-strings.conf",
+            "pics_dir": "C:\\Users\\Juan Moscoso\\Desktop\\Analisador de scripts\\temp_ypk\\ypk-1\\pics",
+            "ui_lang": "en",
+            "is_temp_ypk": true,
+            "ypk_file": "ygopro-super-pre.ypk"
         }
     },
-    "active_profile": "cn"
+    "active_profile": "es",
+    "action": "load_ypk",
+    "ypk_path": "C:/Users/Juan Moscoso/Downloads/ygopro-super-pre.ypk"
 }

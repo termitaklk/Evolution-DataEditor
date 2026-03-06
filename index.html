@@ -27,8 +27,12 @@
             font-family: 'Outfit', sans-serif;
         }
 
+        html,
         body {
             background-color: var(--bg-color);
+        }
+
+        body {
             color: var(--text-main);
             min-height: 100vh;
             padding: 2rem;
@@ -191,6 +195,41 @@
         .profile-btn.active {
             border-color: var(--accent-primary);
             color: var(--accent-primary);
+        }
+
+        .profile-tab-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.22rem;
+        }
+
+        .profile-del-btn {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.42);
+            color: rgba(248, 113, 113, 0.95);
+            border-radius: 0.45rem;
+            padding: 0.35rem 0.45rem;
+            cursor: pointer;
+            font-size: 0.72rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .profile-del-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.65);
+            color: #fff;
+        }
+
+        .profile-btn.temp {
+            border-color: rgba(239, 68, 68, 0.32);
+            color: rgba(248, 113, 113, 0.92);
+        }
+
+        .profile-btn.delete-armed {
+            background: rgba(239, 68, 68, 0.18);
+            border-color: rgba(239, 68, 68, 0.7);
+            color: rgba(255, 255, 255, 0.98);
         }
 
         /* Progreso de Descarga */
@@ -808,6 +847,152 @@
             padding-bottom: 0.25rem;
         }
 
+        .editor-menu {
+            position: relative;
+        }
+
+        .editor-menu-btn {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: rgba(248, 113, 113, 0.95);
+            border-radius: 0.7rem;
+            padding: 0.45rem 0.8rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .editor-menu-btn:hover {
+            background: rgba(239, 68, 68, 0.14);
+            border-color: rgba(239, 68, 68, 0.6);
+            color: rgba(255, 255, 255, 0.98);
+        }
+
+        .editor-menu-list {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 0.35rem);
+            min-width: 190px;
+            background: #141b25;
+            border: 1px solid var(--card-border);
+            border-radius: 0.8rem;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+            padding: 0.35rem;
+            z-index: 30;
+            display: none;
+        }
+
+        .editor-menu-list.open {
+            display: block;
+        }
+
+        .editor-menu-item {
+            width: 100%;
+            text-align: left;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text-main);
+            border-radius: 0.55rem;
+            padding: 0.42rem 0.6rem;
+            font-size: 0.76rem;
+            cursor: pointer;
+        }
+
+        .editor-menu-item:hover {
+            background: rgba(139, 92, 246, 0.14);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .editor-outside-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.45rem;
+            margin: -0.2rem 0 0.45rem 0;
+        }
+
+        .editor-unload-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            border-radius: 0.7rem;
+            padding: 0.45rem 0.8rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .editor-unload-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .ydk-report-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(7, 10, 16, 0.72);
+            backdrop-filter: blur(2px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1200;
+            padding: 1rem;
+        }
+
+        .ydk-report-card {
+            width: min(760px, 96vw);
+            max-height: 86vh;
+            overflow: auto;
+            background: #151c27;
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+
+        .ydk-report-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-secondary);
+            margin-bottom: 0.7rem;
+        }
+
+        .ydk-report-summary {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.45rem 0.8rem;
+            margin-bottom: 0.8rem;
+            font-size: 0.86rem;
+        }
+
+        .ydk-report-section-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin: 0.7rem 0 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .ydk-report-box {
+            background: rgba(0, 0, 0, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.7rem;
+            padding: 0.55rem 0.65rem;
+            max-height: 260px;
+            overflow: auto;
+            font-family: Consolas, monospace;
+            font-size: 0.82rem;
+            line-height: 1.35;
+            white-space: pre-wrap;
+        }
+
+        .ydk-report-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.55rem;
+            margin-top: 0.85rem;
+        }
+
+
         .editor-container {
             background: var(--glass-bg);
             border: 1px solid var(--card-border);
@@ -845,7 +1030,7 @@
         /* --- ESTILOS COMPLEJOS DEL EDITOR --- */
         .editor-grid {
             display: grid;
-            grid-template-columns: clamp(280px, 22vw, 340px) minmax(560px, 1fr) clamp(320px, 28vw, 520px);
+            grid-template-columns: clamp(260px, 22vw, 320px) minmax(0, 1fr) clamp(280px, 26vw, 460px);
             gap: 1.25rem;
             flex: 1;
             height: auto;
@@ -910,13 +1095,14 @@
         }
 
         .editor-card-item {
-            padding: 0.8rem;
+            padding: 0.28rem 0.45rem;
             border-radius: 0.8rem;
             cursor: pointer !important;
             transition: all 0.2s;
             border: 1px solid transparent;
-            margin-bottom: 0.4rem;
-            font-size: 0.85rem;
+            margin-bottom: 0.06rem;
+            font-size: 0.8rem;
+            line-height: 1.05;
             color: var(--text-main);
             user-select: none;
         }
@@ -937,18 +1123,18 @@
         .editor-filter-bar {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
-            gap: 0.45rem;
-            margin-top: 0.6rem;
+            gap: 0.28rem;
+            margin-top: 0.4rem;
         }
 
         .editor-filter-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--card-border);
             color: var(--text-muted);
-            padding: 0.32rem 0.5rem;
+            padding: 0.22rem 0.42rem;
             border-radius: 0.7rem;
             cursor: pointer;
-            font-size: 0.68rem;
+            font-size: 0.64rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.06em;
@@ -966,6 +1152,68 @@
             background: rgba(139, 92, 246, 0.18);
             border-color: var(--accent-primary);
             color: var(--text-main);
+        }
+
+
+        .editor-pagination-row {
+            display: grid;
+            grid-template-columns: 66px repeat(7, minmax(0, 1fr));
+            gap: 0.35rem;
+            width: 100%;
+            align-items: center;
+        }
+
+        .editor-pagination-row .page-btn {
+            width: 100%;
+            min-width: 0;
+            padding: 0.3rem 0.1rem !important;
+            font-size: 0.68rem !important;
+            line-height: 1;
+        }
+
+        #editor-page-info,
+        .editor-page-info-label {
+            text-align: center;
+            white-space: nowrap;
+            font-size: 0.74rem !important;
+        }
+
+        #editor-items-per-page,
+        .editor-items-per-page-select {
+            width: 66px !important;
+            min-width: 66px !important;
+            padding: 0.2rem 0.4rem !important;
+            font-size: 0.72rem !important;
+            border-radius: 0.55rem;
+            background: rgba(255, 255, 255, 0.08) !important;
+            color: var(--text-main) !important;
+            color-scheme: dark;
+        }
+
+        #module-editor .editor-items-per-page-select option {
+            background-color: #1a2230;
+            color: var(--text-main);
+        }
+
+        @media (max-width: 520px) {
+            .editor-pagination-row {
+                grid-template-columns: 58px repeat(7, minmax(0, 1fr));
+                gap: 0.25rem;
+            }
+            #editor-items-per-page,
+            .editor-items-per-page-select {
+                width: 58px !important;
+                min-width: 58px !important;
+                font-size: 0.68rem !important;
+            }
+            .editor-pagination-row .page-btn {
+                padding: 0.26rem 0.05rem !important;
+                font-size: 0.62rem !important;
+            }
+            #editor-page-info,
+            .editor-page-info-label {
+                font-size: 0.68rem !important;
+            }
         }
 
         /* Resaltar el botÃ³n de "Filtros" (Advanced Filters) con tono rojizo */
@@ -1173,8 +1421,8 @@
 
         /* Cuando es Link, reservar una columna a la derecha para Link Markers */
         #module-editor.has-link-markers #editor-form-grid-top {
-            grid-template-columns: 1fr 1fr 150px;
-            column-gap: 0.75rem;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(110px, 130px);
+            column-gap: 0.55rem;
         }
 
         /* Columna derecha (Link): stack (Attribute + Link Markers). */
@@ -1194,11 +1442,16 @@
             grid-row: 1 / span 4;
             align-self: stretch;
             justify-self: stretch;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.8rem;
+            padding: 0.35rem 0.22rem;
+            min-width: 0;
         }
 
         #module-editor.has-link-markers #link-side-stack .input-field {
             width: 100%;
-            max-width: 150px;
+            max-width: 126px;
             align-items: center;
         }
 
@@ -1232,6 +1485,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .link-marker-grid .lm-cell:has(input[type="checkbox"]:checked) {
+            background: rgba(139, 92, 246, 0.18);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.22) inset;
         }
 
         .link-marker-grid .lm-cell.center {
@@ -1769,6 +2028,9 @@
             <button class="back-to-menu" onclick="switchView('main-menu')">
                 <span>&larr;</span> <span data-i18n="btn_back_menu">Volver al Menú</span>
             </button>
+            <div class="lang-switcher" id="analyzer-profile-switcher" style="margin: 0.4rem 0 0.2rem 0;">
+                <!-- Dinámico -->
+            </div>
             <div style="display: flex; align-items: flex-start; margin-top: 1rem;">
                 <header style="flex: 1;">
                     <h1 data-i18n="app_title">Reporte de AnÃ¡lisis Estructural</h1>
@@ -1939,12 +2201,30 @@
         <button class="back-to-menu" onclick="switchView('main-menu')">
             <span>&larr;</span> <span data-i18n="btn_back_menu">Volver al Menú</span>
         </button>
+        <div class="lang-switcher" id="editor-profile-switcher" style="margin: 0.35rem 0 0.2rem 0;">
+            <!-- Dinámico -->
+        </div>
 
         <header style="margin-bottom: 1.5rem;">
             <h1 data-i18n="menu_editor_title">Editor de Scripts</h1>
             <p class="subtitle" data-i18n="editor_subtitle">Herramientas de creaciÃ³n y ediciÃ³n</p>
         </header>
-
+        <div class="editor-outside-actions">
+            <button type="button" id="editor-unload-ydk-btn" class="editor-unload-btn"
+                onclick="clearLoadedYdkFilter()" data-i18n="editor_btn_unload_ydk" disabled>Desmontar YDK</button>
+            <div class="editor-menu">
+                <button type="button" class="editor-menu-btn" onclick="toggleEditorMenu()">
+                    <span data-i18n="editor_menu_title">Opciones</span> ▾
+                </button>
+                <div id="editor-top-menu-list" class="editor-menu-list">
+                    <button type="button" class="editor-menu-item" onclick="onLoadYdkClick(); closeEditorMenu();" data-i18n="editor_btn_load_ydk">Cargar YDK</button>
+                    <button type="button" class="editor-menu-item" onclick="onLoadYpkClick(); closeEditorMenu();" data-i18n="editor_btn_load_ypk">Cargar YPK</button>
+                    <button type="button" class="editor-menu-item" onclick="initEditor(true); closeEditorMenu();" data-i18n="editor_menu_sync">Sincronizar CDB</button>
+                </div>
+            </div>
+        </div>
+        <input id="editor-ydk-file-input" type="file" accept=".ydk,text/plain" multiple style="display:none"
+            onchange="onYdkFileSelected(event)">
         <div class="editor-grid">
             <!-- PANEL IZQUIERDO: LISTA -->
             <div class="editor-panel">
@@ -1979,22 +2259,53 @@
                         <button class="editor-filter-btn" type="button" id="editor-btn-clear-adv-filters"
                             onclick="clearEditorAdvancedFilters()" data-i18n="editor_filter_clear">Limpiar</button>
                     </div>
-                </div>
-                <div id="editor-card-list" class="card-list-container">
-                    <!-- DinÃ¡mico -->
-                </div>
-                <div class="panel-header" style="border-top: 1px solid var(--card-border); border-bottom: none;">
-                    <div style="display: flex; gap: 0.5rem; width: 100%; justify-content: center;">
+                    <div class="editor-pagination-row" style="margin-top: 0.55rem;">
+                        <select id="editor-items-per-page" class="text-input editor-items-per-page-select"
+                            onchange="setEditorItemsPerPage(this.value)"
+                            title="Cards per page">
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                         <button class="page-btn" id="editor-page-first" onclick="firstEditorPage()"
                             style="padding: 0.3rem 0.6rem; font-size: 0.7rem;" title="First page">&laquo;&laquo;</button>
                         <button class="page-btn" id="editor-page-prev" onclick="prevEditorPage()"
                             style="padding: 0.3rem 0.6rem; font-size: 0.7rem;">&laquo;</button>
                         <button class="page-btn" id="editor-card-up" onclick="prevEditorCard()"
                             style="padding: 0.3rem 0.6rem; font-size: 0.7rem;" title="Previous card">&uarr;</button>
-                        <span id="editor-page-info" style="font-size: 0.75rem; align-self: center;">1 / 1</span>
+                        <span id="editor-page-info" class="editor-page-info-label" style="font-size: 0.75rem; align-self: center;">1 / 1</span>
                         <button class="page-btn" id="editor-card-down" onclick="nextEditorCard()"
                             style="padding: 0.3rem 0.6rem; font-size: 0.7rem;" title="Next card">&darr;</button>
                         <button class="page-btn" id="editor-page-next" onclick="nextEditorPage()"
+                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;">&raquo;</button>
+                    </div>
+                </div>
+                <div id="editor-card-list" class="card-list-container">
+                    <!-- DinÃ¡mico -->
+                </div>
+                <div class="panel-header" style="border-top: 1px solid var(--card-border); border-bottom: none;">
+                    <div class="editor-pagination-row">
+                        <select class="text-input editor-items-per-page-select"
+                            onchange="setEditorItemsPerPage(this.value)"
+                            title="Cards per page">
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <button class="page-btn editor-page-first-btn" onclick="firstEditorPage()"
+                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;" title="First page">&laquo;&laquo;</button>
+                        <button class="page-btn editor-page-prev-btn" onclick="prevEditorPage()"
+                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;">&laquo;</button>
+                        <button class="page-btn editor-card-up-btn" onclick="prevEditorCard()"
+                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;" title="Previous card">&uarr;</button>
+                        <span class="editor-page-info-label" style="font-size: 0.75rem; align-self: center;">1 / 1</span>
+                        <button class="page-btn editor-card-down-btn" onclick="nextEditorCard()"
+                            style="padding: 0.3rem 0.6rem; font-size: 0.7rem;" title="Next card">&darr;</button>
+                        <button class="page-btn editor-page-next-btn" onclick="nextEditorPage()"
                             style="padding: 0.3rem 0.6rem; font-size: 0.7rem;">&raquo;</button>
                     </div>
                 </div>
@@ -2178,6 +2489,17 @@
             <button class="editor-btn danger" id="editor-btn-delete" type="button">🗑️ Delete</button>
         </div>
     </div>
+        <div id="ydk-report-overlay" class="ydk-report-overlay" onclick="if(event.target===this) closeYdkReportModal()">
+        <div class="ydk-report-card">
+            <div class="ydk-report-title" data-i18n="editor_ydk_report_title">Detalle de carga YDK</div>
+            <div id="ydk-report-content"></div>
+            <div class="ydk-report-actions">
+                <button type="button" id="ydk-copy-missing-btn" class="browse-btn"
+                    onclick="copyYdkMissingIds()" data-i18n="editor_ydk_copy_missing">Copiar IDs faltantes</button>
+                <button type="button" class="browse-btn" onclick="closeYdkReportModal()" data-i18n="btn_close">Cerrar</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         let allData = { coincidencias: [], anomalias: [], faltantes: [], i18n: {} };
@@ -2209,8 +2531,8 @@
                 'anomalies_th_type': 'Tipo',
                 'anomalies_th_ref': 'Referencia',
                 'anomalies_th_code': 'CÃ³digo LUA',
-                'anomalies_th_desc': 'DescripciÃ³n',
-                'pred_title': 'Efectos Previstos (DescripciÃ³n)',
+                'anomalies_th_desc': 'Descripción',
+                'pred_title': 'Efectos Previstos (Descripción)',
                 'script_title': 'Efectos Hallados (LUA + CDB/SYS)',
                 'script_th_ref': 'Ref',
                 'script_th_code': 'CÃ³digo LUA',
@@ -2241,6 +2563,7 @@
                 'select_vars': 'Carpeta con archivos .lua...',
                 'btn_new_analysis': 'Nuevo AnÃ¡lisis',
                 'btn_cancel': 'Cancelar',
+                'btn_close': 'Cerrar',
                 'tab_local': 'Local',
                 'tab_github': 'GitHub',
                 'menu_config_title': 'ConfiguraciÃ³n Global',
@@ -2304,6 +2627,26 @@
                 'editor_filter_pre': 'Pre-Lanzadas',
                 'editor_filter_adv': 'Filtros',
                 'editor_filter_clear': 'Limpiar',
+                'editor_btn_load_ydk': 'Cargar YDK',
+                'editor_btn_load_ypk': 'Cargar YPK',
+                'editor_btn_unload_ydk': 'Desmontar YDKs',
+                'editor_menu_title': 'Opciones',
+                'editor_menu_sync': 'Sincronizar CDB',
+                'editor_ydk_report_title': 'Detalle de carga YDK',
+                'editor_ydk_file': 'Archivo',
+                'editor_ydk_total_ids': 'IDs leídos',
+                'editor_ydk_unique_ids': 'IDs únicos',
+                'editor_ydk_found_ids': 'IDs encontrados en DB',
+                'editor_ydk_missing_ids': 'IDs no encontrados',
+                'editor_ydk_missing_list': 'IDs no encontrados en base actual',
+                'editor_ydk_all_found': 'Todos los IDs del YDK fueron encontrados en la base actual.',
+                'editor_ydk_no_valid': 'No se encontraron IDs válidos en el YDK.',
+                'editor_ydk_no_match': 'No hay coincidencias del YDK en la base de datos del perfil actual.',
+                'editor_ydk_loaded': 'YDK cargado y filtrado correctamente.',
+                'editor_ydk_error': 'No se pudo cargar el archivo YDK.',
+                'editor_ydk_copy_missing': 'Copiar IDs faltantes',
+                'editor_ydk_copied': 'IDs copiados',
+                'editor_per_page': 'Por página',
                 'editor_link_markers': 'Link Markers',
                 'btn_save_config': 'Guardar y Continuar',
                 'analyzer_welcome_title': 'Analizador de Scripts',
@@ -2367,6 +2710,7 @@
                 'select_vars': 'Folder with .lua files...',
                 'btn_new_analysis': 'New Analysis',
                 'btn_cancel': 'Cancel',
+                'btn_close': 'Close',
                 'tab_local': 'Local',
                 'tab_github': 'GitHub',
                 'label_cdb_gh': 'CDB Folder URL (GitHub)',
@@ -2429,6 +2773,26 @@
                 'editor_filter_pre': 'Pre-Released',
                 'editor_filter_adv': 'Filters',
                 'editor_filter_clear': 'Clear',
+                'editor_btn_load_ydk': 'Load YDK',
+                'editor_btn_load_ypk': 'Load YPK',
+                'editor_btn_unload_ydk': 'Unload YDKs',
+                'editor_menu_title': 'Options',
+                'editor_menu_sync': 'Sync CDB',
+                'editor_ydk_report_title': 'YDK Load Details',
+                'editor_ydk_file': 'File',
+                'editor_ydk_total_ids': 'Read IDs',
+                'editor_ydk_unique_ids': 'Unique IDs',
+                'editor_ydk_found_ids': 'IDs found in DB',
+                'editor_ydk_missing_ids': 'IDs not found',
+                'editor_ydk_missing_list': 'IDs not found in current DB',
+                'editor_ydk_all_found': 'All YDK IDs were found in the current database.',
+                'editor_ydk_no_valid': 'No valid card IDs found in YDK.',
+                'editor_ydk_no_match': 'No YDK IDs matched the current profile database.',
+                'editor_ydk_loaded': 'YDK loaded and filtered successfully.',
+                'editor_ydk_error': 'Could not load YDK file.',
+                'editor_ydk_copy_missing': 'Copy Missing IDs',
+                'editor_ydk_copied': 'IDs copied',
+                'editor_per_page': 'Per page',
                 'editor_link_markers': 'Link Markers',
                 'btn_save_config': 'Save and Continue',
                 'analyzer_welcome_title': 'Script Analyzer',
@@ -2497,7 +2861,13 @@
             'editor_btn_add': '\u6dfb\u52a0\u5361\u7247',
             'editor_btn_modify': '\u4fee\u6539',
             'editor_btn_save': '\u4fdd\u5b58',
-            'editor_btn_delete': '\u5220\u9664'
+            'editor_btn_delete': '\u5220\u9664',
+            'editor_btn_load_ydk': '\u52a0\u8f7d YDK',
+            'editor_btn_load_ypk': '\u52a0\u8f7d YPK',
+            'editor_btn_unload_ydk': '\u5378\u8f7d YDKs',
+            'editor_menu_title': '\u9009\u9879',
+            'editor_menu_sync': '\u540c\u6b65 CDB',
+            'editor_per_page': '\u6bcf\u9875'
         };
         const UI_STRINGS_KR_OVERRIDES = {
             'app_title': '\uad6c\uc870 \ubd84\uc11d \ubcf4\uace0\uc11c',
@@ -2555,7 +2925,13 @@
             'editor_btn_add': '\uce74\ub4dc \ucd94\uac00',
             'editor_btn_modify': '\uc218\uc815',
             'editor_btn_save': '\uc800\uc7a5',
-            'editor_btn_delete': '\uc0ad\uc81c'
+            'editor_btn_delete': '\uc0ad\uc81c',
+            'editor_btn_load_ydk': 'YDK \ubd88\ub7ec\uc624\uae30',
+            'editor_btn_load_ypk': 'YPK \ubd88\ub7ec\uc624\uae30',
+            'editor_btn_unload_ydk': 'YDKs \ud574\uc81c',
+            'editor_menu_title': '\uc635\uc158',
+            'editor_menu_sync': 'CDB \ub3d9\uae30\ud654',
+            'editor_per_page': '\ud398\uc774\uc9c0\ub2f9'
         };
 
         UI_STRINGS.cn = { ...UI_STRINGS.en, ...UI_STRINGS_CN_OVERRIDES };
@@ -2585,9 +2961,15 @@
 
         function ensureDbProfile(key) {
             const k = String(key || '').toLowerCase() || 'es';
-            if (!dbProfiles[k]) dbProfiles[k] = { cdb: '', scripts: '', strings: '', pics: '', ui_lang: inferUiLangFromProfile(k) };
+            if (!dbProfiles[k]) dbProfiles[k] = { cdb: '', scripts: '', strings: '', pics: '', ui_lang: inferUiLangFromProfile(k), is_temp_ypk: false, ypk_file: '' };
             if (!dbProfiles[k].ui_lang) dbProfiles[k].ui_lang = inferUiLangFromProfile(k);
             return k;
+        }
+
+        function isTemporaryProfile(key) {
+            const k = String(key || '').toLowerCase();
+            const p = dbProfiles?.[k] || {};
+            return Boolean(p.is_temp_ypk) || /^ypk-\d+$/.test(k);
         }
 
         function buildProfilesPayload() {
@@ -2599,6 +2981,8 @@
                     strings_conf: v.strings || '',
                     pics_dir: v.pics || '',
                     ui_lang: String(v.ui_lang || inferUiLangFromProfile(k)).toLowerCase(),
+                    is_temp_ypk: Boolean(v.is_temp_ypk),
+                    ypk_file: String(v.ypk_file || ''),
                 };
             }
             return profilesPayload;
@@ -2640,6 +3024,8 @@
         function clearDeleteArmedTabs(exceptKey = '') {
             deleteArmedProfile = String(exceptKey || '').toLowerCase();
             renderDbLangTabs();
+            renderMainProfileTabs();
+            renderModuleProfileTabs();
         }
 
         function inferUiLangFromProfile(profileKey) {
@@ -2699,20 +3085,98 @@
             });
 
             for (const k of keys) {
+                const isTemp = isTemporaryProfile(k);
+                const wrap = document.createElement('div');
+                wrap.className = 'profile-tab-wrap';
+
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = 'profile-btn' + (k === activeDbProfile ? ' active' : '');
+                btn.className = 'profile-btn' + (k === activeDbProfile ? ' active' : '') + (isTemp ? ' temp' : '');
                 btn.textContent = String(k).toUpperCase();
                 btn.title = `DB: ${String(k).toUpperCase()}`;
                 btn.onclick = () => setDbProfile(k);
-                host.appendChild(btn);
+                wrap.appendChild(btn);
+
+                if (isTemp) {
+                    const del = document.createElement('button');
+                    del.type = 'button';
+                    del.className = 'profile-del-btn';
+                    del.textContent = '✕';
+                    del.title = 'Delete temporary tab';
+                    del.onclick = (ev) => {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                        deleteDbProfile(k);
+                    };
+                    wrap.appendChild(del);
+                }
+                host.appendChild(wrap);
+            }
+        }
+
+        function renderModuleProfileTabs() {
+            const hosts = [
+                document.getElementById('analyzer-profile-switcher'),
+                document.getElementById('editor-profile-switcher'),
+            ].filter(Boolean);
+            if (!hosts.length) return;
+            hosts.forEach(h => h.innerHTML = '');
+
+            const keys = Object.keys(dbProfiles || {});
+            keys.sort((a, b) => {
+                const A = String(a).toLowerCase();
+                const B = String(b).toLowerCase();
+                const pref = (x) => (x === 'es' ? 0 : x === 'en' ? 1 : 2);
+                const pa = pref(A), pb = pref(B);
+                if (pa !== pb) return pa - pb;
+                return A.localeCompare(B);
+            });
+
+            for (const k of keys) {
+                hosts.forEach(host => {
+                    const isTemp = isTemporaryProfile(k);
+                    const wrap = document.createElement('div');
+                    wrap.className = 'profile-tab-wrap';
+
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'profile-btn' + (k === activeDbProfile ? ' active' : '') + (isTemp ? ' temp' : '');
+                    btn.textContent = String(k).toUpperCase();
+                    btn.title = `DB: ${String(k).toUpperCase()}`;
+                    btn.onclick = () => setDbProfile(k);
+                    wrap.appendChild(btn);
+
+                    if (isTemp) {
+                        const del = document.createElement('button');
+                        del.type = 'button';
+                        del.className = 'profile-del-btn';
+                        del.textContent = '✕';
+                        del.title = 'Delete temporary tab';
+                        del.onclick = (ev) => {
+                            ev.preventDefault();
+                            ev.stopPropagation();
+                            deleteDbProfile(k);
+                        };
+                        wrap.appendChild(del);
+                    }
+
+                    host.appendChild(wrap);
+                });
             }
         }
 
         document.addEventListener('click', (ev) => {
             const tabsWrap = document.getElementById('db-lang-tabs');
-            if (!tabsWrap) return;
-            if (!tabsWrap.contains(ev.target)) clearDeleteArmedTabs();
+            const mainWrap = document.getElementById('main-profile-switcher');
+            const analyzerWrap = document.getElementById('analyzer-profile-switcher');
+            const editorWrap = document.getElementById('editor-profile-switcher');
+            const target = ev.target;
+            const inside =
+                (tabsWrap && tabsWrap.contains(target)) ||
+                (mainWrap && mainWrap.contains(target)) ||
+                (analyzerWrap && analyzerWrap.contains(target)) ||
+                (editorWrap && editorWrap.contains(target));
+            if (!inside) clearDeleteArmedTabs();
         });
 
         function renderDbLangTabs() {
@@ -2732,6 +3196,7 @@
 
             for (const k of keys) {
                 const tab = document.createElement('div');
+                const isTemp = isTemporaryProfile(k);
                 const isDeleteArmed = (k === deleteArmedProfile);
                 tab.className = 'config-tab' + (k === activeDbProfile ? ' active' : '') + (isDeleteArmed ? ' delete-armed' : '');
                 tab.dataset.profileKey = k;
@@ -2746,41 +3211,34 @@
                     setDbProfile(k);
                 };
                 tab.ondblclick = (ev) => {
+                    if (!isTemp) return;
                     ev.preventDefault();
                     ev.stopPropagation();
                     deleteArmedProfile = (deleteArmedProfile === k) ? '' : k;
                     renderDbLangTabs();
+                    renderMainProfileTabs();
+                    renderModuleProfileTabs();
                 };
 
                 // Solo en esta ventana (Config) se permite renombrar/eliminar perfiles
-                const actions = document.createElement('div');
-                actions.className = 'tab-actions';
+                if (isTemp) {
+                    const actions = document.createElement('div');
+                    actions.className = 'tab-actions';
 
-                const editBtn = document.createElement('button');
-                editBtn.type = 'button';
-                editBtn.className = 'tab-action-btn';
-                editBtn.textContent = '✎';
-                editBtn.title = 'Rename';
-                editBtn.onclick = (ev) => {
-                    ev.preventDefault();
-                    ev.stopPropagation();
-                    beginRenameDbProfile(k);
-                };
+                    const delBtn = document.createElement('button');
+                    delBtn.type = 'button';
+                    delBtn.className = 'tab-action-btn danger';
+                    delBtn.textContent = '✕';
+                    delBtn.title = 'Delete';
+                    delBtn.onclick = (ev) => {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                        deleteDbProfile(k);
+                    };
 
-                const delBtn = document.createElement('button');
-                delBtn.type = 'button';
-                delBtn.className = 'tab-action-btn danger';
-                delBtn.textContent = '✕';
-                delBtn.title = 'Delete';
-                delBtn.onclick = (ev) => {
-                    ev.preventDefault();
-                    ev.stopPropagation();
-                    deleteDbProfile(k);
-                };
-
-                actions.appendChild(editBtn);
-                actions.appendChild(delBtn);
-                tab.appendChild(actions);
+                    actions.appendChild(delBtn);
+                    tab.appendChild(actions);
+                }
                 tabs.appendChild(tab);
             }
 
@@ -2791,6 +3249,7 @@
             plus.onclick = () => addDbProfile();
             tabs.appendChild(plus);
             renderMainProfileTabs();
+            renderModuleProfileTabs();
         }
 
         function syncActiveProfileToUI() {
@@ -2834,6 +3293,7 @@
             syncUiLangFromActiveProfile();
             updateUI();
             persistProfilesConfig();
+            loadData().then(() => { try { render(); } catch { } }).catch(() => { });
         }
 
         function setDbProfile(key) {
@@ -2850,6 +3310,16 @@
             renderDbLangTabs();
             syncActiveProfileToUI();
             try { renderEditorList(); } catch { }
+            try {
+                const editorVisible = document.getElementById('module-editor')?.style?.display !== 'none';
+                if (editorVisible) {
+                    initEditor(true).then(() => {
+                        if (editorMountedYdks && editorMountedYdks.length > 0) {
+                            applyMountedYdksToCurrentDb({ clearFilters: false, showReport: true });
+                        }
+                    }).catch(() => {});
+                }
+            } catch { }
             loadData().then(() => { try { render(); } catch { } }).catch(() => {});
             persistProfilesConfig();
         }
@@ -2969,6 +3439,12 @@
         function deleteDbProfile(key) {
             const k = String(key || '').toLowerCase();
             if (!dbProfiles[k]) return;
+            if (!isTemporaryProfile(k)) {
+                alert(lang === 'en'
+                    ? 'Only temporary YPK tabs can be deleted from here.'
+                    : 'Solo se pueden eliminar aquí los tabs temporales YPK.');
+                return;
+            }
             const keys = Object.keys(dbProfiles || {});
             if (keys.length <= 1) {
                 alert(lang === 'en'
@@ -3182,16 +3658,91 @@
         async function loadData(forceHideConfig = false) {
             try {
                 const ts = new Date().getTime();
-                const profileKey = String(activeDbProfile || '').toLowerCase().replace(/[^a-z0-9_-]/g, '');
-                let r = null;
-                if (profileKey) {
-                    r = await fetch(`resultados_${profileKey}.json?t=${ts}`);
+                const sanitizeResultToken = (value) => String(value || '').toLowerCase().replace(/[^a-z0-9_-]/g, '');
+                const normalizeUiLangCode = (value) => {
+                    const raw = String(value || '').trim().toLowerCase().replace(/_/g, '-');
+                    if (!raw) return '';
+                    if (raw === 'cn') return 'zh-cn';
+                    if (raw === 'kr') return 'ko-kr';
+                    if (raw === 'ge-de') return 'de-de';
+                    return raw;
+                };
+                const resultFiles = [];
+                const pushResultFile = (tokenRaw) => {
+                    const token = sanitizeResultToken(tokenRaw);
+                    if (!token) return;
+                    const file = `resultados_${token}.json`;
+                    if (!resultFiles.includes(file)) resultFiles.push(file);
+                };
+
+                const activeProfile = dbProfiles?.[String(activeDbProfile || '').toLowerCase()] || {};
+                const profileUiLang = normalizeUiLangCode(activeProfile.ui_lang || inferUiLangFromProfile(activeDbProfile) || '');
+                if (profileUiLang) {
+                    pushResultFile(profileUiLang);
+                    pushResultFile(profileUiLang.replace(/-/g, '_'));
+                    const baseLang = profileUiLang.split('-')[0];
+                    pushResultFile(baseLang);
+
+                    if (baseLang === 'zh') {
+                        pushResultFile('cn');
+                        pushResultFile('zh-cn');
+                        pushResultFile('zh-tw');
+                    } else if (baseLang === 'ko') {
+                        pushResultFile('kr');
+                        pushResultFile('ko-kr');
+                    }
                 }
-                if (!r || !r.ok) {
-                    r = await fetch('resultados.json?t=' + ts);
+
+                const normalizeLangForMatch = (value) => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+                const expectedLangTokens = new Set();
+                if (profileUiLang) {
+                    expectedLangTokens.add(normalizeLangForMatch(profileUiLang));
+                    expectedLangTokens.add(normalizeLangForMatch(profileUiLang.replace(/_/g, '-')));
+                    const baseLang = profileUiLang.split('-')[0];
+                    expectedLangTokens.add(normalizeLangForMatch(baseLang));
+                    if (baseLang === 'zh') expectedLangTokens.add('cn');
+                    if (baseLang === 'ko') expectedLangTokens.add('kr');
                 }
-                if (!r.ok) throw new Error("No data");
-                allData = await r.json();
+
+                const fallbackMatchesActiveContext = (data) => {
+                    const meta = data && typeof data === 'object' ? data._meta : null;
+                    if (!meta || typeof meta !== 'object') return false;
+
+                    if (expectedLangTokens.size > 0) {
+                        const metaUi = normalizeLangForMatch(normalizeUiLangCode(meta.ui_lang));
+                        if (!metaUi || !expectedLangTokens.has(metaUi)) return false;
+                    }
+                    return true;
+                };
+
+                let loadedData = null;
+                for (const file of resultFiles) {
+                    try {
+                        const resp = await fetch(`${file}?t=${ts}`);
+                        if (resp.ok) {
+                            const data = await resp.json();
+                            if (fallbackMatchesActiveContext(data)) {
+                                loadedData = data;
+                                break;
+                            }
+                        }
+                    } catch { }
+                }
+
+                if (!loadedData) {
+                    try {
+                        const fallbackResp = await fetch(`resultados.json?t=${ts}`);
+                        if (fallbackResp.ok) {
+                            const fallbackData = await fallbackResp.json();
+                            if (fallbackMatchesActiveContext(fallbackData)) {
+                                loadedData = fallbackData;
+                            }
+                        }
+                    } catch { }
+                }
+
+                if (!loadedData) throw new Error("No data");
+                allData = loadedData;
 
                 const hasResults = allData && (
                     (allData.coincidencias && allData.coincidencias.length > 0) ||
@@ -3247,6 +3798,21 @@
                 return hasResults;
             } catch (e) {
                 allData = { coincidencias: [], anomalias: [], faltantes: [], scripts_faltantes: [] };
+                const setStat = (id, value = 0) => {
+                    const el = document.getElementById(id);
+                    if (el) el.innerText = value;
+                };
+                setStat('stat-total', 0);
+                setStat('stat-ok', 0);
+                setStat('stat-error', 0);
+                setStat('stat-missing', 0);
+                setStat('stat-no-script', 0);
+                setStat('stat-excluded', 0);
+                const welcome = document.getElementById('analyzer-welcome');
+                const results = document.getElementById('analyzer-results');
+                if (welcome) welcome.style.display = 'block';
+                if (results) results.style.display = 'none';
+                try { updateFilteredList(); } catch { }
                 return false;
             }
         }
@@ -3307,7 +3873,13 @@
         let editorSearchQueryFold = '';
         let editorTypeMaskFilter = 0; // 0 => all; else OR-mask of monster/spell/trap
         let editorPreFilter = false; // true => ID length > 8
-        const editorItemsPerPage = 50;
+        let editorDeckFilterIds = null; // Set<string> | null (union de YDK montados)
+        let editorMountedYdks = []; // [{fileName, sourceIds[]}]
+        let editorItemsPerPage = (() => {
+            const saved = parseInt(localStorage.getItem('editor_items_per_page') || '25', 10);
+            const allowed = [15, 20, 25, 50, 100];
+            return allowed.includes(saved) ? saved : 25;
+        })();
 
         const EDITOR_TYPE_MASKS = { monster: 0x1, spell: 0x2, trap: 0x4 };
 
@@ -3354,8 +3926,12 @@
                 const fieldLM = document.getElementById('field-link-markers');
                 const attrAnchor = document.getElementById('attribute-anchor');
                 const lmAnchor = document.getElementById('link-markers-anchor');
-                if (gridTop && fieldAttr && attrAnchor && fieldAttr.parentElement !== gridTop) attrAnchor.after(fieldAttr);
-                if (gridTop && fieldLM && lmAnchor && fieldLM.parentElement !== gridTop) lmAnchor.after(fieldLM);
+                if (gridTop && fieldAttr && attrAnchor && fieldAttr.parentElement !== gridTop) {
+                    gridTop.insertBefore(fieldAttr, attrAnchor.nextSibling);
+                }
+                if (gridTop && fieldLM && lmAnchor && fieldLM.parentElement !== gridTop) {
+                    gridTop.insertBefore(fieldLM, lmAnchor.nextSibling);
+                }
                 if (fieldLM) fieldLM.style.display = 'none';
 
                 // Reset simple fields + highlights
@@ -3490,6 +4066,10 @@
             const adv = editorAdvancedFilterMode ? getEditorAdvancedFiltersFromUI() : null;
 
             editorFilteredCards = editorAllCards.filter(c => {
+                if (editorDeckFilterIds && editorDeckFilterIds.size > 0) {
+                    if (!editorDeckFilterIds.has(String(c.id || ''))) return false;
+                }
+
                 // Pre-lanzadas: IDs con longitud > 8
                 if (editorPreFilter) {
                     const idLen = String(c.id ?? '').length;
@@ -3573,6 +4153,365 @@
                 btn.classList.toggle('active', editorPreFilter);
             });
             applyEditorFilters();
+        }
+
+        function onLoadYdkClick() {
+            const input = document.getElementById('editor-ydk-file-input');
+            if (!input) return;
+            input.value = '';
+            input.click();
+        }
+
+        async function onLoadYpkClick() {
+            try {
+                const browseResp = await fetch(`/api/browse_file?lang=${lang}&title_key=title_select_file`);
+                const browseData = await browseResp.json();
+                const ypkPath = String(browseData?.path || '').trim();
+                if (!ypkPath) return;
+
+                const ypkPayload = JSON.stringify({
+                    ypk_path: ypkPath,
+                    active_profile: activeDbProfile,
+                    ui_lang: String(dbProfiles?.[activeDbProfile]?.ui_lang || inferUiLangFromProfile(activeDbProfile) || '').toLowerCase(),
+                });
+
+                let loadResp = await fetch('/api/load_ypk', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: ypkPayload,
+                });
+                if (loadResp.status === 404) {
+                    loadResp = await fetch('/api/editor/load_ypk', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: ypkPayload,
+                    });
+                }
+                if (loadResp.status === 404) {
+                    loadResp = await fetch('/api/config', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'load_ypk',
+                            ypk_path: ypkPath,
+                            active_profile: activeDbProfile,
+                        }),
+                    });
+                }
+
+                const rawText = await loadResp.text();
+                let loadPayload = {};
+                try { loadPayload = rawText ? JSON.parse(rawText) : {}; } catch { }
+                if (!loadResp.ok) throw new Error(loadPayload?.error || `HTTP ${loadResp.status}`);
+                if (!loadPayload || loadPayload.status !== 'ok' || !loadPayload.paths) {
+                    throw new Error(
+                        lang === 'en'
+                            ? 'Backend does not support YPK load yet. Restart/update the server and try again.'
+                            : 'El backend no soporta carga YPK todavía. Reinicia/actualiza el servidor y vuelve a intentar.'
+                    );
+                }
+
+                const p = loadPayload?.paths || {};
+                const newProfileKey = String(loadPayload?.active_profile || activeDbProfile || '').toLowerCase();
+                const profileKey = ensureDbProfile(newProfileKey);
+                const inheritedUiLang = String(dbProfiles?.[activeDbProfile]?.ui_lang || inferUiLangFromProfile(activeDbProfile) || '').toLowerCase();
+                dbProfiles[profileKey].ui_lang = dbProfiles[profileKey].ui_lang || inheritedUiLang;
+                dbProfiles[profileKey].is_temp_ypk = true;
+                dbProfiles[profileKey].ypk_file = String(ypkPath || '').split(/[\\/]/).pop() || '';
+                dbProfiles[profileKey].cdb = String(p.cdb_dir || '');
+                dbProfiles[profileKey].scripts = String(p.script_dir || '');
+                dbProfiles[profileKey].strings = String(p.strings_conf || '');
+                dbProfiles[profileKey].pics = String(p.pics_dir || '');
+
+                renderDbLangTabs();
+                setDbProfile(profileKey);
+
+                // Al cargar un paquete YPK, volver al modo normal del editor
+                // (sin filtro de mazo YDK) para mostrar todas las cartas del .cdb.
+                editorMountedYdks = [];
+                editorDeckFilterIds = null;
+                updateYdkUnloadButtonState();
+
+                await initEditor(true);
+                try {
+                    const analyzerVisible = document.getElementById('module-analyzer')?.style?.display !== 'none';
+                    if (analyzerVisible) {
+                        await loadData();
+                        render();
+                    }
+                } catch { }
+            } catch (e) {
+                console.error('YPK load error:', e);
+            }
+        }
+
+        function updateYdkUnloadButtonState() {
+            const btn = document.getElementById('editor-unload-ydk-btn');
+            if (!btn) return;
+            btn.disabled = !(Array.isArray(editorMountedYdks) && editorMountedYdks.length > 0);
+        }
+
+        function clearLoadedYdkFilter() {
+            editorMountedYdks = [];
+            editorDeckFilterIds = null;
+            updateYdkUnloadButtonState();
+            applyEditorFilters();
+        }
+
+        function closeYdkReportModal() {
+            const overlay = document.getElementById('ydk-report-overlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        let lastYdkMissingIds = [];
+        let lastYdkMissingClipboardText = '';
+
+        async function copyYdkMissingIds() {
+            if (!Array.isArray(lastYdkMissingIds) || !lastYdkMissingIds.length) return;
+            const text = String(lastYdkMissingClipboardText || '').trim() || lastYdkMissingIds.join('\n');
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(text);
+                } else {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    ta.remove();
+                }
+                const btn = document.getElementById('ydk-copy-missing-btn');
+                if (btn) {
+                    const prev = btn.innerText;
+                    btn.innerText = t('editor_ydk_copied');
+                    setTimeout(() => { btn.innerText = prev; }, 1200);
+                }
+            } catch (e) {
+                console.error('Clipboard copy failed:', e);
+            }
+        }
+
+        function openYdkReportModal(report) {
+            const overlay = document.getElementById('ydk-report-overlay');
+            const content = document.getElementById('ydk-report-content');
+            if (!overlay || !content) return;
+
+            const safeFile = escapeHtml(String(report?.fileName || '-'));
+            const totalIds = Number(report?.totalIds || 0);
+            const uniqueIds = Number(report?.uniqueIds || 0);
+            const foundIds = Number(report?.foundIds || 0);
+            const missingIds = Array.isArray(report?.missingIds) ? report.missingIds : [];
+            const copyMissingIds = Array.isArray(report?.copyMissingIds) ? report.copyMissingIds : missingIds;
+            const missingCount = Number(report?.missingTotal ?? missingIds.length);
+            const statusText = escapeHtml(String(report?.statusText || ''));
+            lastYdkMissingIds = copyMissingIds.slice();
+            const copyBtn = document.getElementById('ydk-copy-missing-btn');
+            if (copyBtn) {
+                copyBtn.disabled = missingCount === 0;
+                copyBtn.innerText = t('editor_ydk_copy_missing');
+            }
+
+            const perDeck = Array.isArray(report?.perDeck) ? report.perDeck : [];
+            const clipboardDeckBlocks = [];
+            perDeck.forEach((deck, idx) => {
+                const deckName = String(deck?.fileName || `YDK ${idx + 1}`);
+                const deckMissing = Array.isArray(deck?.missingIds) ? deck.missingIds : [];
+                if (!deckMissing.length) return;
+                clipboardDeckBlocks.push(`[${deckName}]`);
+                clipboardDeckBlocks.push(...deckMissing.map(id => String(id)));
+                clipboardDeckBlocks.push('');
+            });
+            lastYdkMissingClipboardText = clipboardDeckBlocks.join('\n').trim();
+            const perDeckBlocks = perDeck.map((deck, idx) => {
+                const deckName = escapeHtml(String(deck?.fileName || `YDK ${idx + 1}`));
+                const deckMissing = Array.isArray(deck?.missingIds) ? deck.missingIds : [];
+                const deckFound = Number(deck?.foundIds || 0);
+                const deckUnique = Number(deck?.uniqueIds || 0);
+                const deckList = deckMissing.length
+                    ? escapeHtml(deckMissing.join('\n'))
+                    : escapeHtml(t('editor_ydk_all_found'));
+                return `
+                    <div class="ydk-report-section-title">${deckName} — ${t('editor_ydk_unique_ids')}: ${deckUnique} · ${t('editor_ydk_found_ids')}: ${deckFound} · ${t('editor_ydk_missing_ids')}: ${deckMissing.length}</div>
+                    <div class="ydk-report-box">${deckList}</div>
+                `;
+            }).join('');
+
+            content.innerHTML = `
+                <div class="ydk-report-summary">
+                    <div><strong>${t('editor_ydk_file')}:</strong> ${safeFile}</div>
+                    <div><strong>${t('editor_ydk_total_ids')}:</strong> ${totalIds}</div>
+                    <div><strong>${t('editor_ydk_unique_ids')} (Total):</strong> ${uniqueIds}</div>
+                    <div><strong>${t('editor_ydk_found_ids')} (Total):</strong> ${foundIds}</div>
+                    <div><strong>${t('editor_ydk_missing_ids')} (Total):</strong> ${missingCount}</div>
+                </div>
+                <div class="ydk-report-section-title">${escapeHtml(statusText)}</div>
+                ${perDeckBlocks}
+            `;
+            overlay.style.display = 'flex';
+        }
+
+        function parseYdkCardIds(text) {
+            const ids = [];
+            let section = '';
+            const lines = String(text || '').split(/\r?\n/);
+            for (const rawLine of lines) {
+                const line = String(rawLine || '').replace(/\uFEFF/g, '').trim();
+                if (!line) continue;
+                const low = line.toLowerCase();
+                if (low === '#main') { section = 'main'; continue; }
+                if (low === '#extra') { section = 'extra'; continue; }
+                if (low === '!side') { section = 'side'; continue; }
+                if (!section) continue;
+                const m = line.match(/^(\d+)/);
+                if (!m || !m[1]) continue;
+                ids.push(m[1]);
+            }
+            return ids;
+        }
+
+        function applyMountedYdksToCurrentDb({ clearFilters = false, showReport = true } = {}) {
+            const mounted = Array.isArray(editorMountedYdks) ? editorMountedYdks : [];
+            if (!mounted.length) return;
+
+            const idsInDb = new Set((editorAllCards || []).map(c => String(c.id || '')));
+            const unionMatched = new Set();
+            const unionMissing = new Set();
+            const allMissingForCopy = [];
+            let totalIds = 0;
+            let totalUniqueIds = 0;
+            let totalMissingByDeck = 0;
+            const fileNames = [];
+            const perDeck = [];
+            for (const deck of mounted) {
+                const src = Array.isArray(deck?.sourceIds) ? deck.sourceIds : [];
+                const uniq = [...new Set(src.map(x => String(x)))];
+                totalIds += src.length;
+                totalUniqueIds += uniq.length;
+                if (deck?.fileName) fileNames.push(String(deck.fileName));
+                const deckMissing = [];
+                let deckFound = 0;
+                uniq.forEach(id => {
+                    if (idsInDb.has(id)) {
+                        unionMatched.add(id);
+                        deckFound++;
+                    } else {
+                        unionMissing.add(id);
+                        deckMissing.push(id);
+                        allMissingForCopy.push(id);
+                    }
+                });
+                totalMissingByDeck += deckMissing.length;
+                perDeck.push({
+                    fileName: String(deck?.fileName || ''),
+                    uniqueIds: uniq.length,
+                    foundIds: deckFound,
+                    missingIds: deckMissing,
+                });
+            }
+
+            if (clearFilters) {
+                const search = document.getElementById('editor-search');
+                if (search) search.value = '';
+                editorSearchQuery = '';
+                editorSearchQueryRaw = '';
+                editorSearchQueryFold = '';
+                editorTypeMaskFilter = 0;
+                editorPreFilter = false;
+                editorAdvancedFilterMode = false;
+                updateEditorTypeFilterButtons();
+                document.querySelectorAll('#module-editor [data-editor-prefilter]').forEach(btn => btn.classList.remove('active'));
+                ['edit-rule', 'edit-attribute', 'edit-level', 'edit-race', 'edit-setcode1', 'edit-setcode2', 'edit-setcode3', 'edit-setcode4'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '0';
+                });
+                document.querySelectorAll('#type-checkbox-grid input[type="checkbox"], #category-checkbox-grid input[type="checkbox"], #flags-checkbox-grid input[type="checkbox"]').forEach(cb => {
+                    cb.checked = false;
+                });
+                setEditorControlsEnabledForMode();
+            }
+
+            editorDeckFilterIds = unionMatched.size ? new Set(unionMatched) : new Set(['__NO_YDK_MATCH__']);
+            updateYdkUnloadButtonState();
+            editorPage = 1;
+            applyEditorFilters();
+
+            if (showReport) {
+                openYdkReportModal({
+                    fileName: fileNames.length ? fileNames.join(' + ') : '-',
+                    totalIds: totalIds,
+                    uniqueIds: totalUniqueIds,
+                    foundIds: unionMatched.size,
+                    missingIds: [...unionMissing],
+                    copyMissingIds: allMissingForCopy,
+                    missingTotal: totalMissingByDeck,
+                    perDeck,
+                    statusText: unionMatched.size ? t('editor_ydk_loaded') : t('editor_ydk_no_match'),
+                });
+            }
+        }
+
+        async function onYdkFileSelected(event) {
+            const files = Array.from(event?.target?.files || []);
+            if (!files.length) return;
+            try {
+                if (!editorAllCards || editorAllCards.length === 0) {
+                    await initEditor();
+                }
+
+                const idsInDb = new Set((editorAllCards || []).map(c => String(c.id || '')));
+                let hasMountedChanges = false;
+                for (const file of files) {
+                    const text = await file.text();
+                    const parsedIds = parseYdkCardIds(text);
+                    const uniqueParsedIds = [...new Set(parsedIds)];
+                    if (!parsedIds.length) {
+                        continue;
+                    }
+                    const matchedInCurrentDb = uniqueParsedIds.filter(id => idsInDb.has(String(id)));
+                    if (!matchedInCurrentDb.length) {
+                        continue;
+                    }
+                    editorMountedYdks.push({
+                        fileName: file.name || '',
+                        sourceIds: uniqueParsedIds,
+                    });
+                    hasMountedChanges = true;
+                }
+                if (!hasMountedChanges) {
+                    openYdkReportModal({
+                        fileName: files.length > 1 ? `${files.length} YDK` : String(files[0]?.name || ''),
+                        totalIds: 0,
+                        uniqueIds: 0,
+                        foundIds: 0,
+                        missingIds: [],
+                        statusText: t('editor_ydk_no_match'),
+                    });
+                    return;
+                }
+                applyMountedYdksToCurrentDb({ clearFilters: true, showReport: true });
+            } catch (err) {
+                console.error('YDK load error:', err);
+                openYdkReportModal({
+                    fileName: files.length > 1 ? `${files.length} YDK` : String(files[0]?.name || ''),
+                    totalIds: 0,
+                    uniqueIds: 0,
+                    foundIds: 0,
+                    missingIds: [],
+                    statusText: `${t('editor_ydk_error')} ${String(err?.message || '')}`,
+                });
+            }
+        }
+
+        function toggleEditorMenu() {
+            const menu = document.getElementById('editor-top-menu-list');
+            if (!menu) return;
+            menu.classList.toggle('open');
+        }
+
+        function closeEditorMenu() {
+            const menu = document.getElementById('editor-top-menu-list');
+            if (!menu) return;
+            menu.classList.remove('open');
         }
 
         function updateEditorActionButtons() {
@@ -3750,7 +4689,11 @@
             const isStale = editorAllCards.length > 0 && (editorAllCards[0]?.category == null);
             const profileChanged = editorLoadedProfile !== String(activeDbProfile || '').toLowerCase();
             if (editorAllCards.length > 0 && !force && !isStale && !profileChanged) {
-                applyEditorFilters();
+                if (editorMountedYdks && editorMountedYdks.length > 0) {
+                    applyMountedYdksToCurrentDb({ clearFilters: false, showReport: false });
+                } else {
+                    applyEditorFilters();
+                }
                 setEditorEditMode(false);
                 return;
             }
@@ -3770,7 +4713,11 @@
                 const data = await resp.json();
                 editorAllCards = data;
                 editorLoadedProfile = String(activeDbProfile || '').toLowerCase();
-                applyEditorFilters();
+                if (editorMountedYdks && editorMountedYdks.length > 0) {
+                    applyMountedYdksToCurrentDb({ clearFilters: false, showReport: false });
+                } else {
+                    applyEditorFilters();
+                }
             } catch (e) {
                 console.error("Editor Load Error:", e);
                 editorAllCards = [];
@@ -3802,6 +4749,21 @@
                     row.insertBefore(btn, nextBtn.nextSibling);
                 }
             } catch { }
+        }
+
+        function setEditorItemsPerPage(value) {
+            const parsed = parseInt(String(value || ''), 10);
+            const allowed = [15, 20, 25, 50, 100];
+            const next = allowed.includes(parsed) ? parsed : 25;
+            editorItemsPerPage = next;
+            localStorage.setItem('editor_items_per_page', String(next));
+            document.querySelectorAll('#module-editor .editor-items-per-page-select').forEach(sel => {
+                sel.value = String(next);
+            });
+            const totalPages = Math.ceil((editorFilteredCards?.length || 0) / editorItemsPerPage) || 1;
+            if (editorPage > totalPages) editorPage = totalPages;
+            if (editorPage < 1) editorPage = 1;
+            renderEditorList();
         }
 
         function getEditorSelectedIndex() {
@@ -3854,6 +4816,9 @@
             if (!listContainer) return;
 
             ensureEditorPaginationButtons();
+            document.querySelectorAll('#module-editor .editor-items-per-page-select').forEach(sel => {
+                sel.value = String(editorItemsPerPage);
+            });
 
             if (editorIsLoading) {
                 listContainer.innerHTML = `
@@ -3888,7 +4853,9 @@
             const total = editorFilteredCards.length;
             const totalPages = Math.ceil(total / editorItemsPerPage) || 1;
             document.getElementById('editor-card-count').innerText = `${total} ${t('editor_cards_suffix')}`;
-            document.getElementById('editor-page-info').innerText = `${editorPage} / ${totalPages}`;
+            document.querySelectorAll('#module-editor .editor-page-info-label').forEach(el => {
+                el.innerText = `${editorPage} / ${totalPages}`;
+            });
             updateEditorActionButtons();
 
             // Estado de botones de paginaciÃ³n
@@ -3905,10 +4872,19 @@
                 if (prevBtn) prevBtn.disabled = atFirst;
                 if (nextBtn) nextBtn.disabled = atLast;
                 if (lastBtn) lastBtn.disabled = atLast;
+                document.querySelectorAll('#module-editor .editor-page-first-btn').forEach(btn => btn.disabled = atFirst);
+                document.querySelectorAll('#module-editor .editor-page-prev-btn').forEach(btn => btn.disabled = atFirst);
+                document.querySelectorAll('#module-editor .editor-page-next-btn').forEach(btn => btn.disabled = atLast);
 
                 const idx = getEditorSelectedIndex();
                 if (upBtn) upBtn.disabled = (idx === 0) || (idx === -1 && editorFilteredCards.length === 0);
                 if (downBtn) downBtn.disabled = (idx === editorFilteredCards.length - 1) || (idx === -1 && editorFilteredCards.length === 0);
+                document.querySelectorAll('#module-editor .editor-card-up-btn').forEach(btn => {
+                    btn.disabled = (idx === 0) || (idx === -1 && editorFilteredCards.length === 0);
+                });
+                document.querySelectorAll('#module-editor .editor-card-down-btn').forEach(btn => {
+                    btn.disabled = (idx === editorFilteredCards.length - 1) || (idx === -1 && editorFilteredCards.length === 0);
+                });
             } catch { }
 
             // Al cambiar pÃ¡gina o aplicar filtros, empezar el scroll desde arriba
@@ -3965,6 +4941,17 @@
                     else nextEditorCard();
                 } catch { }
             }, { passive: false });
+        })();
+
+        (function attachEditorMenuCloseOnOutside() {
+            if (window.__editorMenuOutsideAttached) return;
+            window.__editorMenuOutsideAttached = true;
+            document.addEventListener('click', (e) => {
+                const host = document.querySelector('#module-editor .editor-menu');
+                if (!host) return;
+                if (host.contains(e.target)) return;
+                closeEditorMenu();
+            });
         })();
 
         function selectEditorCard(card, opts = {}) {
@@ -4072,8 +5059,12 @@
                     if (stack && fieldAttr && fieldAttr.parentElement !== stack) stack.appendChild(fieldAttr);
                     if (stack && fieldLM && fieldLM.parentElement !== stack) stack.appendChild(fieldLM);
                 } else {
-                    if (gridTop && attrAnchor && fieldAttr && fieldAttr.parentElement !== gridTop) attrAnchor.after(fieldAttr);
-                    if (gridTop && lmAnchor && fieldLM && fieldLM.parentElement !== gridTop) lmAnchor.after(fieldLM);
+                    if (gridTop && attrAnchor && fieldAttr && fieldAttr.parentElement !== gridTop) {
+                        gridTop.insertBefore(fieldAttr, attrAnchor.nextSibling);
+                    }
+                    if (gridTop && lmAnchor && fieldLM && fieldLM.parentElement !== gridTop) {
+                        gridTop.insertBefore(fieldLM, lmAnchor.nextSibling);
+                    }
                 }
             } catch { }
             const catValue = parseInt(card.category || 0);
@@ -4145,15 +5136,29 @@
             const imgPreview = document.getElementById('editor-img-preview');
             const placeholder = document.getElementById('editor-img-placeholder');
 
+            const cardId = String(card.id || '').trim();
+            const profileForPics = encodeURIComponent(String(activeDbProfile || '').toLowerCase());
+            const cacheBust = Date.now();
             imgPreview.style.display = 'none';
             placeholder.style.display = 'block';
-
-            imgPreview.src = `/pics/${card.id}.jpg`;
+            imgPreview.dataset.tryExt = 'jpg';
+            imgPreview.src = `/pics/${cardId}.jpg?active_profile=${profileForPics}&t=${cacheBust}`;
             imgPreview.onload = () => {
                 imgPreview.style.display = 'block';
                 placeholder.style.display = 'none';
             };
             imgPreview.onerror = () => {
+                const current = String(imgPreview.dataset.tryExt || 'jpg').toLowerCase();
+                if (current === 'jpg') {
+                    imgPreview.dataset.tryExt = 'png';
+                    imgPreview.src = `/pics/${cardId}.png?active_profile=${profileForPics}&t=${cacheBust}`;
+                    return;
+                }
+                if (current === 'png') {
+                    imgPreview.dataset.tryExt = 'jpeg';
+                    imgPreview.src = `/pics/${cardId}.jpeg?active_profile=${profileForPics}&t=${cacheBust}`;
+                    return;
+                }
                 imgPreview.style.display = 'none';
                 placeholder.style.display = 'block';
             };
@@ -4183,7 +5188,7 @@
                     descItem.style.borderColor = 'var(--accent-primary)';
                     descItem.innerHTML = `
                         <span class="string-label">DESCRIPTION (FALLBACK)</span>
-                        <div class="string-content">${card.desc || "No hay descripciÃ³n disponible."}</div>
+                        <div class="string-content">${card.desc || "No hay descripción disponible."}</div>
                     `;
                     stringsDisplay.appendChild(descItem);
                 }
@@ -4291,7 +5296,7 @@
                             if (typeof lscale === 'number' || typeof rscale === 'number') chips.push(`<span><strong>Scale:</strong> ${h((lscale ?? '?') + '/' + (rscale ?? '?'))}</span>`);
                         }
 
-                        const desc = card.desc || "No hay descripciÃ³n disponible.";
+                        const desc = card.desc || "No hay descripción disponible.";
 
                         analysisContainer.innerHTML = `
                             <div style="display:flex; flex-direction:column; gap:0.6rem;">
@@ -4305,7 +5310,7 @@
                                     </div>
                                 ` : ``}
                                 <div style="border-top:1px solid var(--card-border); padding-top:0.6rem;">
-                                    <div style="font-weight:600; color: var(--text); margin-bottom:0.25rem;">DescripciÃ³n</div>
+                                    <div style="font-weight:600; color: var(--text); margin-bottom:0.25rem;">Descripción</div>
                                     <div style="white-space: pre-wrap; color: var(--text);">${h(desc)}</div>
                                 </div>
                             </div>
@@ -4325,33 +5330,16 @@
         }
 
         function applyEditorPageZoom(zoom) {
-            // Preferir `zoom` (Chromium/Edge) porque afecta el layout.
             try {
-                if (window.CSS && CSS.supports && CSS.supports('zoom', '1')) {
-                    document.documentElement.style.zoom = String(zoom);
-                    return;
-                }
+                document.documentElement.style.removeProperty('zoom');
             } catch { }
         }
 
         function fitEditorPageToViewport() {
             const editor = document.getElementById('module-editor');
             if (!editor || editor.style.display === 'none') return;
-
-            // Medir en zoom 1 para calcular escala necesaria.
             applyEditorPageZoom(1);
-
-            const margin = 12; // pequeÃ±o margen para evitar recortes
-            const availableH = Math.max(1, document.documentElement.clientHeight - margin);
-            const availableW = Math.max(1, document.documentElement.clientWidth - margin);
-            const contentH = Math.max(1, editor.scrollHeight);
-            const contentW = Math.max(1, editor.scrollWidth);
-
-            let z = Math.min(1, availableH / contentH, availableW / contentW);
-            // limitar y cuantizar a pasos de 0.05 (para estabilidad visual)
-            z = Math.max(0.8, Math.floor(z * 20) / 20);
-
-            applyEditorPageZoom(z);
+            autoFitCardInformation();
         }
 
         window.addEventListener('resize', () => {
@@ -4646,6 +5634,8 @@
                             strings: v?.strings_conf || '',
                             pics: v?.pics_dir || '',
                             ui_lang: String(v?.ui_lang || inferUiLangFromProfile(kk)).toLowerCase(),
+                            is_temp_ypk: Boolean(v?.is_temp_ypk),
+                            ypk_file: String(v?.ypk_file || ''),
                         };
                     }
 
@@ -4690,8 +5680,10 @@
                         strings: paths.strings || '',
                         pics: paths.pics || '',
                         ui_lang: 'es',
+                        is_temp_ypk: false,
+                        ypk_file: '',
                     };
-                    if (!dbProfiles.en) dbProfiles.en = { cdb: '', scripts: '', strings: '', pics: '', ui_lang: 'en' };
+                    if (!dbProfiles.en) dbProfiles.en = { cdb: '', scripts: '', strings: '', pics: '', ui_lang: 'en', is_temp_ypk: false, ypk_file: '' };
 
                     const storedProfile = localStorage.getItem('db_profile');
                     activeDbProfile = String(storedProfile || 'es').toLowerCase();

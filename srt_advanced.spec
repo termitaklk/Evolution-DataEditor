@@ -6,7 +6,10 @@ a = Analysis(
     ['srt_advanced.py'],
     pathex=[],
     binaries=[],
-    datas=[('index.html', '.')],
+    datas=[
+        ('index.html', '.'),
+        ('config/cardinfo_english.txt', 'config'),
+    ],
     hiddenimports=['requests'],
     hookspath=[],
     hooksconfig={},
